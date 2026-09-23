@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse, .animate-fadeIn { animation: none; }
+}
+
+/* Centre short slides, but let tall slides start at the top and scroll
+   (justify-center would push their title off the top of the screen). */
+#slide-container > * { margin-top: auto; margin-bottom: auto; }

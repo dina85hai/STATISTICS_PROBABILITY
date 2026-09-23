@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mean, Mode, Median &amp; Variance</title>
+  <meta name="description" content="Step-by-step statistics notes: mean, mode, median, range, variance and standard deviation for raw, frequency and grouped data." />
+  <link rel="stylesheet" href="/src/statistics.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <p class="kicker">Topic 1 · Statistics</p>
+      <h1>Statistics Made Easy 📊</h1>
+      <p class="lead">Mean, mode, median, range, variance and standard deviation, step by step, for three kinds of data.</p>
+      <nav class="jump" aria-label="Jump to a step">
+        <a href="#problems">Problems</a>
+        <a href="#mean">1 · Mean</a>
+        <a href="#mode">2 · Mode</a>
+        <a href="#median">3 · Median</a>
+        <a href="#range">4 · Range</a>
+        <a href="#spread">5 · Variance &amp; σ</a>
+      </nav>
+    </header>
+
+    <!-- ================= THE THREE PROBLEMS ================= -->
+    <section id="problems" class="step">
+      <h2><span class="num">★</span> The three problems</h2>
+      <p class="hint">Every step below solves these same three problems, so you can compare how the method changes for each kind of data.</p>
+      <div class="cards">
+        <article class="card s1">
+          <p class="type">A · Raw data</p>
+          <h3>🎵 TikTok views</h3>
+          <p>7 Malaysian TikTokers posted videos. Views (in thousands):</p>
+          <p class="data">12, 8, 5, 5, 9, 18, 12</p>
+        </article>
+        <article class="card s2">
+          <p class="type">B · Frequency table</p>
+          <h3>🧋 Bubble tea</h3>
+          <p>40 students were asked how many cups of bubble tea they buy each week.</p>
+          <table>
+            <thead><tr><th>Cups (x)</th><th>Students (f)</th></tr></thead>
+            <tbody>
+              <tr><td>2</td><td>8</td></tr>
+              <tr><td>3</td><td>12</td></tr>
+              <tr><td>4</td><td>15</td></tr>
+              <tr><td>5</td><td>5</td></tr>
+            </tbody>
+            <tfoot><tr><td>Total</td><td>40</td></tr></tfoot>
+          </table>
+        </article>
+        <article class="card s3">
+          <p class="type">C · Grouped data</p>
+          <h3>📱 Social media hours</h3>
+          <p>40 teens recorded their daily social media time (hours).</p>
+          <table>
+            <thead><tr><th>Hours</th><th>Teens (f)</th></tr></thead>
+            <tbody>
+              <tr><td>1 – 2</td><td>5</td></tr>
+              <tr><td>3 – 4</td><td>8</td></tr>
+              <tr><td>5 – 6</td><td>18</td></tr>
+              <tr><td>7 – 8</td><td>7</td></tr>
+              <tr><td>9 – 10</td><td>2</td></tr>
+            </tbody>
+            <tfoot><tr><td>Total</td><td>40</td></tr></tfoot>
+          </table>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= STEP 1: MEAN ================= -->
+    <section id="mean" class="step">
+      <h2><span class="num">1</span> Mean (x̄)</h2>
+      <p class="hint">The mean is the "fair share": add everything up, then divide by how many there are.</p>
+      <div class="formulas">
+        <div class="formula"><span class="tex" data-display data-tex="\bar{x} = \frac{\sum x}{N}">x̄ = Σx ÷ N</span><small>raw data</small></div>
+        <div class="formula"><span class="tex" data-display data-tex="\bar{x} = \frac{\sum fx}{\sum f}">x̄ = Σfx ÷ Σf</span><small>frequency &amp; grouped data</small></div>
+      </div>
+      <div class="cards">
+        <article class="card s1">
+          <p class="type">A · Raw data</p>
+          <ol class="work">
+            <li>Add them all up: 12 + 8 + 5 + 5 + 9 + 18 + 12 = <b>69</b></li>
+            <li>Count the numbers: N = <b>7</b></li>
+            <li>Divide: 69 ÷ 7 = 9.857…</li>
+          </ol>
+          <p class="answer">Mean ≈ 9.86 thousand views</p>
+        </article>
+        <article class="card s2">
+          <p class="type">B · Frequency table</p>
+          <ol class="work">
+            <li>Multiply each value by its frequency (f × x):
+              <table>
+                <thead><tr><th>x</th><th>f</th><th>fx</th></tr></thead>
+                <tbody>
+                  <tr><td>2</td><td>8</td><td>16</td></tr>
+                  <tr><td>3</td><td>12</td><td>36</td></tr>
+                  <tr><td>4</td><td>15</td><td>60</td></tr>
+                  <tr><td>5</td><td>5</td><td>25</td></tr>
+                </tbody>
+                <tfoot><tr><td>Σ</td><td>40</td><td>137</td></tr></tfoot>
+              </table>
+            </li>
+            <li>Divide: 137 ÷ 40 = 3.425</li>
+          </ol>
+          <p class="answer">Mean ≈ 3.43 cups per week</p>
+        </article>
+        <article class="card s3">
+          <p class="type">C · Grouped data</p>
+          <ol class="work">
+            <li>Use the <b>midpoint</b> of each class as x, e.g. (1 + 2) ÷ 2 = 1.5:
+              <table>
+                <thead><tr><th>Hours</th><th>f</th><th>x</th><th>fx</th></tr></thead>
+                <tbody>
+                  <tr><td>1 – 2</td><td>5</td><td>1.5</td><td>7.5</td></tr>
+                  <tr><td>3 – 4</td><td>8</td><td>3.5</td><td>28</td></tr>
+                  <tr><td>5 – 6</td><td>18</td><td>5.5</td><td>99</td></tr>
+                  <tr><td>7 – 8</td><td>7</td><td>7.5</td><td>52.5</td></tr>
+                  <tr><td>9 – 10</td><td>2</td><td>9.5</td><td>19</td></tr>
+                </tbody>
+                <tfoot><tr><td>Σ</td><td>40</td><td></td><td>206</td></tr></tfoot>
+              </table>
+            </li>
+            <li>Divide: 206 ÷ 40 = 5.15</li>
+          </ol>
+          <p class="answer">Mean = 5.15 hours per day</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= STEP 2: MODE ================= -->
+    <section id="mode" class="step">
+      <h2><span class="num">2</span> Mode</h2>
+      <p class="hint">The mode is the value that appears <b>most often</b>. A set of data can have more than one mode.</p>
+      <div class="formulas">
+        <div class="formula"><span class="tex" data-display data-tex="\text{Mode} = L + \left(\frac{d_1}{d_1 + d_2}\right) \times c">Mode = L + (d₁ ÷ (d₁ + d₂)) × c</span><small>grouped data</small></div>
+      </div>
+      <div class="cards">
+        <article class="card s1">
+          <p class="type">A · Raw data</p>
+          <ol class="work">
+            <li>Sort the numbers: 5, 5, 8, 9, 12, 12, 18</li>
+            <li>Count each one: 5 → 2 times, 12 → 2 times, the others → 1 time</li>
+          </ol>
+          <p class="answer">Mode = 5 and 12 thousand views (two modes)</p>
+        </article>
+        <article class="card s2">
+          <p class="type">B · Frequency table</p>
+          <ol class="work">
+            <li>Look down the frequency column: 8, 12, <b>15</b>, 5</li>
+            <li>The highest frequency is 15, for 4 cups</li>
+          </ol>
+          <p class="answer">Mode = 4 cups per week</p>
+        </article>
+        <article class="card s3">
+          <p class="type">C · Grouped data</p>
+          <ol class="work">
+            <li>Modal class = the class with the highest frequency = <b>5 – 6</b> (f = 18)</li>
+            <li>L = <b>lower boundary</b> of 5 – 6 = 4.5<br><span class="note">Classes are 1–2, 3–4, 5–6…, so the boundaries are halfway between: 4.5 and 6.5.</span></li>
+            <li>d₁ = 18 − 8 = 10 (difference with the class before)<br>d₂ = 18 − 7 = 11 (difference with the class after)<br>c = class width = 6.5 − 4.5 = 2</li>
+            <li>4.5 + (10 ÷ 21) × 2 = 4.5 + 0.952 = 5.452</li>
+          </ol>
+          <p class="answer">Mode ≈ 5.45 hours per day</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= STEP 3: MEDIAN ================= -->
+    <section id="median" class="step">
+      <h2><span class="num">3</span> Median</h2>
+      <p class="hint">The median is the <b>middle</b> value when the data is in order.</p>
+      <div class="formulas">
+        <div class="formula"><span class="tex" data-display data-tex="\text{Position} = \frac{N + 1}{2}">Position = (N + 1) ÷ 2</span><small>raw &amp; frequency data</small></div>
+        <div class="formula"><span class="tex" data-display data-tex="\text{Median} = L + \left(\frac{\frac{N}{2} - F}{f_m}\right) \times c">Median = L + ((N/2 − F) ÷ fₘ) × c</span><small>grouped data</small></div>
+      </div>
+      <div class="cards">
+        <article class="card s1">
+          <p class="type">A · Raw data</p>
+          <ol class="work">
+            <li>Sort: 5, 5, 8, <b>9</b>, 12, 12, 18</li>
+            <li>Position = (7 + 1) ÷ 2 = 4th value</li>
+          </ol>
+          <p class="answer">Median = 9 thousand views</p>
+        </article>
+        <article class="card s2">
+          <p class="type">B · Frequency table</p>
+          <ol class="work">
+            <li>Position = (40 + 1) ÷ 2 = 20.5, so the median is halfway between the 20th and 21st values</li>
+            <li>Add a cumulative frequency column:
+              <table>
+                <thead><tr><th>x</th><th>f</th><th>Cumulative f</th></tr></thead>
+                <tbody>
+                  <tr><td>2</td><td>8</td><td>8 (values 1–8)</td></tr>
+                  <tr class="hl"><td>3</td><td>12</td><td>20 (values 9–20)</td></tr>
+                  <tr class="hl"><td>4</td><td>15</td><td>35 (values 21–35)</td></tr>
+                  <tr><td>5</td><td>5</td><td>40 (values 36–40)</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>20th value = 3, 21st value = 4</li>
+            <li>Median = (3 + 4) ÷ 2 = 3.5</li>
+          </ol>
+          <p class="answer">Median = 3.5 cups per week</p>
+        </article>
+        <article class="card s3">
+          <p class="type">C · Grouped data</p>
+          <ol class="work">
+            <li>N ÷ 2 = 40 ÷ 2 = 20</li>
+            <li>Cumulative frequency: 5, 13, <b>31</b>, 38, 40. The 20th value is in class <b>5 – 6</b></li>
+            <li>L = lower boundary = 4.5<br>F = cumulative f <b>before</b> the class = 13<br>fₘ = frequency of the class = 18<br>c = 2</li>
+            <li>4.5 + ((20 − 13) ÷ 18) × 2 = 4.5 + 0.778 = 5.278</li>
+          </ol>
+          <p class="answer">Median ≈ 5.28 hours per day</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= STEP 4: RANGE ================= -->
+    <section id="range" class="step">
+      <h2><span class="num">4</span> Range</h2>
+      <p class="hint">The range shows how spread out the data is: largest value minus smallest value.</p>
+      <div class="formulas">
+        <div class="formula"><span class="tex" data-display data-tex="\text{Range} = \text{Largest} - \text{Smallest}">Range = Largest − Smallest</span></div>
+      </div>
+      <div class="cards">
+        <article class="card s1">
+          <p class="type">A · Raw data</p>
+          <ol class="work"><li>18 − 5 = 13</li></ol>
+          <p class="answer">Range = 13 thousand views</p>
+        </article>
+        <article class="card s2">
+          <p class="type">B · Frequency table</p>
+          <ol class="work"><li>Largest value 5, smallest value 2: 5 − 2 = 3</li></ol>
+          <p class="answer">Range = 3 cups</p>
+        </article>
+        <article class="card s3">
+          <p class="type">C · Grouped data</p>
+          <ol class="work">
+            <li>Upper limit of the last class − lower limit of the first class: 10 − 1 = 9</li>
+          </ol>
+          <p class="answer">Range = 9 hours</p>
+          <p class="note">Some textbooks use the class midpoints instead: 9.5 − 1.5 = 8. Use the method your teacher or syllabus uses.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= STEP 5: VARIANCE & STANDARD DEVIATION ================= -->
+    <section id="spread" class="step">
+      <h2><span class="num">5</span> Variance (σ²) &amp; standard deviation (σ)</h2>
+      <p class="hint">These measure how far, on average, the data is from the mean. Find the <b>variance</b> first, then take its square root to get the <b>standard deviation</b>.</p>
+      <div class="formulas">
+        <div class="formula"><span class="tex" data-display data-tex="\sigma^2 = \frac{\sum x^2}{N} - \bar{x}^2">σ² = Σx² ÷ N − x̄²</span><small>raw data</small></div>
+        <div class="formula"><span class="tex" data-display data-tex="\sigma^2 = \frac{\sum fx^2}{\sum f} - \bar{x}^2">σ² = Σfx² ÷ Σf − x̄²</span><small>frequency &amp; grouped data</small></div>
+        <div class="formula"><span class="tex" data-display data-tex="\sigma = \sqrt{\sigma^2}">σ = √σ²</span></div>
+      </div>
+      <p class="tip">💡 Keep the full mean (for example 3.425, not 3.43) until the very last step. Rounding early makes the answer slightly wrong.</p>
+      <div class="cards">
+        <article class="card s1">
+          <p class="type">A · Raw data</p>
+          <ol class="work">
+            <li>Square each value and add: 144 + 64 + 25 + 25 + 81 + 324 + 144 = <b>807</b></li>
+            <li>Σx² ÷ N = 807 ÷ 7 = 115.286</li>
+            <li>x̄² = 9.857² = 97.163</li>
+            <li>Variance σ² = 115.286 − 97.163 = <b>18.12</b></li>
+            <li>σ = √18.12 = 4.257</li>
+          </ol>
+          <p class="answer">σ² ≈ 18.12, σ ≈ 4.26 thousand views</p>
+        </article>
+        <article class="card s2">
+          <p class="type">B · Frequency table</p>
+          <ol class="work">
+            <li>Work out fx² for each row:
+              <table>
+                <thead><tr><th>x</th><th>f</th><th>x²</th><th>fx²</th></tr></thead>
+                <tbody>
+                  <tr><td>2</td><td>8</td><td>4</td><td>32</td></tr>
+                  <tr><td>3</td><td>12</td><td>9</td><td>108</td></tr>
+                  <tr><td>4</td><td>15</td><td>16</td><td>240</td></tr>
+                  <tr><td>5</td><td>5</td><td>25</td><td>125</td></tr>
+                </tbody>
+                <tfoot><tr><td>Σ</td><td>40</td><td></td><td>505</td></tr></tfoot>
+              </table>
+            </li>
+            <li>Σfx² ÷ Σf = 505 ÷ 40 = 12.625</li>
+            <li>x̄² = 3.425² = 11.731</li>
+            <li>Variance σ² = 12.625 − 11.731 = <b>0.894</b></li>
+            <li>σ = √0.894 = 0.946</li>
+          </ol>
+          <p class="answer">σ² ≈ 0.894, σ ≈ 0.95 cups</p>
+        </article>
+        <article class="card s3">
+          <p class="type">C · Grouped data</p>
+          <ol class="work">
+            <li>Use the midpoints as x:
+              <table>
+                <thead><tr><th>x</th><th>f</th><th>x²</th><th>fx²</th></tr></thead>
+                <tbody>
+                  <tr><td>1.5</td><td>5</td><td>2.25</td><td>11.25</td></tr>
+                  <tr><td>3.5</td><td>8</td><td>12.25</td><td>98</td></tr>
+                  <tr><td>5.5</td><td>18</td><td>30.25</td><td>544.5</td></tr>
+                  <tr><td>7.5</td><td>7</td><td>56.25</td><td>393.75</td></tr>
+                  <tr><td>9.5</td><td>2</td><td>90.25</td><td>180.5</td></tr>
+                </tbody>
+                <tfoot><tr><td>Σ</td><td>40</td><td></td><td>1228</td></tr></tfoot>
+              </table>
+            </li>
+            <li>Σfx² ÷ Σf = 1228 ÷ 40 = 30.7</li>
+            <li>x̄² = 5.15² = 26.5225</li>
+            <li>Variance σ² = 30.7 − 26.5225 = <b>4.18</b></li>
+            <li>σ = √4.1775 = 2.044</li>
+          </ol>
+          <p class="answer">σ² ≈ 4.18, σ ≈ 2.04 hours</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= SUMMARY ================= -->
+    <section class="step">
+      <h2><span class="num">✓</span> Summary</h2>
+      <div class="table-scroll">
+        <table class="summary">
+          <thead><tr><th></th><th>A · TikTok views</th><th>B · Bubble tea</th><th>C · Social media</th></tr></thead>
+          <tbody>
+            <tr><th>Mean</th><td>9.86k</td><td>3.43 cups</td><td>5.15 hrs</td></tr>
+            <tr><th>Mode</th><td>5k and 12k</td><td>4 cups</td><td>5.45 hrs</td></tr>
+            <tr><th>Median</th><td>9k</td><td>3.5 cups</td><td>5.28 hrs</td></tr>
+            <tr><th>Range</th><td>13k</td><td>3 cups</td><td>9 hrs</td></tr>
+            <tr><th>Variance σ²</th><td>18.12</td><td>0.894</td><td>4.18</td></tr>
+            <tr><th>Std deviation σ</th><td>4.26k</td><td>0.95 cups</td><td>2.04 hrs</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="/src/statistics.ts"></script>
+  <script src="./learner.js" data-lesson="statistics-notes"></script>
+</body>
+</html>

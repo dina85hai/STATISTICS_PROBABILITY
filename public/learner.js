@@ -10,8 +10,8 @@
   /*
    * The learning path, in order. Topics appear on the landing page in this
    * order, and the "Next" button follows it too.
-   * To add a lesson: add its page to `staticPages` in vite.config.ts, then add
-   * an entry to the right topic below (id = published file name without .html).
+   * To add a lesson: put its .html file in the lessons/ folder, then add an entry
+   * to the right topic below (id = the file name without .html).
    */
   var TOPICS = [
     {
@@ -31,14 +31,10 @@
       title: 'Topic 2 · Probability',
       intro: 'Experiments, outcomes and events, tree diagrams, and independent and mutually exclusive events.',
       lessons: [
-        { id: 'presentation', title: 'Probability Presentation', url: 'presentation.html',
+        { id: 'presentation', title: 'Probability Presentation & Practice Arena', url: 'presentation.html',
           tag: 'Learn', word: 'learn', c1: '#f3c2cf', c2: '#c9a07e',
-          blurb: 'Slides that introduce probability with animated tree diagrams.',
-          how: 'Use Next / Previous to go at your own speed.' },
-        { id: 'probability-notes', title: 'Probability Notes & Practice Arena', url: 'probability-notes.html',
-          tag: 'Review', word: 'review', c1: '#f7d6de', c2: '#9fc3d9',
-          blurb: 'Review the same ideas, then try the 20-question Practice Arena at the end.',
-          how: 'Answer in your head before you reveal each answer.' },
+          blurb: 'Slides with animated tree diagrams, then a 20-question Practice Arena at the end.',
+          how: 'Use Next / Previous at your own speed. Answer each question before you reveal it.' },
         { id: 'probability-exercise', title: 'Gen Z Probability Exercises', url: 'probability-exercise.html',
           tag: 'Practice', word: 'practice', c1: '#fff0e3', c2: '#f3c2cf',
           blurb: 'Five real-life Malaysian scenarios, from easy to hard, with tree diagrams and tables.',
@@ -86,6 +82,10 @@
     '.sp-pill.sp-done { background: #b0506c; color: #fff; border-color: #b0506c; }',
     '.sp-home { position: fixed; top: 12px; left: 12px; z-index: 2147483000; }',
     '.sp-bar { position: fixed; left: 12px; bottom: 12px; z-index: 2147483000; display: flex; gap: 8px; flex-wrap: wrap; max-width: calc(100vw - 24px); }',
+    /* The presentation has its own Previous/Next buttons and full-screen slides:
+       show icon-only buttons in the corner so they cover as little as possible */
+    '.sp-lesson-presentation .sp-bar .sp-label { display: none; }',
+    '.sp-lesson-presentation .sp-bar .sp-pill { padding: 0 11px; }',
     '.sp-toast { position: fixed; left: 50%; top: 16px; transform: translateX(-50%); z-index: 2147483001; background: #7a3a4d; color: #fff;',
     '  padding: 10px 16px; border-radius: 12px; font-size: 14px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,.2); opacity: 0; transition: opacity .25s; pointer-events: none; }',
     '.sp-toast.show { opacity: 1; }',
@@ -124,7 +124,7 @@
     var state = load();
     state.last = lessonId;
     save(state);
-    document.body.classList.add('sp-lesson');
+    document.body.classList.add('sp-lesson', 'sp-lesson-' + lessonId);
 
     var home = document.createElement('a');
     home.className = 'sp-ui sp-pill sp-home';
@@ -145,6 +145,7 @@
       doneBtn.innerHTML = ICON_CHECK + '<span class="sp-label">' + (done ? 'Completed' : 'Mark as done') + '</span>';
       doneBtn.setAttribute('aria-pressed', done ? 'true' : 'false');
       doneBtn.setAttribute('aria-label', done ? 'Completed' : 'Mark as done');
+      doneBtn.title = done ? 'Completed' : 'Mark as done';
     }
     doneBtn.addEventListener('click', function () {
       var s = load();
