@@ -235,7 +235,7 @@
             {
                 emoji: '📱',
                 title: 'Posting on TikTok',
-                description: 'You post a video on TikTok. It can go Viral (P=0.3) or Flop (P=0.7). If it goes viral, brands might reach out for a deal: Yes (P=0.4) or No (P=0.6). What are all possible outcomes?',
+                description: 'You post a video on TikTok. It can go Viral (P=0.3) or Flop (P=0.7). Whether or not it goes viral, a brand might reach out for a deal: Yes (P=0.4) or No (P=0.6). What are all possible outcomes?',
                 difficulty: 'MEDIUM',
                 events: ['Video Result', 'Brand Deal'],
                 options: [
@@ -252,7 +252,7 @@
                     'Flop, Deal',
                     'Flop, No Deal'
                 ],
-                note: 'Note: Even if your video flops, you might still get deals from smaller brands!'
+                note: 'Note: Here the brand deal does not depend on the video result, so the two events are independent and you multiply along each branch.'
             },
             {
                 emoji: '🛵',
@@ -305,29 +305,34 @@
             {
                 emoji: '🎮',
                 title: 'Mobile Legends Rank Game',
-                description: 'In ranked games, you can Win, Lose, or Draw. From past 20 games: 12 Wins, 6 Losses, 2 Draws. If you Win, you gain stars (70% chance) or stay same rank (30%). Calculate all probabilities and outcomes.',
+                description: 'In ranked games you either Win or Lose. From your past 20 games: 12 Wins and 8 Losses. If you WIN, you gain a star (70%) or your rank stays the same (30%). If you LOSE, you lose a star (80%) or star protection keeps your rank the same (20%). Calculate all probabilities and outcomes.',
                 difficulty: 'HARD',
                 events: ['Game Result', 'Rank Change'],
                 options: [
-                    { label: 'Win', short: 'W', prob: 0.6, calculate: true, hint: '12 wins out of 20 games' },
-                    { label: 'Lose', short: 'L', prob: 0.3, calculate: true, hint: '6 losses out of 20 games' },
-                    { label: 'Draw', short: 'D', prob: 0.1, calculate: true, hint: '2 draws out of 20 games' }
+                    { label: 'Win', short: 'W', prob: 0.6, calculate: true, hint: '12 wins out of 20 games',
+                      next: [
+                          { label: 'Star+', short: '+', prob: 0.7 },
+                          { label: 'Same', short: '=', prob: 0.3 }
+                      ] },
+                    { label: 'Lose', short: 'L', prob: 0.4, calculate: true, hint: '8 losses out of 20 games',
+                      next: [
+                          { label: 'Star−', short: '−', prob: 0.8 },
+                          { label: 'Same', short: '=', prob: 0.2 }
+                      ] }
                 ],
+                // Column headings for the table view; each row uses its own `next` branches.
                 options2: [
-                    { label: 'Star+', short: '+', prob: 0.7 },
-                    { label: 'Same', short: '=', prob: 0.3 }
+                    { label: 'Star changes', short: '±' },
+                    { label: 'Rank stays', short: '=' }
                 ],
                 outcomes: [
                     'Win, Star+',
                     'Win, Same',
-                    'Lose, Star+',
-                    'Lose, Same',
-                    'Draw, Star+',
-                    'Draw, Same'
+                    'Lose, Star−',
+                    'Lose, Same'
                 ],
-                note: '💡 Hint: Win probability = 12÷20 = ? | Lose = 6÷20 = ? | Draw = 2÷20 = ?',
-                needsCalculation: true,
-                isThreeOptions: true
+                note: '💡 Hint: Win probability = 12÷20 = ? | Lose = 8÷20 = ? The rank change depends on the result, so follow the branches after Win or Lose.',
+                needsCalculation: true
             }
         ];
 
@@ -439,7 +444,7 @@
             scenario.options.forEach((opt1, i) => {
                 const y1 = startY - startOffset + i * spacing1 * (numOptions === 2 ? 2 : 1.5);
                 
-                scenario.options2.forEach((opt2, j) => {
+                (opt1.next || scenario.options2).forEach((opt2, j) => {
                     const y2 = y1 - spacing2 + j * spacing2 * 2;
                     drawBranch(level1X, y1, level2X, y2);
                     drawCircle(level2X, y2, 12, '#667eea');
@@ -634,7 +639,7 @@
                 ctx.fillText(opt1.label, startX - 45, startY + headerH * 2 + i * cellH + cellH / 2);
                 
                 // Cells
-                scenario.options2.forEach((opt2, j) => {
+                (opt1.next || scenario.options2).forEach((opt2, j) => {
                     const x = startX + j * cellW;
                     const y = startY + headerH * 2 + i * cellH;
                     
