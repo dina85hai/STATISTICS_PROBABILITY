@@ -11,9 +11,24 @@ const staticPages: Record<string, string> = {
   'probability_answer_key for teacher.html': 'answer-key.html',
 }
 
+// Changes on every build so browsers fetch the new learner.js right after a deploy.
+const buildVersion = Date.now().toString(36)
+
 // Adds the shared Home button / progress script (public/learner.js) to a page.
 function withLearner(html: string, lesson: string) {
-  return html.replace(/<\/body>/i, `  <script src="./learner.js" data-lesson="${lesson}"></script>\n</body>`)
+  return html.replace(/<\/body>/i, `  <script src="./learner.js?v=${buildVersion}" data-lesson="${lesson}"></script>\n</body>`)
+}
+
+// Cache-busts the learner.js tag already written in index.html / presentation.html.
+function versionLearner(): Plugin {
+  return {
+    name: 'version-learner',
+    apply: 'build',
+    transformIndexHtml: {
+      order: 'post',
+      handler: (html) => html.replace('src="./learner.js"', `src="./learner.js?v=${buildVersion}"`),
+    },
+  }
 }
 
 function copyStaticPages(): Plugin {
@@ -31,7 +46,7 @@ function copyStaticPages(): Plugin {
 
 export default defineConfig({
   base: './',
-  plugins: [react(), copyStaticPages()],
+  plugins: [react(), copyStaticPages(), versionLearner()],
   build: {
     rollupOptions: {
       input: {
