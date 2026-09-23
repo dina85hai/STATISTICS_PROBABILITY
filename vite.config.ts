@@ -11,13 +11,19 @@ const staticPages: Record<string, string> = {
   'probability_answer_key for teacher.html': 'answer-key.html',
 }
 
+// Adds the shared Home button / progress script (public/learner.js) to a page.
+function withLearner(html: string, lesson: string) {
+  return html.replace(/<\/body>/i, `  <script src="./learner.js" data-lesson="${lesson}"></script>\n</body>`)
+}
+
 function copyStaticPages(): Plugin {
   return {
     name: 'copy-static-pages',
     apply: 'build',
     generateBundle() {
       for (const [source, fileName] of Object.entries(staticPages)) {
-        this.emitFile({ type: 'asset', fileName, source: readFileSync(resolve(__dirname, source)) })
+        const html = readFileSync(resolve(__dirname, source), 'utf8')
+        this.emitFile({ type: 'asset', fileName, source: withLearner(html, fileName.replace('.html', '')) })
       }
     },
   }
