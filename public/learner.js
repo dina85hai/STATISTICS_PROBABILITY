@@ -56,8 +56,13 @@
   var KEY = 'sp-progress-v1';
 
   function load() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || { done: {}, last: null }; }
-    catch (e) { return { done: {}, last: null }; }
+    var s = null;
+    try { s = JSON.parse(localStorage.getItem(KEY)); } catch (e) { /* storage unavailable or corrupt */ }
+    if (!s || typeof s !== 'object') s = {};
+    return {
+      done: s.done && typeof s.done === 'object' ? s.done : {},
+      last: typeof s.last === 'string' ? s.last : null
+    };
   }
   function save(state) {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
@@ -78,16 +83,18 @@
     '  -webkit-backdrop-filter: blur(8px); transition: transform .15s ease, background .15s ease; line-height: 1; }',
     '.sp-pill:hover { transform: translateY(-1px); background: #fff; }',
     '.sp-pill svg { width: 18px; height: 18px; flex: none; }',
-    '.sp-pill.sp-done { background: #d9819a; color: #fff; border-color: #d9819a; }',
+    '.sp-pill.sp-done { background: #b0506c; color: #fff; border-color: #b0506c; }',
     '.sp-home { position: fixed; top: 12px; left: 12px; z-index: 2147483000; }',
     '.sp-bar { position: fixed; left: 12px; bottom: 12px; z-index: 2147483000; display: flex; gap: 8px; flex-wrap: wrap; max-width: calc(100vw - 24px); }',
     '.sp-toast { position: fixed; left: 50%; top: 16px; transform: translateX(-50%); z-index: 2147483001; background: #7a3a4d; color: #fff;',
     '  padding: 10px 16px; border-radius: 12px; font-size: 14px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,.2); opacity: 0; transition: opacity .25s; pointer-events: none; }',
     '.sp-toast.show { opacity: 1; }',
-    '@media (max-width: 640px) { .sp-pill .sp-label { display: none; } .sp-pill { padding: 0 11px; } .sp-pill .sp-keep { display: inline; } }',
+    '@media (max-width: 640px) { .sp-pill .sp-label { display: none; } .sp-pill { padding: 0 11px; }',
+    '  .sp-bar { left: auto; right: 12px; bottom: 92px; flex-direction: column; } body.sp-lesson { padding-bottom: 72px; } }',
     /* Self-test mode on the answer key */
-    '.sp-hide .answer, .sp-hide .work-shown, .sp-hide .multiple-choice-correct { filter: blur(7px); cursor: pointer; user-select: none; transition: filter .2s; }',
-    '.sp-hide .answer.sp-shown, .sp-hide .work-shown.sp-shown, .sp-hide .multiple-choice-correct.sp-shown { filter: none; cursor: auto; user-select: auto; }',
+    '.sp-hide .sp-answer { filter: blur(7px); cursor: pointer; user-select: none; transition: filter .2s; }',
+    '.sp-hide .sp-answer.sp-shown { filter: none; cursor: auto; user-select: auto; }',
+    '.sp-answer:focus-visible { outline: 3px solid #b0506c; outline-offset: 3px; }',
     '.sp-selftest { margin: 16px auto; max-width: 900px; padding: 14px 18px; border-radius: 14px; background: #fff4f7; border: 1px solid #f1d3dc; color: #5b2a39; font-size: 15px; line-height: 1.5; }',
     '.sp-selftest b { color: #7a3a4d; }',
     '.sp-selftest button { margin-top: 8px; }'
@@ -117,6 +124,7 @@
     var state = load();
     state.last = lessonId;
     save(state);
+    document.body.classList.add('sp-lesson');
 
     var home = document.createElement('a');
     home.className = 'sp-ui sp-pill sp-home';
@@ -164,9 +172,33 @@
   }
 
   function selfTest() {
-    var answers = document.querySelectorAll('.answer, .work-shown, .multiple-choice-correct');
+    // Everything that gives an answer away: answers, working, the correct choice,
+    // finished tree diagrams and teacher notes. "Key Formula" notes stay visible as hints.
+    var answers = [];
+    document.querySelectorAll('.answer, .work-shown, .multiple-choice-correct, .tree-diagram, .note').forEach(function (el) {
+      if (el.classList.contains('note') && el.querySelector('.formula')) return;
+      if (el.parentElement && el.parentElement.closest('.sp-answer')) return;
+      el.classList.add('sp-answer');
+      el.setAttribute('tabindex', '0');
+      el.setAttribute('role', 'button');
+      el.setAttribute('aria-label', 'Hidden answer. Press to reveal.');
+      answers.push(el);
+    });
     if (!answers.length) return;
     document.body.classList.add('sp-hide');
+
+    function reveal(el) {
+      el.classList.add('sp-shown');
+      el.removeAttribute('role');
+      el.removeAttribute('aria-label');
+    }
+    function hideAll() {
+      answers.forEach(function (el) {
+        el.classList.remove('sp-shown');
+        el.setAttribute('role', 'button');
+        el.setAttribute('aria-label', 'Hidden answer. Press to reveal.');
+      });
+    }
 
     var box = document.createElement('div');
     box.className = 'sp-ui sp-selftest';
@@ -180,9 +212,8 @@
     }
     toggle.addEventListener('click', function () {
       document.body.classList.toggle('sp-hide');
-      if (document.body.classList.contains('sp-hide')) {
-        for (var i = 0; i < answers.length; i++) answers[i].classList.remove('sp-shown');
-      }
+      if (document.body.classList.contains('sp-hide')) hideAll();
+      else answers.forEach(reveal);
       renderToggle();
     });
     renderToggle();
@@ -191,10 +222,19 @@
     var anchor = document.querySelector('h2') || document.body.firstElementChild;
     anchor.parentNode.insertBefore(box, anchor.nextSibling);
 
+    function hiddenAnswerFor(target) {
+      if (!document.body.classList.contains('sp-hide')) return null;
+      var el = target.closest && target.closest('.sp-answer');
+      return el && !el.classList.contains('sp-shown') ? el : null;
+    }
     document.addEventListener('click', function (e) {
-      if (!document.body.classList.contains('sp-hide')) return;
-      var el = e.target.closest && e.target.closest('.answer, .work-shown, .multiple-choice-correct');
-      if (el) el.classList.add('sp-shown');
+      var el = hiddenAnswerFor(e.target);
+      if (el) reveal(el);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var el = hiddenAnswerFor(e.target);
+      if (el) { e.preventDefault(); reveal(el); }
     });
   }
 
@@ -213,8 +253,8 @@
         '<h3 class="topic-title">' + escapeHtml(topic.title) + '</h3>' +
         '<p class="topic-intro">' + escapeHtml(topic.intro) + '</p><div class="grid">';
       topic.lessons.forEach(function (l, i) {
-        html += '<a class="card" href="' + l.url + '" data-lesson-card="' + l.id + '">' +
-          '<div class="thumb" style="--c1:' + l.c1 + ';--c2:' + l.c2 + '"><span class="step">' + (i + 1) + '</span><span>' + escapeHtml(l.word) + '</span></div>' +
+        html += '<a class="card" href="' + escapeHtml(l.url) + '" data-lesson-card="' + escapeHtml(l.id) + '">' +
+          '<div class="thumb" style="--c1:' + escapeHtml(l.c1) + ';--c2:' + escapeHtml(l.c2) + '"><span class="step">' + (i + 1) + '</span><span>' + escapeHtml(l.word) + '</span></div>' +
           '<div class="card-body"><div class="tag">Lesson ' + (i + 1) + ' · ' + escapeHtml(l.tag) + '</div>' +
           '<h3>' + escapeHtml(l.title) + '</h3><p>' + escapeHtml(l.blurb) + '</p>' +
           '<p class="how">' + escapeHtml(l.how) + '</p></div></a>';
