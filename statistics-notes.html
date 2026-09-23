@@ -218,9 +218,10 @@
     <!-- ================= STEP 4: RANGE ================= -->
     <section id="range" class="step">
       <h2><span class="num">4</span> Range</h2>
-      <p class="hint">The range shows how spread out the data is: largest value minus smallest value.</p>
+      <p class="hint">The range shows how spread out the data is: largest value minus smallest value. For grouped data, use the class midpoints.</p>
       <div class="formulas">
-        <div class="formula"><span class="tex" data-display data-tex="\text{Range} = \text{Largest} - \text{Smallest}">Range = Largest − Smallest</span></div>
+        <div class="formula"><span class="tex" data-display data-tex="\text{Range} = \text{Largest} - \text{Smallest}">Range = Largest − Smallest</span><small>raw &amp; frequency data</small></div>
+        <div class="formula"><span class="tex" data-display data-tex="\text{Range} = \text{Midpoint}_{\text{last class}} - \text{Midpoint}_{\text{first class}}">Range = midpoint of last class − midpoint of first class</span><small>grouped data</small></div>
       </div>
       <div class="cards">
         <article class="card s1">
@@ -236,10 +237,11 @@
         <article class="card s3">
           <p class="type">C · Grouped data</p>
           <ol class="work">
-            <li>Upper limit of the last class − lower limit of the first class: 10 − 1 = 9</li>
+            <li>Midpoint of the last class (9 – 10) = (9 + 10) ÷ 2 = 9.5</li>
+            <li>Midpoint of the first class (1 – 2) = (1 + 2) ÷ 2 = 1.5</li>
+            <li>9.5 − 1.5 = 8</li>
           </ol>
-          <p class="answer">Range = 9 hours</p>
-          <p class="note">Some textbooks use the class midpoints instead: 9.5 − 1.5 = 8. Use the method your teacher or syllabus uses.</p>
+          <p class="answer">Range = 8 hours</p>
         </article>
       </div>
     </section>
@@ -324,7 +326,7 @@
             <tr><th>Mean</th><td>9.86k</td><td>3.43 cups</td><td>5.15 hrs</td></tr>
             <tr><th>Mode</th><td>5k and 12k</td><td>4 cups</td><td>5.45 hrs</td></tr>
             <tr><th>Median</th><td>9k</td><td>3.5 cups</td><td>5.28 hrs</td></tr>
-            <tr><th>Range</th><td>13k</td><td>3 cups</td><td>9 hrs</td></tr>
+            <tr><th>Range</th><td>13k</td><td>3 cups</td><td>8 hrs</td></tr>
             <tr><th>Variance σ²</th><td>18.12</td><td>0.894</td><td>4.18</td></tr>
             <tr><th>Std deviation σ</th><td>4.26k</td><td>0.95 cups</td><td>2.04 hrs</td></tr>
           </tbody>
