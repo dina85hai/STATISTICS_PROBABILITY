@@ -167,6 +167,12 @@
     .card .how { margin-top: 10px; font-size: 13px; color: var(--ink); opacity: .8; }
     .card.is-done { border-color: var(--accent); }
 
+    .topic { margin: 0 0 36px; }
+    .topic-title { font-size: clamp(17px, 2.1vw, 21px); margin: 0 2px 4px; }
+    .topic-intro { color: var(--muted); font-size: 14px; margin: 0 2px 16px; }
+    .card.soon { border-style: dashed; background: transparent; justify-content: center; min-height: 160px; }
+    .card.soon:hover { transform: none; box-shadow: none; }
+
     .guide { margin: 44px 0 0; }
     .guide h2 { font-size: clamp(18px, 2.2vw, 22px); margin: 0 2px 16px; }
     .guide ol { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; counter-reset: g; }
@@ -203,14 +209,14 @@
       </div>
 
       <nav class="bottom-left" aria-label="Quick links">
+        <a class="icon-btn" href="statistics-notes.html" aria-label="Statistics notes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>
+        </a>
         <a class="icon-btn" href="presentation.html" aria-label="Interactive presentation">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M12 16v4M8 20h8"/></svg>
         </a>
         <a class="icon-btn" href="probability-exercise.html" aria-label="Exercises">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="15" cy="15" r="1.2" fill="currentColor"/><circle cx="15" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="15" r="1.2" fill="currentColor"/></svg>
-        </a>
-        <a class="icon-btn" href="statistics-notes.html" aria-label="Statistics notes">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>
         </a>
       </nav>
 
@@ -227,7 +233,7 @@
         <h2 class="title">Your Self-Learning Path</h2>
         <p class="subtitle">Work through the lessons in order, at your own pace. Your progress is saved on this device.</p>
       </div>
-      <a id="continue" class="cta" href="presentation.html">Start learning: Probability Presentation →</a>
+      <a id="continue" class="cta" href="statistics-notes.html">Start learning: Mean, Mode, Median &amp; Variance →</a>
     </div>
 
     <div class="progress" aria-live="polite">
@@ -238,53 +244,19 @@
       </div>
     </div>
 
-    <section id="collection" class="grid">
-      <a class="card" href="presentation.html" data-lesson-card="presentation">
-        <div class="thumb" style="--c1:#f3c2cf;--c2:#c9a07e"><span class="step">1</span><span>learn</span></div>
-        <div class="card-body">
-          <div class="tag">Step 1 · Learn</div>
-          <h3>Probability Presentation</h3>
-          <p>Start here: slides that introduce probability with animated tree diagrams.</p>
-          <p class="how">Use Next / Previous to go at your own speed.</p>
-        </div>
-      </a>
-      <a class="card" href="probability-notes.html" data-lesson-card="probability-notes">
-        <div class="thumb" style="--c1:#f7d6de;--c2:#9fc3d9"><span class="step">2</span><span>review</span></div>
-        <div class="card-body">
-          <div class="tag">Step 2 · Review</div>
-          <h3>Probability Notes</h3>
-          <p>Go over the key ideas again and try the built-in practice questions.</p>
-          <p class="how">Answer in your head before you reveal each answer.</p>
-        </div>
-      </a>
-      <a class="card" href="probability-exercise.html" data-lesson-card="probability-exercise">
-        <div class="thumb" style="--c1:#fff0e3;--c2:#f3c2cf"><span class="step">3</span><span>practice</span></div>
-        <div class="card-body">
-          <div class="tag">Step 3 · Practice</div>
-          <h3>Gen Z Probability</h3>
-          <p>Real-life Malaysian examples, from easy to hard, with tree diagrams and tables.</p>
-          <p class="how">Work it out on paper, then press "Show All Answers".</p>
-        </div>
-      </a>
-      <a class="card" href="answer-key.html" data-lesson-card="answer-key">
-        <div class="thumb" style="--c1:#d9e8d4;--c2:#f3c2cf"><span class="step">4</span><span>self-check</span></div>
-        <div class="card-body">
-          <div class="tag">Step 4 · Self-check</div>
-          <h3>Practice Worksheet &amp; Answers</h3>
-          <p>A full 20-point worksheet. Answers start hidden, so you can test yourself.</p>
-          <p class="how">Tap a blurred answer to reveal it and mark your own score.</p>
-        </div>
-      </a>
-      <a class="card" href="statistics-notes.html" data-lesson-card="statistics-notes">
-        <div class="thumb" style="--c1:#e6d3f0;--c2:#f7d6de"><span class="step">5</span><span>statistics</span></div>
-        <div class="card-body">
-          <div class="tag">Step 5 · Statistics</div>
-          <h3>Mean, Mode, Median &amp; Variance</h3>
-          <p>Step-by-step worked examples for raw, frequency and grouped data.</p>
-          <p class="how">Copy each step into your notebook as you go.</p>
-        </div>
-      </a>
-    </section>
+    <div id="collection">
+      <div id="topics">
+        <noscript>
+          <ul>
+            <li><a href="statistics-notes.html">Statistics: Mean, Mode, Median &amp; Variance</a></li>
+            <li><a href="presentation.html">Probability Presentation</a></li>
+            <li><a href="probability-notes.html">Probability Notes &amp; Practice Arena</a></li>
+            <li><a href="probability-exercise.html">Gen Z Probability Exercises</a></li>
+            <li><a href="answer-key.html">Practice Worksheet &amp; Answers</a></li>
+          </ul>
+        </noscript>
+      </div>
+    </div>
 
     <section class="guide" aria-labelledby="guide-title">
       <h2 id="guide-title">How to study on your own</h2>

@@ -7,13 +7,52 @@
  * work when storage is unavailable.
  */
 (function () {
-  var LESSONS = [
-    { id: 'presentation', title: 'Probability Presentation', url: 'presentation.html' },
-    { id: 'probability-notes', title: 'Probability Notes', url: 'probability-notes.html' },
-    { id: 'probability-exercise', title: 'Gen Z Probability Practice', url: 'probability-exercise.html' },
-    { id: 'answer-key', title: 'Self-Check Answer Key', url: 'answer-key.html' },
-    { id: 'statistics-notes', title: 'Mean, Mode, Median & Variance', url: 'statistics-notes.html' }
+  /*
+   * The learning path, in order. Topics appear on the landing page in this
+   * order, and the "Next" button follows it too.
+   * To add a lesson: add its page to `staticPages` in vite.config.ts, then add
+   * an entry to the right topic below (id = published file name without .html).
+   */
+  var TOPICS = [
+    {
+      id: 'statistics',
+      title: 'Topic 1 · Statistics',
+      intro: 'Measures of central tendency and spread: how to describe a set of data.',
+      comingSoon: 'More interactive statistics lessons are coming soon.',
+      lessons: [
+        { id: 'statistics-notes', title: 'Mean, Mode, Median & Variance', url: 'statistics-notes.html',
+          tag: 'Notes', word: 'statistics', c1: '#e6d3f0', c2: '#f7d6de',
+          blurb: 'Step-by-step worked examples for raw data, frequency tables and grouped data.',
+          how: 'Copy each step into your notebook as you go.' }
+      ]
+    },
+    {
+      id: 'probability',
+      title: 'Topic 2 · Probability',
+      intro: 'Experiments, outcomes and events, tree diagrams, and independent and mutually exclusive events.',
+      lessons: [
+        { id: 'presentation', title: 'Probability Presentation', url: 'presentation.html',
+          tag: 'Learn', word: 'learn', c1: '#f3c2cf', c2: '#c9a07e',
+          blurb: 'Slides that introduce probability with animated tree diagrams.',
+          how: 'Use Next / Previous to go at your own speed.' },
+        { id: 'probability-notes', title: 'Probability Notes & Practice Arena', url: 'probability-notes.html',
+          tag: 'Review', word: 'review', c1: '#f7d6de', c2: '#9fc3d9',
+          blurb: 'Review the same ideas, then try the 20-question Practice Arena at the end.',
+          how: 'Answer in your head before you reveal each answer.' },
+        { id: 'probability-exercise', title: 'Gen Z Probability Exercises', url: 'probability-exercise.html',
+          tag: 'Practice', word: 'practice', c1: '#fff0e3', c2: '#f3c2cf',
+          blurb: 'Five real-life Malaysian scenarios, from easy to hard, with tree diagrams and tables.',
+          how: 'Work it out on paper, then press "Show All Answers".' },
+        { id: 'answer-key', title: 'Practice Worksheet & Answers', url: 'answer-key.html',
+          tag: 'Self-check', word: 'self-check', c1: '#d9e8d4', c2: '#f3c2cf',
+          blurb: 'A full 20-point worksheet. Answers start hidden so you can test yourself.',
+          how: 'Tap a blurred answer to reveal it and mark your own score.' }
+      ]
+    }
   ];
+  var LESSONS = [];
+  TOPICS.forEach(function (t) { t.lessons.forEach(function (l) { LESSONS.push(l); }); });
+
   var KEY = 'sp-progress-v1';
 
   function load() {
@@ -159,6 +198,36 @@
     });
   }
 
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  function renderTopics() {
+    var root = document.getElementById('topics');
+    if (!root) return;
+    var html = '';
+    TOPICS.forEach(function (topic) {
+      html += '<section class="topic" id="topic-' + topic.id + '">' +
+        '<h3 class="topic-title">' + escapeHtml(topic.title) + '</h3>' +
+        '<p class="topic-intro">' + escapeHtml(topic.intro) + '</p><div class="grid">';
+      topic.lessons.forEach(function (l, i) {
+        html += '<a class="card" href="' + l.url + '" data-lesson-card="' + l.id + '">' +
+          '<div class="thumb" style="--c1:' + l.c1 + ';--c2:' + l.c2 + '"><span class="step">' + (i + 1) + '</span><span>' + escapeHtml(l.word) + '</span></div>' +
+          '<div class="card-body"><div class="tag">Lesson ' + (i + 1) + ' · ' + escapeHtml(l.tag) + '</div>' +
+          '<h3>' + escapeHtml(l.title) + '</h3><p>' + escapeHtml(l.blurb) + '</p>' +
+          '<p class="how">' + escapeHtml(l.how) + '</p></div></a>';
+      });
+      if (topic.comingSoon) {
+        html += '<div class="card soon"><div class="card-body"><div class="tag">Coming soon</div>' +
+          '<p>' + escapeHtml(topic.comingSoon) + '</p></div></div>';
+      }
+      html += '</div></section>';
+    });
+    root.innerHTML = html;
+  }
+
   function homePage() {
     var state = load();
     var cards = document.querySelectorAll('[data-lesson-card]');
@@ -201,7 +270,7 @@
 
   function init() {
     injectStyles();
-    if (lessonId === 'home') { homePage(); bindReset(); }
+    if (lessonId === 'home') { renderTopics(); homePage(); bindReset(); }
     else if (lessonId) lessonPage();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
