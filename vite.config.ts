@@ -1,15 +1,10 @@
 import { defineConfig, Plugin } from 'vite'
-import react from '@vitejs/plugin-react'
-import { readFileSync } from 'fs'
+import { readdirSync, readFileSync } from 'fs'
 import { resolve } from 'path'
 
-// Standalone lesson pages, published under URL-safe names.
-const staticPages: Record<string, string> = {
-  'PROBABILITY.html': 'probability-notes.html',
-  'EXERCISE PROBABILITY.html': 'probability-exercise.html',
-  'mean, mode, median, variance.html': 'statistics-notes.html',
-  'probability_answer_key for teacher.html': 'answer-key.html',
-}
+// Standalone lesson pages: every .html file in lessons/ is published at the site
+// root under the same name, with the shared learner.js added.
+const lessonsDir = resolve(__dirname, 'lessons')
 
 // Changes on every build so browsers fetch the new learner.js right after a deploy.
 const buildVersion = Date.now().toString(36)
@@ -19,7 +14,20 @@ function withLearner(html: string, lesson: string) {
   return html.replace(/<\/body>/i, `  <script src="./learner.js?v=${buildVersion}" data-lesson="${lesson}"></script>\n</body>`)
 }
 
-// Cache-busts the learner.js tag already written in index.html / presentation.html.
+function copyLessons(): Plugin {
+  return {
+    name: 'copy-lessons',
+    apply: 'build',
+    generateBundle() {
+      for (const fileName of readdirSync(lessonsDir).filter((f) => f.endsWith('.html'))) {
+        const html = readFileSync(resolve(lessonsDir, fileName), 'utf8')
+        this.emitFile({ type: 'asset', fileName, source: withLearner(html, fileName.replace(/\.html$/, '')) })
+      }
+    },
+  }
+}
+
+// Cache-busts the learner.js tag already written in the built pages.
 function versionLearner(): Plugin {
   return {
     name: 'version-learner',
@@ -31,27 +39,15 @@ function versionLearner(): Plugin {
   }
 }
 
-function copyStaticPages(): Plugin {
-  return {
-    name: 'copy-static-pages',
-    apply: 'build',
-    generateBundle() {
-      for (const [source, fileName] of Object.entries(staticPages)) {
-        const html = readFileSync(resolve(__dirname, source), 'utf8')
-        this.emitFile({ type: 'asset', fileName, source: withLearner(html, fileName.replace('.html', '')) })
-      }
-    },
-  }
-}
-
 export default defineConfig({
   base: './',
-  plugins: [react(), copyStaticPages(), versionLearner()],
+  plugins: [copyLessons(), versionLearner()],
   build: {
     rollupOptions: {
       input: {
         index: resolve(__dirname, 'index.html'),
         presentation: resolve(__dirname, 'presentation.html'),
+        'statistics-notes': resolve(__dirname, 'statistics-notes.html'),
       },
     },
   },
