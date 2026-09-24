@@ -66,6 +66,9 @@
     .rule > b:first-child { display: block; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
     .rule p { margin: 4px 0; }
     .rule .eq { font-size: 18px; font-weight: 700; text-align: center; margin: 6px 0; }
+    .rule table.words { border-collapse: collapse; margin: 6px 0; width: 100%; font-size: 15px; }
+    .rule table.words th, .rule table.words td { border: 1px solid var(--rule-line); padding: 5px 8px; text-align: left; vertical-align: top; }
+    .rule table.words td:last-child { font-style: italic; }
 
     .q {
       background: var(--card); border: 1px solid var(--line); border-radius: 16px;
@@ -138,62 +141,69 @@
     <section id="vocabulary" class="skill">
       <h2><span class="num">1</span> Vocabulary</h2>
       <div class="rule">
-        <b>Key words</b>
-        <p><b>Experiment:</b> an action with an uncertain result. <b>Outcome:</b> one possible result.</p>
-        <p><b>Event:</b> a group of one or more outcomes. <b>Sample space (S):</b> all possible outcomes.</p>
+        <b>Word box</b>
+        <p>Example: you <b>flip a coin</b> once.</p>
+        <table class="words">
+          <tr><th>Experiment</th><td>the action you do</td><td>flip a coin</td></tr>
+          <tr><th>Outcome</th><td>ONE result</td><td>Heads</td></tr>
+          <tr><th>Sample space (S)</th><td>ALL the results, in { }</td><td>S = {Heads, Tails}</td></tr>
+          <tr><th>Event</th><td>the result(s) you are looking for</td><td>getting Heads</td></tr>
+        </table>
+        <p>n(S) means "how many results are in S". Here n(S) = 2.</p>
       </div>
 
       <article class="q">
-        <div class="q-head"><h3>Q1 · Social media scrolling 🤳</h3><span class="level easy">Easy</span></div>
-        <p>You open TikTok and scroll through your For You Page.</p>
-        <ol type="A">
-          <li>What is the <b>experiment</b>?</li>
-          <li>Name one <b>outcome</b>.</li>
-          <li>Give an example of an <b>event</b>.</li>
-          <li>What is the <b>sample space</b>?</li>
+        <div class="q-head"><h3>Q1 · Flip a coin 🪙</h3><span class="level easy">Easy</span></div>
+        <p>Fill in each blank with a word from the word box: <b>experiment</b>, <b>outcome</b> or <b>sample space</b>.</p>
+        <ol type="a">
+          <li>Flipping the coin is the ____________.</li>
+          <li>Getting Tails is one ____________.</li>
+          <li>{Heads, Tails} is the ____________.</li>
         </ol>
         <div class="answer">
           <span class="label">Answer</span>
-          <ol type="A">
-            <li>Opening TikTok and seeing which video appears on your For You Page.</li>
-            <li>Any ONE specific type of video, for example a dance video.</li>
-            <li>Any GROUP of outcomes, for example "seeing an entertainment video" (dance, comedy or music).</li>
-            <li>All the types of video that could appear: {dance, comedy, cooking, sports, music, gaming, …}.</li>
+          <ol type="a">
+            <li><b>experiment</b> (it is the action you do)</li>
+            <li><b>outcome</b> (it is one result)</li>
+            <li><b>sample space</b> (it lists all the results)</li>
           </ol>
         </div>
       </article>
 
       <article class="q">
-        <div class="q-head"><h3>Q2 · Coffee order ☕</h3><span class="level easy">Easy</span></div>
-        <p>At a coffee shop, you order a random drink from the menu. The menu has 8 hot drinks and 6 cold drinks.</p>
-        <p><b>Which of these is an EVENT, not just one outcome?</b></p>
-        <ol type="A">
-          <li>Getting a caramel latte</li>
-          <li>Getting a hot drink</li>
-          <li>Getting exactly one drink</li>
-          <li>Getting an iced lemon tea</li>
+        <div class="q-head"><h3>Q2 · Roll a die 🎲</h3><span class="level easy">Easy</span></div>
+        <p>You roll a normal die once. It shows 1, 2, 3, 4, 5 or 6.</p>
+        <ol type="a">
+          <li>Write the sample space S.</li>
+          <li>What is n(S)?</li>
+          <li>Event E = "get an even number". List the outcomes in E.</li>
+          <li>What is n(E)?</li>
         </ol>
         <div class="answer">
           <span class="label">Answer</span>
-          <p class="final">B) Getting a hot drink</p>
-          <p class="why">It is an event because it is a group of 8 outcomes (the 8 hot drinks). A and D are single outcomes (one drink each), and C always happens, so it tells you nothing about which drink you get.</p>
+          <ol type="a">
+            <li>S = {1, 2, 3, 4, 5, 6}</li>
+            <li>n(S) = 6 (count the numbers in S)</li>
+            <li>E = {2, 4, 6}</li>
+            <li>n(E) = 3</li>
+          </ol>
         </div>
       </article>
 
       <article class="q">
-        <div class="q-head"><h3>Q3 · Playlist shuffle 🎵</h3><span class="level medium">Medium</span></div>
-        <p>Your playlist has 20 pop songs, 15 rap songs and 10 rock songs. You press shuffle and one song plays.</p>
-        <ol>
-          <li>What is the experiment?</li>
-          <li>How many outcomes are in the sample space?</li>
-          <li>Give an event with exactly 15 outcomes.</li>
+        <div class="q-head"><h3>Q3 · Canteen spinner 🍛</h3><span class="level medium">Medium</span></div>
+        <p>The school canteen spins a wheel to pick today's special. The wheel has 4 equal parts: <b>Nasi lemak</b>, <b>Mee goreng</b>, <b>Roti canai</b> and <b>Laksa</b>.</p>
+        <ol type="a">
+          <li>Write the sample space S. What is n(S)?</li>
+          <li>Event N = "the special is a noodle dish". List the outcomes in N. What is n(N)?</li>
+          <li>Is "the wheel lands on Roti canai" one <b>outcome</b> or an event with <b>more than one</b> outcome?</li>
         </ol>
         <div class="answer">
           <span class="label">Answer</span>
-          <ol>
-            <li>Shuffling the playlist and playing one random song.</li>
-            <li>20 + 15 + 10 = <b>45 outcomes</b> (every song is one outcome).</li>
-            <li>"Playing a rap song" (there are 15 rap songs).</li>
+          <ol type="a">
+            <li>S = {Nasi lemak, Mee goreng, Roti canai, Laksa}, n(S) = 4</li>
+            <li>N = {Mee goreng, Laksa}, n(N) = 2 (both are noodles)</li>
+            <li>One <b>outcome</b>: the wheel lands on only one food.</li>
           </ol>
         </div>
       </article>
