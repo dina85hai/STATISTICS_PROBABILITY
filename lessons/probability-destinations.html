@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Probability Travel Edition</title>
+  <meta name="description" content="4.3 Introduction to Probability: the basic concept and the four types of events (dependent, independent, mutually exclusive, non-mutually exclusive), each with an interactive travel example." />
+  <style>
+    :root {
+      --bg: #f5f9fb; --card: #ffffff; --ink: #1a1c1e; --muted: #5a6068; --line: #dde6eb; --accent: #0b6e7a;
+      --rule: #fff8d6; --rule-line: #e9c84b;
+      --a: #1f6fd1; --a-soft: #e3eefc; --b: #c35a00; --b-soft: #fdeede; --both: #7b3fb5; --both-soft: #efe4fa;
+      --ok: #1f7a4d; --ok-soft: #e2f6ea; --bad: #b3261e; --bad-soft: #fde7e5;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #111517; --card: #1b2125; --ink: #eef3f5; --muted: #b2bcc2; --line: #2d373d; --accent: #6fd3dd;
+        --rule: #332c14; --rule-line: #8a7424;
+        --a: #8cbcff; --a-soft: #1a2a40; --b: #ffb36b; --b-soft: #3a2614; --both: #cfa6ff; --both-soft: #2c1f3d;
+        --ok: #7fe3b0; --ok-soft: #15302a; --bad: #ff9d95; --bad-soft: #3a1f1d;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #111517; --card: #1b2125; --ink: #eef3f5; --muted: #b2bcc2; --line: #2d373d; --accent: #6fd3dd;
+      --rule: #332c14; --rule-line: #8a7424;
+      --a: #8cbcff; --a-soft: #1a2a40; --b: #ffb36b; --b-soft: #3a2614; --both: #cfa6ff; --both-soft: #2c1f3d;
+      --ok: #7fe3b0; --ok-soft: #15302a; --bad: #ff9d95; --bad-soft: #3a1f1d;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .page { max-width: 920px; margin: 0 auto; padding: 64px 16px 40px; }
+
+    .hero { border-radius: 20px; padding: 28px 22px; color: #fff; background: linear-gradient(135deg, #0b6e7a, #1f6fd1 55%, #7b3fb5); }
+    .kicker { margin: 0 0 4px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
+    .hero h1 { margin: 0 0 8px; font-size: clamp(26px, 5vw, 40px); line-height: 1.15; }
+    .lead { margin: 0; max-width: 62ch; }
+    .syllabus { margin-top: 14px; padding: 10px 14px; border-radius: 12px; background: rgba(255, 255, 255, .14); font-size: 15px; }
+    .syllabus p { margin: 2px 0; }
+    .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .jump a { color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; padding: 7px 12px; border-radius: 999px; background: rgba(255, 255, 255, .18); }
+    .jump a:hover, .jump a:focus-visible { background: rgba(255, 255, 255, .32); }
+
+    .topic { margin-top: 40px; scroll-margin-top: 16px; }
+    .topic > h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 4px; font-size: clamp(20px, 3vw, 26px); }
+    .num { display: inline-grid; place-items: center; min-width: 44px; height: 34px; padding: 0 8px; flex: none; border-radius: 999px; background: var(--accent); color: var(--card); font-size: 15px; }
+    .dest { margin: 0 0 12px; color: var(--muted); font-weight: 600; }
+    .lo { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 1px 8px; margin-left: 6px; vertical-align: middle; }
+
+    .rule { background: var(--rule); border: 2px solid var(--rule-line); border-radius: 12px; padding: 10px 14px; margin: 0 0 14px; }
+    .rule > b:first-child { display: block; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .rule p { margin: 4px 0; }
+    .eq { font-size: 18px; font-weight: 700; text-align: center; margin: 6px 0; }
+    /* Long word fractions may wrap on small screens */
+    .eq .sp-frac { white-space: normal; max-width: 100%; }
+
+    .box { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px; margin-bottom: 14px; }
+    .box h3 { margin: 0 0 6px; font-size: 18px; }
+    .box p { margin: 0 0 8px; }
+    .terms { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin: 0; }
+    .terms div { border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; }
+    .terms dt { font-weight: 700; }
+    .terms dd { margin: 0; color: var(--muted); font-size: 15px; }
+
+    button { font: inherit; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 12px; }
+    .chip { font-size: 14px; padding: 4px 8px; border-radius: 8px; border: 2px solid var(--line); background: var(--card); }
+    .chip.in-a { border-color: var(--a); background: var(--a-soft); }
+    .chip.in-b { border-color: var(--b); background: var(--b-soft); }
+    .chip.in-both { border-color: var(--both); background: var(--both-soft); }
+    .chip.gone { opacity: .3; text-decoration: line-through; }
+    .pick { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+    .pick button, .btn {
+      font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 999px; padding: 7px 12px;
+      border: 2px solid var(--line); background: var(--card); color: var(--ink);
+    }
+    .pick button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--card); }
+    .btn.primary { border-color: var(--accent); background: var(--accent); color: var(--card); }
+    label.field { display: inline-flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 600; margin: 0 12px 10px 0; max-width: 100%; }
+    label.field select { width: 100%; }
+    select { font: inherit; font-size: 15px; padding: 6px 8px; border-radius: 8px; border: 2px solid var(--line); background: var(--card); color: var(--ink); max-width: 100%; }
+    .tag-a { color: var(--a); } .tag-b { color: var(--b); } .tag-both { color: var(--both); }
+
+    .result { border-left: 4px solid var(--accent); background: var(--bg); border-radius: 8px; padding: 10px 14px; margin-top: 10px; }
+    .result .work { white-space: pre-line; }
+    .result .final { font-weight: 700; margin: 6px 0 0; }
+    .verdict { display: inline-block; font-weight: 700; padding: 2px 10px; border-radius: 999px; margin-bottom: 6px; }
+    .verdict.ok { color: var(--ok); background: var(--ok-soft); }
+    .verdict.bad { color: var(--bad); background: var(--bad-soft); }
+
+    .scale { position: relative; height: 14px; border-radius: 999px; margin: 18px 4px 26px; background: linear-gradient(90deg, #d64545, #e9b949 50%, #2e9e5b); }
+    .scale span { position: absolute; top: 18px; font-size: 12px; color: var(--muted); transform: translateX(-50%); }
+    .scale span.start { left: 0; transform: none; }
+    .scale span.end { right: 0; transform: none; }
+    .scale .marker { position: absolute; top: -7px; width: 4px; height: 28px; border-radius: 2px; background: var(--ink); transform: translateX(-50%); transition: left .3s; }
+
+    .table-scroll { overflow-x: auto; }
+    table.grid { border-collapse: collapse; margin: 8px 0; font-size: 14px; }
+    table.grid th, table.grid td { border: 1px solid var(--line); padding: 6px 10px; text-align: center; }
+    table.grid td.hit { background: var(--both-soft); outline: 2px solid var(--both); outline-offset: -2px; font-weight: 700; }
+    table.grid td.last { box-shadow: inset 0 0 0 3px var(--accent); }
+    table.tree td.hit { background: var(--a-soft); font-weight: 700; }
+
+    .venn { display: block; width: 100%; max-width: 420px; height: auto; margin: 6px auto; }
+    .venn text { fill: var(--ink); font: 700 18px system-ui, sans-serif; text-anchor: middle; }
+    .venn .small { font-size: 13px; font-weight: 600; fill: var(--muted); }
+    input[type="range"] { width: 100%; max-width: 360px; accent-color: var(--both); }
+
+    details.check { margin-top: 12px; border: 1px dashed var(--accent); border-radius: 12px; padding: 8px 12px; }
+    details.check summary { cursor: pointer; font-weight: 700; color: var(--accent); }
+    details.check .work { white-space: pre-line; margin-top: 6px; }
+
+    .quiz { display: grid; gap: 12px; }
+    .quiz .box { margin: 0; }
+    .quiz .choices { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .quiz .choices button.right { border-color: var(--ok); background: var(--ok-soft); }
+    .quiz .choices button.wrong { border-color: var(--bad); background: var(--bad-soft); }
+    .quiz .why { margin: 8px 0 0; color: var(--muted); font-size: 15px; }
+    .score { font-weight: 700; }
+
+    table.summary { width: 100%; border-collapse: collapse; background: var(--card); font-size: 15px; }
+    table.summary th, table.summary td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+    table.summary thead th { background: var(--rule); }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <p class="kicker">Topic 2 · Probability · 4.3</p>
+      <h1>Introduction to Probability: Travel Edition ✈️</h1>
+      <p class="lead">Pack your bags! Each subtopic visits a destination and has an example you can play with. Change the choices, press the buttons and watch the probability change.</p>
+      <div class="syllabus">
+        <p><b>Learning outcome 3:</b> Calculate the probability of an event (C2).</p>
+        <p><b>8.</b> Explain the basic concept of probability → 4.3.1</p>
+        <p><b>9.</b> Explain the types of events → 4.3.2 dependent, 4.3.3 independent, 4.3.4 mutually exclusive, 4.3.5 non-mutually exclusive</p>
+      </div>
+      <nav class="jump" aria-label="Jump to a subtopic">
+        <a href="#basic">4.3.1 Langkawi</a>
+        <a href="#dependent">4.3.2 Cameron Highlands</a>
+        <a href="#independent">4.3.3 Penang</a>
+        <a href="#exclusive">4.3.4 Kuala Lumpur</a>
+        <a href="#non-exclusive">4.3.5 Sabah</a>
+        <a href="#which">Which type?</a>
+      </nav>
+    </header>
+
+    <!-- ================= 4.3.1 BASIC CONCEPT ================= -->
+    <section id="basic" class="topic">
+      <h2><span class="num">4.3.1</span> The basic concept of probability <span class="lo">LO 8</span></h2>
+      <p class="dest">🏝️ Destination: Langkawi, Kedah</p>
+      <div class="rule">
+        <b>Formula</b>
+        <p class="eq">P(A) = n(A)/n(S) = <span class="sp-frac"><span>number of outcomes in event A</span><span>number of outcomes in the sample space</span></span></p>
+        <p class="eq">0 ≤ P(A) ≤ 1 &nbsp;&nbsp;&nbsp; P(A′) = 1 − P(A)</p>
+        <p>P = 0 means impossible, P = 1 means certain. A′ ("A complement") means "A does not happen".</p>
+      </div>
+      <div class="box">
+        <h3>Key words, Langkawi style</h3>
+        <dl class="terms">
+          <div><dt>Experiment</dt><dd>Drawing one activity ticket from the hotel's lucky jar.</dd></div>
+          <div><dt>Outcome</dt><dd>One result, e.g. the ticket says "Cable car".</dd></div>
+          <div><dt>Sample space, S</dt><dd>All 12 tickets in the jar, so n(S) = 12.</dd></div>
+          <div><dt>Event</dt><dd>A group of outcomes, e.g. "a water activity".</dd></div>
+        </dl>
+      </div>
+      <div class="box">
+        <h3>🎟️ Interactive: the Langkawi lucky jar</h3>
+        <p>Your hotel has a jar of 12 free activity tickets. You draw one without looking. Choose an event to see its probability.</p>
+        <div class="chips" id="jar"></div>
+        <div class="pick" id="jar-events" role="group" aria-label="Event"></div>
+        <div class="scale" aria-hidden="true"><div class="marker" id="jar-marker"></div><span class="start">0 impossible</span><span style="left:50%">0.5</span><span class="end">1 certain</span></div>
+        <div class="result" id="jar-result" aria-live="polite"></div>
+        <h3 style="margin-top:16px">Try it many times</h3>
+        <p>Draw tickets at random (putting each one back). The more you draw, the closer the <b>experimental</b> probability gets to the <b>theoretical</b> one.</p>
+        <div class="pick">
+          <button type="button" class="btn" data-draw="1">Draw 1</button>
+          <button type="button" class="btn" data-draw="10">Draw 10</button>
+          <button type="button" class="btn" data-draw="100">Draw 100</button>
+          <button type="button" class="btn" id="jar-reset">Reset</button>
+        </div>
+        <div class="result" id="jar-sim" aria-live="polite">No draws yet.</div>
+      </div>
+      <details class="check">
+        <summary>Quick check: what is P(not a water activity)?</summary>
+        <div class="work">Water activities: island hopping 5 + kayak 2 + parasailing 1 = 8 tickets
+P(water) = 8/12 = 2/3
+P(not water) = 1 − 2/3 = 1/3 (the 4 cable car tickets: 4/12 = 1/3 ✓)</div>
+      </details>
+    </section>
+
+    <!-- ================= 4.3.2 DEPENDENT ================= -->
+    <section id="dependent" class="topic">
+      <h2><span class="num">4.3.2</span> Dependent events <span class="lo">LO 9</span></h2>
+      <p class="dest">🍓 Destination: Cameron Highlands, Pahang</p>
+      <div class="rule">
+        <b>Formula</b>
+        <p class="eq">P(A and B) = P(A) × P(B | A)</p>
+        <p>Two events are <b>dependent</b> when the first one changes the probability of the second. This happens when you pick <b>without replacement</b>. P(B | A) means "the probability of B, given that A has already happened".</p>
+      </div>
+      <div class="box">
+        <h3>🧺 Interactive: the strawberry farm basket</h3>
+        <p>At a strawberry farm you pick 2 fruits from a basket of <b>5 ripe</b> 🍓 and <b>3 unripe</b> 🟢 strawberries, without looking.</p>
+        <div class="pick" id="straw-mode" role="group" aria-label="Replacement">
+          <button type="button" data-mode="without" aria-pressed="true">Eat the first one (without replacement)</button>
+          <button type="button" data-mode="with" aria-pressed="false">Put it back (with replacement)</button>
+        </div>
+        <div class="chips" id="basket"></div>
+        <div class="pick">
+          <button type="button" class="btn primary" id="straw-pick">Pick a strawberry</button>
+          <button type="button" class="btn" id="straw-reset">Reset basket</button>
+        </div>
+        <div class="result" id="straw-live" aria-live="polite"></div>
+        <h3 style="margin-top:16px">Tree of all the possibilities</h3>
+        <div class="table-scroll"><table class="grid tree" id="straw-tree"></table></div>
+        <div class="result" id="straw-note"></div>
+      </div>
+      <details class="check">
+        <summary>Quick check: without replacement, what is P(one ripe and one unripe, in any order)?</summary>
+        <div class="work">P(ripe then unripe) = 5/8 × 3/7 = 15/56
+P(unripe then ripe) = 3/8 × 5/7 = 15/56
+These two paths can't both happen, so add them: 15/56 + 15/56 = 30/56 = 15/28 ≈ 0.536</div>
+      </details>
+    </section>
+
+    <!-- ================= 4.3.3 INDEPENDENT ================= -->
+    <section id="independent" class="topic">
+      <h2><span class="num">4.3.3</span> Independent events <span class="lo">LO 9</span></h2>
+      <p class="dest">🍜 Destination: George Town, Penang</p>
+      <div class="rule">
+        <b>Formula</b>
+        <p class="eq">P(A and B) = P(A) × P(B)</p>
+        <p>Two events are <b>independent</b> when one does not change the probability of the other.</p>
+      </div>
+      <div class="box">
+        <h3>🎡 Interactive: plan a Penang food trip</h3>
+        <p>You spin a wheel with 4 equal parts to choose dinner (Char Kway Teow, Assam Laksa, Nasi Kandar or Cendol), then flip a coin to choose how to get there (Trishaw or Walk). The coin doesn't know what the wheel said, so the events are independent.</p>
+        <label class="field"><span class="tag-a">Event A (food)</span><select id="pg-a"></select></label>
+        <label class="field"><span class="tag-b">Event B (transport)</span><select id="pg-b"></select></label>
+        <div class="table-scroll"><table class="grid" id="pg-grid"></table></div>
+        <div class="pick"><button type="button" class="btn primary" id="pg-spin">🎲 Spin and flip</button></div>
+        <div class="result" id="pg-result" aria-live="polite"></div>
+      </div>
+      <details class="check">
+        <summary>Quick check: what is P(noodles AND walk)?</summary>
+        <div class="work">Noodles = Char Kway Teow or Assam Laksa, so P(noodles) = 2/4 = 1/2
+P(walk) = 1/2
+P(noodles and walk) = 1/2 × 1/2 = 1/4 (2 of the 8 boxes in the grid ✓)</div>
+      </details>
+    </section>
+
+    <!-- ================= 4.3.4 MUTUALLY EXCLUSIVE ================= -->
+    <section id="exclusive" class="topic">
+      <h2><span class="num">4.3.4</span> Mutually exclusive events <span class="lo">LO 9</span></h2>
+      <p class="dest">🏙️ Destination: Kuala Lumpur</p>
+      <div class="rule">
+        <b>Formula</b>
+        <p class="eq">P(A or B) = P(A) + P(B)</p>
+        <p>Two events are <b>mutually exclusive</b> when they cannot happen at the same time: they have <b>no outcomes in common</b>, so P(A and B) = 0.</p>
+      </div>
+      <div class="box">
+        <h3>🃏 Interactive: the KL day-trip lucky draw</h3>
+        <p>A travel fair gives away a free day trip. You draw ONE card from 20: 8 Petronas Twin Towers 🏙️, 5 Batu Caves 🛕, 4 KL Tower 🗼 and 3 Aquaria KLCC 🐠. Pick two events and check whether they are mutually exclusive.</p>
+        <label class="field"><span class="tag-a">Event A</span><select id="kl-a"></select></label>
+        <label class="field"><span class="tag-b">Event B</span><select id="kl-b"></select></label>
+        <div class="chips" id="kl-cards"></div>
+        <p style="font-size:14px"><span class="chip in-a">in A only</span> <span class="chip in-b">in B only</span> <span class="chip in-both">in both A and B</span></p>
+        <div class="result" id="kl-result" aria-live="polite"></div>
+      </div>
+      <details class="check">
+        <summary>Quick check: what is P(Batu Caves or KL Tower)?</summary>
+        <div class="work">One card can't be both, so the events are mutually exclusive.
+P(Batu Caves or KL Tower) = 5/20 + 4/20 = 9/20 = 0.45</div>
+      </details>
+    </section>
+
+    <!-- ================= 4.3.5 NON-MUTUALLY EXCLUSIVE ================= -->
+    <section id="non-exclusive" class="topic">
+      <h2><span class="num">4.3.5</span> Non-mutually exclusive events <span class="lo">LO 9</span></h2>
+      <p class="dest">🐢 Destination: Sabah</p>
+      <div class="rule">
+        <b>Formula</b>
+        <p class="eq">P(A or B) = P(A) + P(B) − P(A and B)</p>
+        <p>Two events are <b>non-mutually exclusive</b> when they can happen at the same time. The outcomes in both get counted twice when you add, so subtract them once.</p>
+      </div>
+      <div class="box">
+        <h3>🤿 Interactive: the Sabah tour group</h3>
+        <p>A tour group of <b>40 travellers</b> visits Sabah. <b class="tag-a">18 went scuba diving</b> at Sipadan (D) and <b class="tag-b">15 climbed Mount Kinabalu</b> (K). Some did both. One traveller is chosen at random for a prize. Move the slider to change how many did both.</p>
+        <label class="field" style="display:flex">Did both diving and climbing: <b id="sb-both-label">7</b>
+          <input type="range" id="sb-both" min="0" max="15" value="7" aria-describedby="sb-result" />
+        </label>
+        <svg class="venn" viewBox="0 0 420 260" role="img" aria-labelledby="sb-venn-title">
+          <title id="sb-venn-title">Venn diagram of the Sabah tour group</title>
+          <rect x="4" y="4" width="412" height="252" rx="14" fill="none" stroke="currentColor" stroke-opacity=".25" />
+          <text class="small" x="30" y="28" style="text-anchor:start">S (40)</text>
+          <circle cx="160" cy="135" r="95" fill="var(--a)" fill-opacity=".18" stroke="var(--a)" stroke-width="3" />
+          <circle cx="260" cy="135" r="95" fill="var(--b)" fill-opacity=".18" stroke="var(--b)" stroke-width="3" />
+          <text class="small" x="120" y="52">Diving (D)</text>
+          <text class="small" x="300" y="52">Kinabalu (K)</text>
+          <text id="sb-d" x="110" y="142">11</text>
+          <text id="sb-dk" x="210" y="142">7</text>
+          <text id="sb-k" x="310" y="142">8</text>
+          <text id="sb-n" x="380" y="236">14</text>
+          <text class="small" x="380" y="214">neither</text>
+        </svg>
+        <div class="result" id="sb-result" aria-live="polite"></div>
+      </div>
+      <details class="check">
+        <summary>Quick check (7 did both): what is P(the winner did only ONE of the two activities)?</summary>
+        <div class="work">Diving only = 18 − 7 = 11, climbing only = 15 − 7 = 8
+P(only one) = (11 + 8)/40 = 19/40 = 0.475</div>
+      </details>
+    </section>
+
+    <!-- ================= WHICH TYPE? ================= -->
+    <section id="which" class="topic">
+      <h2><span class="num">★</span> Which type of event?</h2>
+      <p class="dest">🌏 Around Malaysia and beyond</p>
+      <div class="rule">
+        <b>Ask yourself</b>
+        <p><b>Two things one after another?</b> Does the first change the chances of the second? Yes → <b>dependent</b>. No → <b>independent</b>.</p>
+        <p><b>Two events from one draw?</b> Can both happen together? No → <b>mutually exclusive</b>. Yes → <b>non-mutually exclusive</b>.</p>
+      </div>
+      <p>Score: <span class="score" id="quiz-score">0 / 0</span></p>
+      <div class="quiz" id="quiz"></div>
+    </section>
+
+    <!-- ================= SUMMARY ================= -->
+    <section class="topic">
+      <h2><span class="num">✓</span> Summary</h2>
+      <div class="table-scroll">
+        <table class="summary">
+          <thead><tr><th>Type</th><th>Meaning</th><th>Formula</th><th>Destination example</th></tr></thead>
+          <tbody>
+            <tr><th>Dependent</th><td>The first event changes the probability of the second</td><td>P(A and B) = P(A) × P(B | A)</td><td>🍓 Two strawberries, the first one eaten: 5/8 × 4/7 = 5/14</td></tr>
+            <tr><th>Independent</th><td>One event does not change the other</td><td>P(A and B) = P(A) × P(B)</td><td>🍜 Laksa and trishaw: 1/4 × 1/2 = 1/8</td></tr>
+            <tr><th>Mutually exclusive</th><td>Cannot happen at the same time</td><td>P(A or B) = P(A) + P(B)</td><td>🛕 Batu Caves or KL Tower: 5/20 + 4/20 = 9/20</td></tr>
+            <tr><th>Non-mutually exclusive</th><td>Can happen at the same time</td><td>P(A or B) = P(A) + P(B) − P(A and B)</td><td>🤿 Diving or Kinabalu: 18/40 + 15/40 − 7/40 = 13/20</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ---------- fraction helpers (text like "3/10" is stacked by learner.js) ----------
+    function gcd(a, b) { return b ? gcd(b, a % b) : Math.abs(a); }
+    function simplest(n, d) {
+      if (n === 0) return '0';
+      const g = gcd(n, d);
+      return d / g === 1 ? String(n / g) : `${n / g}/${d / g}`;
+    }
+    // "6/12 = 1/2" (or just "5/12" when it can't be simplified)
+    function fracSteps(n, d) {
+      const s = simplest(n, d);
+      return s === `${n}/${d}` ? s : `${n}/${d} = ${s}`;
+    }
+    function dec(x) { return (Math.round(x * 1000) / 1000).toString(); }
+    function pct(x) { return (Math.round(x * 1000) / 10).toString() + '%'; }
+    function el(id) { return document.getElementById(id); }
+
+    // ================= 4.3.1 Langkawi jar =================
+    const TICKETS = [
+      ...Array(5).fill({ kind: 'island', label: '🛥️ Island hopping' }),
+      ...Array(4).fill({ kind: 'cable', label: '🚠 Cable car' }),
+      ...Array(2).fill({ kind: 'kayak', label: '🛶 Mangrove kayak' }),
+      { kind: 'para', label: '🪂 Parasailing' }
+    ];
+    const JAR_EVENTS = [
+      { name: 'Island hopping', test: t => t.kind === 'island' },
+      { name: 'Cable car', test: t => t.kind === 'cable' },
+      { name: 'Parasailing', test: t => t.kind === 'para' },
+      { name: 'A water activity', test: t => t.kind !== 'cable' },
+      { name: 'Not parasailing', test: t => t.kind !== 'para', complement: 2 },
+      { name: 'Snorkelling', test: () => false },
+      { name: 'Any activity', test: () => true }
+    ];
+    let jarEvent = 0;
+    let sim = { draws: 0, hits: 0 };
+
+    function renderJar() {
+      const ev = JAR_EVENTS[jarEvent];
+      el('jar').innerHTML = TICKETS.map(t => `<span class="chip ${ev.test(t) ? 'in-a' : ''}">${t.label}</span>`).join('');
+      el('jar-events').innerHTML = JAR_EVENTS.map((e, i) =>
+        `<button type="button" data-event="${i}" aria-pressed="${i === jarEvent}">${e.name}</button>`).join('');
+      const n = TICKETS.filter(ev.test).length, N = TICKETS.length, p = n / N;
+      el('jar-marker').style.left = (p * 100) + '%';
+      let work = `n(A) = ${n} ticket${n === 1 ? '' : 's'}, n(S) = ${N}\nP(${ev.name.toLowerCase()}) = ${fracSteps(n, N)}`;
+      if (ev.complement !== undefined) {
+        const c = JAR_EVENTS[ev.complement], cn = TICKETS.filter(c.test).length;
+        work += `\nUsing the complement: 1 − P(${c.name.toLowerCase()}) = 1 − ${simplest(cn, N)} = ${simplest(N - cn, N)} ✓`;
+      }
+      const note = p === 0 ? ' (impossible: there is no snorkelling ticket)' : p === 1 ? ' (certain: every ticket is an activity)' : '';
+      el('jar-result').innerHTML = `<div class="work">${work}</div><p class="final">P = ${simplest(n, N)} ≈ ${dec(p)} = ${pct(p)}${note}</p>`;
+      renderSim();
+    }
+    function renderSim() {
+      const ev = JAR_EVENTS[jarEvent];
+      const theory = TICKETS.filter(ev.test).length / TICKETS.length;
+      el('jar-sim').innerHTML = sim.draws === 0 ? 'No draws yet.' :
+        `<div class="work">Draws: ${sim.draws}. "${ev.name}" came up ${sim.hits} times.
+Experimental probability = ${sim.hits}/${sim.draws} ≈ ${dec(sim.hits / sim.draws)}
+Theoretical probability ≈ ${dec(theory)}</div>`;
+    }
+    el('jar-events').addEventListener('click', e => {
+      const b = e.target.closest('[data-event]');
+      if (!b) return;
+      jarEvent = Number(b.dataset.event);
+      sim = { draws: 0, hits: 0 };
+      renderJar();
+    });
+    document.querySelectorAll('[data-draw]').forEach(b => b.addEventListener('click', () => {
+      const ev = JAR_EVENTS[jarEvent];
+      for (let i = 0; i < Number(b.dataset.draw); i++) {
+        sim.draws++;
+        if (ev.test(TICKETS[Math.floor(Math.random() * TICKETS.length)])) sim.hits++;
+      }
+      renderSim();
+    }));
+    el('jar-reset').addEventListener('click', () => { sim = { draws: 0, hits: 0 }; renderSim(); });
+
+    // ================= 4.3.2 Cameron Highlands strawberries =================
+    let strawMode = 'without';
+    let basket, picks;
+    function resetBasket() {
+      basket = [...Array(5).fill('R'), ...Array(3).fill('U')].map(k => ({ k, gone: false }));
+      picks = [];
+    }
+    const NAME = { R: 'ripe 🍓', U: 'unripe 🟢' };
+
+    function treeRows() {
+      const w = strawMode === 'without';
+      const rows = [];
+      [['R', 5], ['U', 3]].forEach(([k1, n1]) => {
+        [['R', 5], ['U', 3]].forEach(([k2, n2]) => {
+          const d2 = w ? 7 : 8;
+          const m2 = w && k1 === k2 ? n2 - 1 : n2;
+          rows.push({ path: k1 + k2, p1: [n1, 8], p2: [m2, d2], prod: [n1 * m2, 8 * d2] });
+        });
+      });
+      return rows;
+    }
+    function renderStraw() {
+      document.querySelectorAll('#straw-mode button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === strawMode));
+      el('basket').innerHTML = basket.map(s => `<span class="chip ${s.gone ? 'gone' : ''}">${s.k === 'R' ? '🍓' : '🟢'}</span>`).join('');
+      const left = basket.filter(s => !s.gone), r = left.filter(s => s.k === 'R').length;
+      let live;
+      if (picks.length === 0) live = `Basket: ${r} ripe and ${left.length - r} unripe. P(first is ripe) = ${r}/${left.length}`;
+      else if (picks.length === 1) {
+        live = `First pick: ${NAME[picks[0]]}. ` + (strawMode === 'without'
+          ? `You ate it, so the basket now has ${r} ripe out of ${left.length}.\nP(second is ripe | first was ${picks[0] === 'R' ? 'ripe' : 'unripe'}) = ${r}/${left.length}. The first pick CHANGED the chances → dependent.`
+          : `You put it back, so the basket still has ${r} ripe out of ${left.length}.\nP(second is ripe) = ${r}/${left.length}, the same as before → independent.`);
+      } else live = `Your picks: ${NAME[picks[0]]} then ${NAME[picks[1]]} (path ${picks.join('')} is highlighted below). Reset to try again.`;
+      el('straw-live').innerHTML = `<div class="work">${live}</div>`;
+      el('straw-pick').disabled = picks.length >= 2;
+
+      const rows = treeRows(), full = picks.join('');
+      el('straw-tree').innerHTML = `<thead><tr><th>1st pick</th><th>2nd pick</th><th>Path</th><th>Probability</th></tr></thead><tbody>` +
+        rows.map(row => `<tr><td>${NAME[row.path[0]]}: ${row.p1[0]}/${row.p1[1]}</td><td>${NAME[row.path[1]]}: ${row.p2[0]}/${row.p2[1]}</td>` +
+          `<td class="${row.path === full ? 'hit' : ''}">${row.path}</td><td class="${row.path === full ? 'hit' : ''}">${row.p1[0]}/${row.p1[1]} × ${row.p2[0]}/${row.p2[1]} = ${fracSteps(row.prod[0], row.prod[1])}</td></tr>`).join('') +
+        `</tbody>`;
+      const rr = rows[0];
+      el('straw-note').innerHTML = strawMode === 'without'
+        ? `<div class="work">Without replacement the second pick has only 7 fruits, and its chances depend on the first pick.
+P(both ripe) = P(R) × P(R | R) = 5/8 × 4/7 = ${fracSteps(rr.prod[0], rr.prod[1])} ≈ ${dec(rr.prod[0] / rr.prod[1])}</div>`
+        : `<div class="work">With replacement the basket is the same for both picks, so the events are independent.
+P(both ripe) = 5/8 × 5/8 = 25/64 ≈ ${dec(25 / 64)}</div>`;
+    }
+    el('straw-mode').addEventListener('click', e => {
+      const b = e.target.closest('[data-mode]');
+      if (!b) return;
+      strawMode = b.dataset.mode;
+      resetBasket();
+      renderStraw();
+    });
+    el('straw-pick').addEventListener('click', () => {
+      const left = basket.filter(s => !s.gone);
+      const s = left[Math.floor(Math.random() * left.length)];
+      picks.push(s.k);
+      if (strawMode === 'without') s.gone = true;
+      renderStraw();
+    });
+    el('straw-reset').addEventListener('click', () => { resetBasket(); renderStraw(); });
+
+    // ================= 4.3.3 Penang grid =================
+    const FOODS = ['Char Kway Teow', 'Assam Laksa', 'Nasi Kandar', 'Cendol'];
+    const RIDES = ['Trishaw', 'Walk'];
+    const SHORT = { 'Char Kway Teow': 'CKT', 'Assam Laksa': 'Laksa', 'Nasi Kandar': 'Nasi Kandar', 'Cendol': 'Cendol' };
+    const PG_A = [
+      ...FOODS.map(f => ({ name: f, set: [f] })),
+      { name: 'Noodles (Char Kway Teow or Assam Laksa)', set: ['Char Kway Teow', 'Assam Laksa'] }
+    ];
+    const PG_B = RIDES.map(r => ({ name: r, set: [r] }));
+    let lastSpin = null;
+    el('pg-a').innerHTML = PG_A.map((a, i) => `<option value="${i}">${a.name}</option>`).join('');
+    el('pg-b').innerHTML = PG_B.map((b, i) => `<option value="${i}">${b.name}</option>`).join('');
+    el('pg-a').value = '1';
+
+    function renderPenang() {
+      const A = PG_A[el('pg-a').value], B = PG_B[el('pg-b').value];
+      el('pg-grid').innerHTML = `<thead><tr><th></th>${RIDES.map(r => `<th>${r}</th>`).join('')}</tr></thead><tbody>` +
+        FOODS.map(f => `<tr><th>${f}</th>${RIDES.map(r => {
+          const hit = A.set.includes(f) && B.set.includes(r);
+          const last = lastSpin && lastSpin[0] === f && lastSpin[1] === r;
+          return `<td class="${hit ? 'hit' : ''} ${last ? 'last' : ''}">${SHORT[f]} + ${r}</td>`;
+        }).join('')}</tr>`).join('') + '</tbody>';
+      const nA = A.set.length, nB = B.set.length, hits = nA * nB;
+      let spin = '';
+      if (lastSpin) {
+        const won = A.set.includes(lastSpin[0]) && B.set.includes(lastSpin[1]);
+        spin = `\nYour spin: ${lastSpin[0]} + ${lastSpin[1]} (outlined). A and B ${won ? 'both happened! 🎉' : 'did not both happen.'}`;
+      }
+      el('pg-result').innerHTML = `<div class="work">P(A) = ${fracSteps(nA, 4)}, P(B) = ${fracSteps(nB, 2)}
+P(A and B) = P(A) × P(B) = ${simplest(nA, 4)} × ${simplest(nB, 2)} = ${simplest(hits, 8)}
+Check by counting: ${hits} of the 8 equally likely boxes are highlighted, ${fracSteps(hits, 8)} ✓${spin}</div>
+<p class="final">P(A and B) = ${simplest(hits, 8)} = ${pct(hits / 8)}</p>`;
+    }
+    el('pg-a').addEventListener('change', renderPenang);
+    el('pg-b').addEventListener('change', renderPenang);
+    el('pg-spin').addEventListener('click', () => {
+      lastSpin = [FOODS[Math.floor(Math.random() * 4)], RIDES[Math.floor(Math.random() * 2)]];
+      renderPenang();
+    });
+
+    // ================= 4.3.4 KL cards =================
+    const KL_KINDS = [
+      { kind: 'twin', label: '🏙️ Twin Towers', n: 8 },
+      { kind: 'batu', label: '🛕 Batu Caves', n: 5 },
+      { kind: 'kltower', label: '🗼 KL Tower', n: 4 },
+      { kind: 'aqua', label: '🐠 Aquaria', n: 3 }
+    ];
+    const KL_CARDS = KL_KINDS.flatMap(k => Array(k.n).fill(k));
+    const KL_EVENTS = [
+      { name: 'Petronas Twin Towers', kinds: ['twin'] },
+      { name: 'Batu Caves', kinds: ['batu'] },
+      { name: 'KL Tower', kinds: ['kltower'] },
+      { name: 'Aquaria KLCC', kinds: ['aqua'] },
+      { name: 'In the KLCC area (Twin Towers or Aquaria)', kinds: ['twin', 'aqua'] },
+      { name: 'A tower (Twin Towers or KL Tower)', kinds: ['twin', 'kltower'] }
+    ];
+    el('kl-a').innerHTML = el('kl-b').innerHTML = KL_EVENTS.map((e, i) => `<option value="${i}">${e.name}</option>`).join('');
+    el('kl-a').value = '1'; el('kl-b').value = '2';
+
+    function renderKL() {
+      const A = KL_EVENTS[el('kl-a').value], B = KL_EVENTS[el('kl-b').value];
+      const inA = c => A.kinds.includes(c.kind), inB = c => B.kinds.includes(c.kind);
+      el('kl-cards').innerHTML = KL_CARDS.map(c => {
+        const cls = inA(c) && inB(c) ? 'in-both' : inA(c) ? 'in-a' : inB(c) ? 'in-b' : '';
+        return `<span class="chip ${cls}">${c.label}</span>`;
+      }).join('');
+      const nA = KL_CARDS.filter(inA).length, nB = KL_CARDS.filter(inB).length;
+      const nAB = KL_CARDS.filter(c => inA(c) && inB(c)).length, nOr = KL_CARDS.filter(c => inA(c) || inB(c)).length;
+      let html;
+      if (A === B) {
+        html = `<span class="verdict bad">Same event</span><p>Choose two different events to compare.</p>`;
+      } else if (nAB === 0) {
+        html = `<span class="verdict ok">Mutually exclusive</span>
+<div class="work">No card is in both events, so they can't happen together: P(A and B) = 0.
+P(A or B) = P(A) + P(B) = ${nA}/20 + ${nB}/20 = ${fracSteps(nA + nB, 20)}</div>
+<p class="final">P(A or B) = ${simplest(nOr, 20)} = ${pct(nOr / 20)}</p>`;
+      } else {
+        html = `<span class="verdict bad">Not mutually exclusive</span>
+<div class="work">${nAB} cards are in BOTH events (purple), so A and B can happen together.
+Adding ${nA}/20 + ${nB}/20 = ${nA + nB}/20 would count those ${nAB} cards twice.
+P(A or B) = P(A) + P(B) − P(A and B) = ${nA}/20 + ${nB}/20 − ${nAB}/20 = ${fracSteps(nOr, 20)}</div>
+<p class="final">P(A or B) = ${simplest(nOr, 20)} = ${pct(nOr / 20)} (see 4.3.5)</p>`;
+      }
+      el('kl-result').innerHTML = html;
+    }
+    el('kl-a').addEventListener('change', renderKL);
+    el('kl-b').addEventListener('change', renderKL);
+
+    // ================= 4.3.5 Sabah Venn =================
+    function renderSabah() {
+      const both = Number(el('sb-both').value), D = 18, K = 15, N = 40;
+      const dOnly = D - both, kOnly = K - both, neither = N - (D + K - both);
+      el('sb-both-label').textContent = both;
+      el('sb-d').textContent = dOnly; el('sb-dk').textContent = both; el('sb-k').textContent = kOnly; el('sb-n').textContent = neither;
+      const nOr = D + K - both;
+      el('sb-result').innerHTML = (both === 0
+        ? `<span class="verdict ok">Mutually exclusive</span><div class="work">Nobody did both, so P(D and K) = 0 and the rule becomes the simple addition rule.</div>`
+        : `<span class="verdict bad">Non-mutually exclusive</span><div class="work">${both} travellers did both, so they are inside BOTH circles.</div>`) +
+        `<div class="work">P(D) = 18/40, P(K) = 15/40, P(D and K) = ${both}/40
+P(D or K) = 18/40 + 15/40 − ${both}/40 = ${fracSteps(nOr, N)}
+Check by counting the circles: ${dOnly} + ${both} + ${kOnly} = ${nOr} travellers ✓</div>
+<p class="final">P(D or K) = ${simplest(nOr, N)} = ${pct(nOr / N)}</p>`;
+    }
+    el('sb-both').addEventListener('input', renderSabah);
+
+    // ================= Which type? =================
+    const TYPES = ['Dependent', 'Independent', 'Mutually exclusive', 'Non-mutually exclusive'];
+    const QUIZ = [
+      { place: '🛶 Melaka', text: 'You flip a coin to choose a river cruise time, then roll a die to choose a Jonker Street stall. A = "heads", B = "roll a 6".', answer: 1,
+        why: 'The coin does not change the die. P(A and B) = 1/2 × 1/6 = 1/12.' },
+      { place: '🌺 Bali', text: 'You pick 2 postcards from a pack of 10 (4 beach, 6 temple) and keep the first one. A = "1st is beach", B = "2nd is beach".', answer: 0,
+        why: 'Keeping the first card leaves 9 cards, so it changes the second pick: 4/10 × 3/9 = 2/15.' },
+      { place: '🗼 Tokyo', text: 'You choose one day of your trip at random. A = "it rains all day", B = "it is sunny all day".', answer: 2,
+        why: 'One day cannot be rainy all day AND sunny all day, so P(A and B) = 0.' },
+      { place: '🏔️ Kota Kinabalu', text: 'You choose one tourist at the airport at random. A = "is Malaysian", B = "is under 18".', answer: 3,
+        why: 'A tourist can be Malaysian AND under 18, so subtract the overlap.' },
+      { place: '🏝️ Langkawi', text: 'You draw an activity ticket, put it back, then draw again. A = "1st is cable car", B = "2nd is cable car".', answer: 1,
+        why: 'The ticket goes back, so the jar is the same for both draws: 4/12 × 4/12 = 1/9.' },
+      { place: '🎤 Seoul', text: 'You draw one concert seat from a box. A = "seat is in Section A", B = "seat is in Section B".', answer: 2,
+        why: 'One seat is in only one section, so the two events cannot happen together.' },
+      { place: '🍰 Cameron Highlands', text: 'A plate has 6 scones (2 with jam). You eat one at random, then your friend takes one. A = "you get jam", B = "your friend gets jam".', answer: 0,
+        why: 'After you eat one, only 5 scones are left, and how many have jam depends on what you ate: 2/6 × 1/5 = 1/15.' },
+      { place: '🦁 Singapore', text: 'You choose one attraction from a guidebook. A = "free to enter", B = "outdoors".', answer: 3,
+        why: 'Some attractions (like a park) are free AND outdoors, so A and B can happen together.' }
+    ];
+    let score = { right: 0, done: 0 };
+    el('quiz').innerHTML = QUIZ.map((q, i) => `
+      <div class="box" data-q="${i}">
+        <p><b>${q.place}</b>: ${q.text}</p>
+        <div class="choices">${TYPES.map((t, j) => `<button type="button" class="btn" data-choice="${j}">${t}</button>`).join('')}</div>
+        <p class="why" hidden></p>
+      </div>`).join('');
+    el('quiz').addEventListener('click', e => {
+      const b = e.target.closest('[data-choice]');
+      if (!b) return;
+      const card = b.closest('[data-q]'), q = QUIZ[card.dataset.q];
+      if (card.dataset.answered) return;
+      card.dataset.answered = '1';
+      const pickedRight = Number(b.dataset.choice) === q.answer;
+      score.done++; if (pickedRight) score.right++;
+      card.querySelectorAll('[data-choice]').forEach(btn => {
+        if (Number(btn.dataset.choice) === q.answer) btn.classList.add('right');
+      });
+      if (!pickedRight) b.classList.add('wrong');
+      const why = card.querySelector('.why');
+      why.hidden = false;
+      why.textContent = (pickedRight ? '✅ Correct! ' : `❌ It's ${TYPES[q.answer].toLowerCase()}. `) + q.why;
+      el('quiz-score').textContent = `${score.right} / ${score.done}`;
+    });
+
+    resetBasket();
+    renderJar();
+    renderStraw();
+    renderPenang();
+    renderKL();
+    renderSabah();
+  </script>
+</body>
+</html>

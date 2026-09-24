@@ -30,12 +30,16 @@
     {
       id: 'probability',
       title: 'Topic 2 · Probability',
-      intro: 'Experiments, outcomes and events, tree diagrams, and independent and mutually exclusive events.',
+      intro: 'Syllabus 4.3: the basic concept of probability, tree diagrams, and dependent, independent, mutually exclusive and non-mutually exclusive events.',
       lessons: [
         { id: 'presentation', title: 'Probability Presentation', url: 'presentation.html',
           tag: 'Learn', word: 'learn', c1: '#f3c2cf', c2: '#c9a07e',
           blurb: 'Slides with animated tree diagrams, worked examples and quick "try it" questions.',
           how: 'Use Next / Previous at your own speed. Answer each question before you reveal it.' },
+        { id: 'probability-destinations', title: 'Probability: Travel Edition', url: 'probability-destinations.html',
+          tag: 'Explore', word: 'explore', c1: '#d6ecf0', c2: '#e3eefc',
+          blurb: 'Syllabus 4.3: the basic concept and dependent, independent, mutually exclusive and non-mutually exclusive events, each with an interactive trip from Langkawi to Sabah.',
+          how: 'Change the choices and press the buttons in each example, then try the quick checks and the "Which type?" game.' },
         { id: 'probability-practice', title: 'Probability Practice', url: 'probability-practice.html',
           tag: 'Practice', word: 'practice', c1: '#fff0e3', c2: '#f3c2cf',
           blurb: 'Every probability exercise on one page, sorted by skill from easy to hard, with an interactive tree diagram explorer.',
@@ -96,7 +100,7 @@
     '.sp-selftest b { color: #7a3a4d; }',
     '.sp-selftest button { margin-top: 8px; }',
     /* Stacked fractions (see typesetFractions) */
-    '.sp-frac { display: inline-flex; flex-direction: column; align-items: stretch; vertical-align: middle;',
+    '.sp-frac { position: relative; display: inline-flex; flex-direction: column; align-items: stretch; vertical-align: middle;',
     '  text-align: center; line-height: 1.15; margin: 0 .1em; white-space: nowrap; font-size: .95em; }',
     '.sp-frac > span { display: block; padding: 0 .15em; }',
     '.sp-frac > span:last-child { border-top: max(1px, .07em) solid currentColor; }',
