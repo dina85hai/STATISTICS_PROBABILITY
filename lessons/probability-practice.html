@@ -63,7 +63,7 @@
       background: var(--rule); border: 2px solid var(--rule-line); border-radius: 12px;
       padding: 10px 14px; margin: 0 0 16px;
     }
-    .rule b:first-child { display: block; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .rule > b:first-child { display: block; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
     .rule p { margin: 4px 0; }
     .rule .eq { font-size: 18px; font-weight: 700; text-align: center; margin: 6px 0; }
 
@@ -127,8 +127,9 @@
         <a href="#basic">2 · Basic probability</a>
         <a href="#trees">3 · Tree diagrams</a>
         <a href="#independent">4 · Independent (AND)</a>
-        <a href="#exclusive">5 · Mutually exclusive (OR)</a>
-        <a href="#explorer">6 · Probability trees</a>
+        <a href="#dependent">5 · Dependent (AND, no replacement)</a>
+        <a href="#exclusive">6 · Mutually exclusive (OR)</a>
+        <a href="#explorer">7 · Probability trees</a>
       </nav>
     </header>
     <div id="sp-selftest-anchor"></div>
@@ -515,9 +516,104 @@ P(both on time) = 0.90 × 0.85 = 0.765</div>
       </article>
     </section>
 
-    <!-- ================= SKILL 5: MUTUALLY EXCLUSIVE EVENTS ================= -->
+    <!-- ================= SKILL 5: DEPENDENT EVENTS ================= -->
+    <section id="dependent" class="skill">
+      <h2><span class="num">5</span> Dependent events (AND, without replacement)</h2>
+      <div class="rule">
+        <b>Formula</b>
+        <p class="eq">P(A and B) = P(A) × P(B | A)</p>
+        <p>Events are dependent when the first one changes the probability of the second, for example when you pick <b>without replacement</b>. P(B | A) means "the probability of B, given that A has already happened": after the first pick, the total and the count both go down.</p>
+      </div>
+
+      <article class="q">
+        <div class="q-head"><h3>Q17 · Duit raya packets 🧧</h3><span class="level easy">Easy</span></div>
+        <p>A bag has 10 duit raya packets: 3 contain RM10 and 7 contain RM5. You take one and keep it, then your cousin takes one.</p>
+        <p><b>What is the probability that you BOTH get RM10?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">P(you get RM10) = 3/10
+You keep it, so 2 RM10 packets are left out of 9.
+P(cousin gets RM10 | you got RM10) = 2/9
+P(both RM10) = 3/10 × 2/9 = 6/90 = 1/15</div>
+          <p class="final">1/15 ≈ 0.067 ≈ 6.7%</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q18 · Class committee 🗳️</h3><span class="level medium">Medium</span></div>
+        <p>A class has 30 students: 12 girls and 18 boys. The teacher picks a chairperson at random, then a secretary at random from the students who are left.</p>
+        <p><b>What is the probability that both are girls?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">The same student can't have both jobs, so the events are dependent.
+P(chair is a girl) = 12/30
+P(secretary is a girl | chair is a girl) = 11/29
+P(both girls) = 12/30 × 11/29 = 132/870 = 22/145</div>
+          <p class="final">22/145 ≈ 0.152 ≈ 15.2%</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q19 · Drink sachets ☕</h3><span class="level medium">Medium</span></div>
+        <p>A box has 5 Milo sachets and 3 teh tarik sachets. You take 2 sachets at random.</p>
+        <div class="part">
+          <p><b>Part A:</b> You put the first sachet back before taking the second. What is P(both Milo)?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">With replacement the box is the same both times, so the events are independent.
+P(both Milo) = 5/8 × 5/8 = 25/64</div>
+            <p class="final">25/64 ≈ 0.391 ≈ 39.1%</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part B:</b> You keep the first sachet. What is P(both Milo)?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">Without replacement: 4 Milo left out of 7.
+P(both Milo) = 5/8 × 4/7 = 20/56 = 5/14</div>
+            <p class="final">5/14 ≈ 0.357 ≈ 35.7%</p>
+            <p class="why">It is smaller than Part A because taking a Milo first leaves fewer Milo sachets for the second pick.</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part C:</b> Without replacement, what is P(one Milo and one teh tarik, in any order)?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">Milo then teh tarik: 5/8 × 3/7 = 15/56
+Teh tarik then Milo: 3/8 × 5/7 = 15/56
+The two orders can't both happen, so add them: 15/56 + 15/56 = 30/56 = 15/28</div>
+            <p class="final">15/28 ≈ 0.536 ≈ 53.6%</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q20 · Blind-box figures 🎁</h3><span class="level hard">Hard</span></div>
+        <p>A shelf has 12 blind boxes and 4 of them hold a rare figure. You buy 3 different boxes at random.</p>
+        <div class="part">
+          <p><b>Part A:</b> What is the probability that NONE of your 3 boxes is rare?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">Not rare: 8 of 12, then 7 of 11, then 6 of 10.
+P(no rare) = 8/12 × 7/11 × 6/10 = 336/1320 = 14/55</div>
+            <p class="final">14/55 ≈ 0.255 ≈ 25.5%</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part B:</b> What is the probability that you get AT LEAST ONE rare figure?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">"At least one rare" is the complement of "no rare".
+P(at least one rare) = 1 − 14/55 = 41/55</div>
+            <p class="final">41/55 ≈ 0.745 ≈ 74.5%</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= SKILL 6: MUTUALLY EXCLUSIVE EVENTS ================= -->
     <section id="exclusive" class="skill">
-      <h2><span class="num">5</span> Mutually exclusive events (OR → add)</h2>
+      <h2><span class="num">6</span> Mutually exclusive events (OR → add)</h2>
       <div class="rule">
         <b>Formula</b>
         <p class="eq">P(A or B) = P(A) + P(B)</p>
@@ -525,7 +621,7 @@ P(both on time) = 0.90 × 0.85 = 0.765</div>
       </div>
 
       <article class="q">
-        <div class="q-head"><h3>Q17 · Gaming loot box 🎮</h3><span class="level easy">Easy</span></div>
+        <div class="q-head"><h3>Q21 · Gaming loot box 🎮</h3><span class="level easy">Easy</span></div>
         <p>A loot box contains 50 common, 30 rare, 15 epic and 5 legendary items. You open one box and get one item.</p>
         <p><b>Are these events mutually exclusive or independent? Explain.</b></p>
         <ul>
@@ -540,7 +636,7 @@ P(both on time) = 0.90 × 0.85 = 0.765</div>
       </article>
 
       <article class="q">
-        <div class="q-head"><h3>Q18 · Grade distribution 📝</h3><span class="level medium">Medium</span></div>
+        <div class="q-head"><h3>Q22 · Grade distribution 📝</h3><span class="level medium">Medium</span></div>
         <p>In your class: A 15%, B 30%, C 35%, D 15%, F 5%.</p>
         <p><b>What is the probability a randomly selected student has a passing grade (A, B or C)?</b></p>
         <div class="answer">
@@ -552,7 +648,7 @@ P(A or B or C) = 0.15 + 0.30 + 0.35 = 0.80</div>
       </article>
 
       <article class="q">
-        <div class="q-head"><h3>Q19 · Concert raffle 🎫</h3><span class="level medium">Medium</span></div>
+        <div class="q-head"><h3>Q23 · Concert raffle 🎫</h3><span class="level medium">Medium</span></div>
         <p>A radio station gives away: 1st prize to 5 winners, 2nd prize to 15 winners and 3rd prize to 10 winners. Each entry can win only one prize. There are 1,000 entries and you entered once.</p>
         <p><b>What is the probability you win ANY prize?</b></p>
         <div class="answer">
@@ -564,7 +660,7 @@ P(any prize) = 5/1000 + 15/1000 + 10/1000 = 30/1000 = 3/100</div>
       </article>
 
       <article class="q">
-        <div class="q-head"><h3>Q20 · Video game drops 🗡️</h3><span class="level hard">Hard</span></div>
+        <div class="q-head"><h3>Q24 · Video game drops 🗡️</h3><span class="level hard">Hard</span></div>
         <p>When you defeat a boss you get exactly ONE reward: legendary weapon 10%, epic armour 25%, rare accessory 30%, common item 35%.</p>
         <div class="part">
           <p><b>Part A:</b> What is the probability of a legendary weapon OR epic armour?</p>
@@ -593,9 +689,9 @@ Check: 1 − P(common) = 1 − 0.35 = 0.65</div>
       </article>
     </section>
 
-    <!-- ================= SKILL 6: PROBABILITY TREES (INTERACTIVE) ================= -->
+    <!-- ================= SKILL 7: PROBABILITY TREES (INTERACTIVE) ================= -->
     <section id="explorer" class="skill">
-      <h2><span class="num">6</span> Probability trees: put it all together</h2>
+      <h2><span class="num">7</span> Probability trees: put it all together</h2>
       <div class="rule">
         <b>Key idea</b>
         <p><b>Multiply along a path</b> to get the probability of that outcome (AND).</p>
