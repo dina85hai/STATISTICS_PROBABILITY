@@ -57,12 +57,13 @@ body {
 }
 .hint { margin: 0 0 14px; color: var(--muted); }
 
-.formulas { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+/* Each worked example starts with its own formula, so students can see it while they follow the steps */
 .formula {
-  flex: 1 1 240px; background: var(--formula); border: 2px solid var(--formula-line); border-radius: 12px;
-  padding: 10px 14px; text-align: center; overflow-x: auto;
+  background: var(--formula); border: 2px solid var(--formula-line); border-radius: 12px;
+  margin: 0 0 12px; padding: 8px 10px; text-align: center; overflow-x: auto;
 }
 .formula small { display: block; color: var(--muted); font-size: 13px; }
+.formula small:first-child { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .formula .katex-display { margin: .3em 0; }
 .tip { background: var(--card); border-left: 4px solid var(--formula-line); border-radius: 8px; padding: 10px 14px; margin: 0 0 16px; }
 
@@ -82,6 +83,8 @@ body {
 .work { margin: 0 0 12px; padding-left: 22px; }
 .work li { margin-bottom: 8px; }
 .work li::marker { color: var(--c); font-weight: 700; }
+.work .katex-display { margin: .35em 0 .2em; overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+.work .katex-display > .katex { text-align: left; }
 .note { display: block; color: var(--muted); font-size: 14px; }
 .answer {
   margin-top: auto !important; padding: 10px 12px; border-radius: 10px;

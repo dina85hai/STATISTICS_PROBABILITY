@@ -27,7 +27,12 @@ https://dina85hai.github.io/STATISTICS_PROBABILITY/
 
 That's it: the landing page card, Home button, Mark as done and Next button are added
 automatically. If the answers are inside elements with `class="answer"`, self-test mode
-hides them too. Push to `main` and the site redeploys.
+hides them too. Fractions typed as `3/10` (or `n(A)/n(S)`) are shown as stacked fractions
+automatically; for words, write `<span class="sp-frac"><span>top</span><span>bottom</span></span>`.
+Push to `main` and the site redeploys.
+
+In the statistics notes, each worked example starts with its formula (`class="formula"`), and
+every step is typeset with KaTeX via `<span class="tex" data-tex="...">`.
 
 ## Local development
 

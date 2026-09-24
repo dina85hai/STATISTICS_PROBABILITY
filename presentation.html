@@ -72,11 +72,11 @@ const practiceQuestions = [
   },
   { q: 6, topic: "Basic Probability", difficulty: "Easy",
     scenario: "A mystery box contains 15 items: 5 tech gadgets, 7 clothing items, and 3 gift cards.\n\nWhat's the probability of NOT getting a tech gadget?",
-    answer: "Method 1: Not tech = clothing or gift cards = 7+3 = 10 items. P(not tech) = 10/15 = 2/3 ≈ 66.7%\nMethod 2 (Complement): P(tech) = 5/15 = 1/3. P(not tech) = 1 - 1/3 = 2/3 ≈ 66.7%"
+    answer: "Method 1: Not tech = clothing or gift cards = 7+3 = 10 items. P(not tech) = 10/15 = 2/3 ≈ 66.7%\nMethod 2 (Complement): P(tech) = 5/15 = 1/3. P(not tech) = 1 − 1/3 = 2/3 ≈ 66.7%"
   },
   { q: 7, topic: "Basic Probability", difficulty: "Medium",
     scenario: "A limited sneaker drop has 500 pairs available. 200,000 people enter the raffle.\n\nWhat's your probability of winning?",
-    answer: "P(winning) = 500 / 200,000 = 1/400 = 0.0025 = 0.25%\n\nReality check: That's a 1 in 400 chance. Pretty rare! This is why limited drops are so competitive."
+    answer: "P(winning) = 500/200,000 = 1/400 = 0.0025 = 0.25%\n\nReality check: That's a 1 in 400 chance. Pretty rare! This is why limited drops are so competitive."
   },
   { q: 8, topic: "Basic Probability", difficulty: "Medium",
     scenario: "Your teacher randomly selects students to present. Your class has 8 students who finished their project and 4 who didn't. You finished yours.\n\nWhat's the probability that:\nPart A: You get selected?\nPart B: Someone who finished gets selected?",
@@ -234,8 +234,8 @@ const slides = [
     type: 'formula',
     title: 'THE BASIC CONCEPT',
     text: 'PROBABILITY = How likely something is to happen',
-    formula: 'P(A) = n(A) / n(S)',
-    subformula: 'P(Event) = Number of favorable outcomes / Total number of outcomes',
+    formula: 'P(A) = n(A)/n(S)',
+    subformula: 'P(Event) = <span class="sp-frac"><span>Number of favorable outcomes</span><span>Total number of outcomes</span></span>',
     example: {
       text: 'Example: Jar with 10 balls (3 pink, 7 grey)',
       question: 'What\'s P(picking pink)?',
@@ -586,7 +586,7 @@ window.selectAnswer = function(index) {
 
         return `
             <button onclick="window.selectAnswer(${i})" class="rounded-xl p-3 md:p-6 text-white text-sm md:text-xl text-center border-2 transition-all cursor-pointer flex flex-col items-center justify-center ${btnClass}">
-                ${opt.label}
+                <span>${opt.label}</span>
                 ${isSelected && isCorrect ? '<div class="text-green-400 text-xl md:text-3xl mt-1 md:mt-2 font-bold">✓</div>' : ''}
                 ${isSelected && !isCorrect ? '<div class="text-red-400 text-xl md:text-3xl mt-1 md:mt-2 font-bold">✗</div>' : ''}
             </button>

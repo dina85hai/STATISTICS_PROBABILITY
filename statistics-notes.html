@@ -72,22 +72,20 @@
     <section id="mean" class="step">
       <h2><span class="num">1</span> Mean (x̄)</h2>
       <p class="hint">The mean is the "fair share": add everything up, then divide by how many there are.</p>
-      <div class="formulas">
-        <div class="formula"><span class="tex" data-display data-tex="\bar{x} = \frac{\sum x}{N}">x̄ = Σx ÷ N</span><small>raw data</small></div>
-        <div class="formula"><span class="tex" data-display data-tex="\bar{x} = \frac{\sum fx}{\sum f}">x̄ = Σfx ÷ Σf</span><small>frequency &amp; grouped data</small></div>
-      </div>
       <div class="cards">
         <article class="card s1">
           <p class="type">A · Raw data</p>
+          <div class="formula"><small>Formula</small><span class="tex" data-display data-tex="\bar{x} = \frac{\sum x}{N}">x̄ = Σx ÷ N</span></div>
           <ol class="work">
-            <li>Add them all up: 12 + 8 + 5 + 5 + 9 + 18 + 12 = <b>69</b></li>
-            <li>Count the numbers: N = <b>7</b></li>
-            <li>Divide: 69 ÷ 7 = 9.857…</li>
+            <li>Add them all up: <span class="tex" data-tex="\sum x = 12 + 8 + 5 + 5 + 9 + 18 + 12 = 69">Σx = 12 + 8 + 5 + 5 + 9 + 18 + 12 = 69</span></li>
+            <li>Count the numbers: <span class="tex" data-tex="N = 7">N = 7</span></li>
+            <li>Substitute into the formula:<span class="tex" data-display data-tex="\bar{x} = \frac{69}{7} = 9.857\ldots">x̄ = 69 ÷ 7 = 9.857…</span></li>
           </ol>
           <p class="answer">Mean ≈ 9.86 thousand views</p>
         </article>
         <article class="card s2">
           <p class="type">B · Frequency table</p>
+          <div class="formula"><small>Formula</small><span class="tex" data-display data-tex="\bar{x} = \frac{\sum fx}{\sum f}">x̄ = Σfx ÷ Σf</span></div>
           <ol class="work">
             <li>Multiply each value by its frequency (f × x):
               <table>
@@ -101,14 +99,15 @@
                 <tfoot><tr><td>Σ</td><td>40</td><td>137</td></tr></tfoot>
               </table>
             </li>
-            <li>Divide: 137 ÷ 40 = 3.425</li>
+            <li>Substitute into the formula:<span class="tex" data-display data-tex="\bar{x} = \frac{137}{40} = 3.425">x̄ = 137 ÷ 40 = 3.425</span></li>
           </ol>
           <p class="answer">Mean ≈ 3.43 cups per week</p>
         </article>
         <article class="card s3">
           <p class="type">C · Grouped data</p>
+          <div class="formula"><small>Formula</small><span class="tex" data-display data-tex="\bar{x} = \frac{\sum fx}{\sum f}">x̄ = Σfx ÷ Σf</span><span class="tex" data-display data-tex="x = \frac{\text{lower limit} + \text{upper limit}}{2}">x = (lower limit + upper limit) ÷ 2</span><small>x = class midpoint</small></div>
           <ol class="work">
-            <li>Use the <b>midpoint</b> of each class as x, e.g. (1 + 2) ÷ 2 = 1.5:
+            <li>Use the <b>midpoint</b> of each class as x, for example <span class="tex" data-tex="\dfrac{1 + 2}{2} = 1.5">(1 + 2) ÷ 2 = 1.5</span>:
               <table>
                 <thead><tr><th>Hours</th><th>f</th><th>x</th><th>fx</th></tr></thead>
                 <tbody>
@@ -121,7 +120,7 @@
                 <tfoot><tr><td>Σ</td><td>40</td><td></td><td>206</td></tr></tfoot>
               </table>
             </li>
-            <li>Divide: 206 ÷ 40 = 5.15</li>
+            <li>Substitute into the formula:<span class="tex" data-display data-tex="\bar{x} = \frac{206}{40} = 5.15">x̄ = 206 ÷ 40 = 5.15</span></li>
           </ol>
           <p class="answer">Mean = 5.15 hours per day</p>
         </article>
@@ -132,12 +131,10 @@
     <section id="mode" class="step">
       <h2><span class="num">2</span> Mode</h2>
       <p class="hint">The mode is the value that appears <b>most often</b>. A set of data can have more than one mode.</p>
-      <div class="formulas">
-        <div class="formula"><span class="tex" data-display data-tex="\text{Mode} = L + \left(\frac{d_1}{d_1 + d_2}\right) \times c">Mode = L + (d₁ ÷ (d₁ + d₂)) × c</span><small>grouped data</small></div>
-      </div>
       <div class="cards">
         <article class="card s1">
           <p class="type">A · Raw data</p>
+          <div class="formula"><small>Rule</small><span class="tex" data-display data-tex="\text{Mode} = \text{the value that appears most often}">Mode = the value that appears most often</span></div>
           <ol class="work">
             <li>Sort the numbers: 5, 5, 8, 9, 12, 12, 18</li>
             <li>Count each one: 5 → 2 times, 12 → 2 times, the others → 1 time</li>
@@ -146,6 +143,7 @@
         </article>
         <article class="card s2">
           <p class="type">B · Frequency table</p>
+          <div class="formula"><small>Rule</small><span class="tex" data-display data-tex="\text{Mode} = \text{the value with the highest } f">Mode = the value with the highest f</span></div>
           <ol class="work">
             <li>Look down the frequency column: 8, 12, <b>15</b>, 5</li>
             <li>The highest frequency is 15, for 4 cups</li>
@@ -154,11 +152,12 @@
         </article>
         <article class="card s3">
           <p class="type">C · Grouped data</p>
+          <div class="formula"><small>Formula</small><span class="tex" data-display data-tex="\text{Mode} = L + \left(\frac{d_1}{d_1 + d_2}\right) \times c">Mode = L + (d₁ ÷ (d₁ + d₂)) × c</span></div>
           <ol class="work">
             <li>Modal class = the class with the highest frequency = <b>5 – 6</b> (f = 18)</li>
-            <li>L = <b>lower boundary</b> of 5 – 6 = 4.5<br><span class="note">Classes are 1–2, 3–4, 5–6…, so the boundaries are halfway between: 4.5 and 6.5.</span></li>
-            <li>d₁ = 18 − 8 = 10 (difference with the class before)<br>d₂ = 18 − 7 = 11 (difference with the class after)<br>c = class width = 6.5 − 4.5 = 2</li>
-            <li>4.5 + (10 ÷ 21) × 2 = 4.5 + 0.952 = 5.452</li>
+            <li><span class="tex" data-tex="L">L</span> = <b>lower boundary</b> of 5 – 6 = 4.5<br><span class="note">Classes are 1–2, 3–4, 5–6…, so the boundaries are halfway between: 4.5 and 6.5.</span></li>
+            <li><span class="tex" data-tex="d_1 = 18 - 8 = 10">d₁ = 18 − 8 = 10</span> (difference with the class before)<br><span class="tex" data-tex="d_2 = 18 - 7 = 11">d₂ = 18 − 7 = 11</span> (difference with the class after)<br><span class="tex" data-tex="c = 6.5 - 4.5 = 2">c = 6.5 − 4.5 = 2</span> (class width)</li>
+            <li>Substitute into the formula:<span class="tex" data-display data-tex="\begin{aligned}\text{Mode} &amp;= 4.5 + \left(\frac{10}{10 + 11}\right) \times 2 \\ &amp;= 4.5 + 0.952 \\ &amp;= 5.452\end{aligned}">Mode = 4.5 + (10 ÷ (10 + 11)) × 2 = 4.5 + 0.952 = 5.452</span></li>
           </ol>
           <p class="answer">Mode ≈ 5.45 hours per day</p>
         </article>
@@ -169,23 +168,21 @@
     <section id="median" class="step">
       <h2><span class="num">3</span> Median</h2>
       <p class="hint">The median is the <b>middle</b> value when the data is in order.</p>
-      <div class="formulas">
-        <div class="formula"><span class="tex" data-display data-tex="\text{Position} = \frac{N + 1}{2}">Position = (N + 1) ÷ 2</span><small>raw &amp; frequency data</small></div>
-        <div class="formula"><span class="tex" data-display data-tex="\text{Median} = L + \left(\frac{\frac{N}{2} - F}{f_m}\right) \times c">Median = L + ((N/2 − F) ÷ fₘ) × c</span><small>grouped data</small></div>
-      </div>
       <div class="cards">
         <article class="card s1">
           <p class="type">A · Raw data</p>
+          <div class="formula"><small>Formula</small><span class="tex" data-display data-tex="\text{Position of median} = \frac{N + 1}{2}">Position of median = (N + 1) ÷ 2</span></div>
           <ol class="work">
             <li>Sort: 5, 5, 8, <b>9</b>, 12, 12, 18</li>
-            <li>Position = (7 + 1) ÷ 2 = 4th value</li>
+            <li>Substitute into the formula:<span class="tex" data-display data-tex="\text{Position} = \frac{7 + 1}{2} = 4">Position = (7 + 1) ÷ 2 = 4</span>So the median is the 4th value.</li>
           </ol>
           <p class="answer">Median = 9 thousand views</p>
         </article>
         <article class="card s2">
           <p class="type">B · Frequency table</p>
+          <div class="formula"><small>Formula</small><span class="tex" data-display data-tex="\text{Position of median} = \frac{N + 1}{2}">Position of median = (N + 1) ÷ 2</span><small>N = Σf</small></div>
           <ol class="work">
-            <li>Position = (40 + 1) ÷ 2 = 20.5, so the median is halfway between the 20th and 21st values</li>
+            <li>Substitute into the formula:<span class="tex" data-display data-tex="\text{Position} = \frac{40 + 1}{2} = 20.5">Position = (40 + 1) ÷ 2 = 20.5</span>So the median is halfway between the 20th and 21st values.</li>
             <li>Add a cumulative frequency column:
               <table>
                 <thead><tr><th>x</th><th>f</th><th>Cumulative f</th></tr></thead>
@@ -198,17 +195,18 @@
               </table>
             </li>
             <li>20th value = 3, 21st value = 4</li>
-            <li>Median = (3 + 4) ÷ 2 = 3.5</li>
+            <li>Take the middle of the two:<span class="tex" data-display data-tex="\text{Median} = \frac{3 + 4}{2} = 3.5">Median = (3 + 4) ÷ 2 = 3.5</span></li>
           </ol>
           <p class="answer">Median = 3.5 cups per week</p>
         </article>
         <article class="card s3">
           <p class="type">C · Grouped data</p>
+          <div class="formula"><small>Formula</small><span class="tex" data-display data-tex="\text{Median} = L + \left(\frac{\frac{N}{2} - F}{f_m}\right) \times c">Median = L + ((N/2 − F) ÷ fₘ) × c</span></div>
           <ol class="work">
-            <li>N ÷ 2 = 40 ÷ 2 = 20</li>
+            <li>Find the middle position:<span class="tex" data-display data-tex="\frac{N}{2} = \frac{40}{2} = 20">N/2 = 40/2 = 20</span></li>
             <li>Cumulative frequency: 5, 13, <b>31</b>, 38, 40. The 20th value is in class <b>5 – 6</b></li>
-            <li>L = lower boundary = 4.5<br>F = cumulative f <b>before</b> the class = 13<br>fₘ = frequency of the class = 18<br>c = 2</li>
-            <li>4.5 + ((20 − 13) ÷ 18) × 2 = 4.5 + 0.778 = 5.278</li>
+            <li><span class="tex" data-tex="L = 4.5">L = 4.5</span> (lower boundary)<br><span class="tex" data-tex="F = 13">F = 13</span> (cumulative f <b>before</b> the class)<br><span class="tex" data-tex="f_m = 18">fₘ = 18</span> (frequency of the class)<br><span class="tex" data-tex="c = 2">c = 2</span> (class width)</li>
+            <li>Substitute into the formula:<span class="tex" data-display data-tex="\begin{aligned}\text{Median} &amp;= 4.5 + \left(\frac{20 - 13}{18}\right) \times 2 \\ &amp;= 4.5 + 0.778 \\ &amp;= 5.278\end{aligned}">Median = 4.5 + ((20 − 13) ÷ 18) × 2 = 4.5 + 0.778 = 5.278</span></li>
           </ol>
           <p class="answer">Median ≈ 5.28 hours per day</p>
         </article>
@@ -219,27 +217,32 @@
     <section id="range" class="step">
       <h2><span class="num">4</span> Range</h2>
       <p class="hint">The range shows how spread out the data is: largest value minus smallest value. For grouped data, use the class midpoints.</p>
-      <div class="formulas">
-        <div class="formula"><span class="tex" data-display data-tex="\text{Range} = \text{Largest} - \text{Smallest}">Range = Largest − Smallest</span><small>raw &amp; frequency data</small></div>
-        <div class="formula"><span class="tex" data-display data-tex="\text{Range} = \text{Midpoint}_{\text{last class}} - \text{Midpoint}_{\text{first class}}">Range = midpoint of last class − midpoint of first class</span><small>grouped data</small></div>
-      </div>
       <div class="cards">
         <article class="card s1">
           <p class="type">A · Raw data</p>
-          <ol class="work"><li>18 − 5 = 13</li></ol>
+          <div class="formula"><small>Formula</small><span class="tex" data-display data-tex="\text{Range} = \text{Largest} - \text{Smallest}">Range = Largest − Smallest</span></div>
+          <ol class="work">
+            <li>Largest value 18, smallest value 5</li>
+            <li>Substitute into the formula:<span class="tex" data-display data-tex="\text{Range} = 18 - 5 = 13">Range = 18 − 5 = 13</span></li>
+          </ol>
           <p class="answer">Range = 13 thousand views</p>
         </article>
         <article class="card s2">
           <p class="type">B · Frequency table</p>
-          <ol class="work"><li>Largest value 5, smallest value 2: 5 − 2 = 3</li></ol>
+          <div class="formula"><small>Formula</small><span class="tex" data-display data-tex="\text{Range} = \text{Largest} - \text{Smallest}">Range = Largest − Smallest</span></div>
+          <ol class="work">
+            <li>Largest value 5, smallest value 2</li>
+            <li>Substitute into the formula:<span class="tex" data-display data-tex="\text{Range} = 5 - 2 = 3">Range = 5 − 2 = 3</span></li>
+          </ol>
           <p class="answer">Range = 3 cups</p>
         </article>
         <article class="card s3">
           <p class="type">C · Grouped data</p>
+          <div class="formula"><small>Formula</small><span class="tex" data-display data-tex="\begin{aligned}\text{Range} = {} &amp;\text{Midpoint}_{\text{last class}} \\ &amp;- \text{Midpoint}_{\text{first class}}\end{aligned}">Range = midpoint of last class − midpoint of first class</span></div>
           <ol class="work">
-            <li>Midpoint of the last class (9 – 10) = (9 + 10) ÷ 2 = 9.5</li>
-            <li>Midpoint of the first class (1 – 2) = (1 + 2) ÷ 2 = 1.5</li>
-            <li>9.5 − 1.5 = 8</li>
+            <li>Midpoint of the last class (9 – 10):<span class="tex" data-display data-tex="\frac{9 + 10}{2} = 9.5">(9 + 10) ÷ 2 = 9.5</span></li>
+            <li>Midpoint of the first class (1 – 2):<span class="tex" data-display data-tex="\frac{1 + 2}{2} = 1.5">(1 + 2) ÷ 2 = 1.5</span></li>
+            <li>Substitute into the formula:<span class="tex" data-display data-tex="\text{Range} = 9.5 - 1.5 = 8">Range = 9.5 − 1.5 = 8</span></li>
           </ol>
           <p class="answer">Range = 8 hours</p>
         </article>
@@ -250,26 +253,22 @@
     <section id="spread" class="step">
       <h2><span class="num">5</span> Variance (σ²) &amp; standard deviation (σ)</h2>
       <p class="hint">These measure how far, on average, the data is from the mean. Find the <b>variance</b> first, then take its square root to get the <b>standard deviation</b>.</p>
-      <div class="formulas">
-        <div class="formula"><span class="tex" data-display data-tex="\sigma^2 = \frac{\sum x^2}{N} - \bar{x}^2">σ² = Σx² ÷ N − x̄²</span><small>raw data</small></div>
-        <div class="formula"><span class="tex" data-display data-tex="\sigma^2 = \frac{\sum fx^2}{\sum f} - \bar{x}^2">σ² = Σfx² ÷ Σf − x̄²</span><small>frequency &amp; grouped data</small></div>
-        <div class="formula"><span class="tex" data-display data-tex="\sigma = \sqrt{\sigma^2}">σ = √σ²</span></div>
-      </div>
       <p class="tip">💡 Keep the full mean (for example 3.425, not 3.43) until the very last step. Rounding early makes the answer slightly wrong.</p>
       <div class="cards">
         <article class="card s1">
           <p class="type">A · Raw data</p>
+          <div class="formula"><small>Formula</small><span class="tex" data-display data-tex="\sigma^2 = \frac{\sum x^2}{N} - \bar{x}^2">σ² = Σx² ÷ N − x̄²</span><span class="tex" data-display data-tex="\sigma = \sqrt{\sigma^2}">σ = √σ²</span></div>
           <ol class="work">
-            <li>Square each value and add: 144 + 64 + 25 + 25 + 81 + 324 + 144 = <b>807</b></li>
-            <li>Σx² ÷ N = 807 ÷ 7 = 115.286</li>
-            <li>x̄² = 9.857² = 97.163</li>
-            <li>Variance σ² = 115.286 − 97.163 = <b>18.12</b></li>
-            <li>σ = √18.12 = 4.257</li>
+            <li>Square each value and add:<span class="tex" data-display data-tex="\begin{aligned}\sum x^2 &amp;= 144 + 64 + 25 + 25 \\ &amp;\quad + 81 + 324 + 144 \\ &amp;= 807\end{aligned}">Σx² = 144 + 64 + 25 + 25 + 81 + 324 + 144 = 807</span></li>
+            <li>From Step 1: <span class="tex" data-tex="\bar{x} = \dfrac{69}{7}">x̄ = 69 ÷ 7</span> and <span class="tex" data-tex="N = 7">N = 7</span></li>
+            <li>Substitute into the formula:<span class="tex" data-display data-tex="\begin{aligned}\sigma^2 &amp;= \frac{807}{7} - \left(\frac{69}{7}\right)^2 \\ &amp;= 115.286 - 97.163 \\ &amp;= 18.12\end{aligned}">σ² = 807 ÷ 7 − (69 ÷ 7)² = 115.286 − 97.163 = 18.12</span></li>
+            <li>Standard deviation:<span class="tex" data-display data-tex="\sigma = \sqrt{18.12} = 4.257">σ = √18.12 = 4.257</span></li>
           </ol>
           <p class="answer">σ² ≈ 18.12, σ ≈ 4.26 thousand views</p>
         </article>
         <article class="card s2">
           <p class="type">B · Frequency table</p>
+          <div class="formula"><small>Formula</small><span class="tex" data-display data-tex="\sigma^2 = \frac{\sum fx^2}{\sum f} - \bar{x}^2">σ² = Σfx² ÷ Σf − x̄²</span><span class="tex" data-display data-tex="\sigma = \sqrt{\sigma^2}">σ = √σ²</span></div>
           <ol class="work">
             <li>Work out fx² for each row:
               <table>
@@ -283,15 +282,15 @@
                 <tfoot><tr><td>Σ</td><td>40</td><td></td><td>505</td></tr></tfoot>
               </table>
             </li>
-            <li>Σfx² ÷ Σf = 505 ÷ 40 = 12.625</li>
-            <li>x̄² = 3.425² = 11.731</li>
-            <li>Variance σ² = 12.625 − 11.731 = <b>0.894</b></li>
-            <li>σ = √0.894 = 0.946</li>
+            <li>From Step 1: <span class="tex" data-tex="\bar{x} = 3.425">x̄ = 3.425</span></li>
+            <li>Substitute into the formula:<span class="tex" data-display data-tex="\begin{aligned}\sigma^2 &amp;= \frac{505}{40} - 3.425^2 \\ &amp;= 12.625 - 11.731 \\ &amp;= 0.894\end{aligned}">σ² = 505 ÷ 40 − 3.425² = 12.625 − 11.731 = 0.894</span></li>
+            <li>Standard deviation:<span class="tex" data-display data-tex="\sigma = \sqrt{0.894} = 0.946">σ = √0.894 = 0.946</span></li>
           </ol>
           <p class="answer">σ² ≈ 0.894, σ ≈ 0.95 cups</p>
         </article>
         <article class="card s3">
           <p class="type">C · Grouped data</p>
+          <div class="formula"><small>Formula</small><span class="tex" data-display data-tex="\sigma^2 = \frac{\sum fx^2}{\sum f} - \bar{x}^2">σ² = Σfx² ÷ Σf − x̄²</span><span class="tex" data-display data-tex="\sigma = \sqrt{\sigma^2}">σ = √σ²</span></div>
           <ol class="work">
             <li>Use the midpoints as x:
               <table>
@@ -306,10 +305,9 @@
                 <tfoot><tr><td>Σ</td><td>40</td><td></td><td>1228</td></tr></tfoot>
               </table>
             </li>
-            <li>Σfx² ÷ Σf = 1228 ÷ 40 = 30.7</li>
-            <li>x̄² = 5.15² = 26.5225</li>
-            <li>Variance σ² = 30.7 − 26.5225 = <b>4.18</b></li>
-            <li>σ = √4.1775 = 2.044</li>
+            <li>From Step 1: <span class="tex" data-tex="\bar{x} = 5.15">x̄ = 5.15</span></li>
+            <li>Substitute into the formula:<span class="tex" data-display data-tex="\begin{aligned}\sigma^2 &amp;= \frac{1228}{40} - 5.15^2 \\ &amp;= 30.7 - 26.5225 \\ &amp;= 4.1775\end{aligned}">σ² = 1228 ÷ 40 − 5.15² = 30.7 − 26.5225 = 4.1775</span></li>
+            <li>Standard deviation:<span class="tex" data-display data-tex="\sigma = \sqrt{4.1775} = 2.044">σ = √4.1775 = 2.044</span></li>
           </ol>
           <p class="answer">σ² ≈ 4.18, σ ≈ 2.04 hours</p>
         </article>
