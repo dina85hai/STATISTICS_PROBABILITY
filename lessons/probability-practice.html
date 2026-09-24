@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Probability Practice</title>
+  <meta name="description" content="Every probability exercise on one page, sorted by skill from easy to hard, with worked answers." />
+  <style>
+    :root {
+      --bg: #fdf7f9; --card: #ffffff; --ink: #1c1a1b; --muted: #5f5a5c; --line: #eadfe3; --accent: #b0506c;
+      --rule: #fff8d6; --rule-line: #e9c84b;
+      --ans: #e8f5ec; --ans-line: #2e8b57;
+      --easy: #1f7a4d; --easy-soft: #e2f6ea; --medium: #8a5a00; --medium-soft: #fff1d6; --hard: #b3261e; --hard-soft: #fde7e5;
+      --tree: #6a4c93;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #161314; --card: #211c1e; --ink: #f6eef0; --muted: #c2b8bb; --line: #3a2f33; --accent: #f0a5ba;
+        --rule: #332c14; --rule-line: #8a7424; --ans: #16302a; --ans-line: #5fcf9a;
+        --easy: #7fe3b0; --easy-soft: #15302a; --medium: #ffd27a; --medium-soft: #3a2f14; --hard: #ff9d95; --hard-soft: #3a1f1d;
+        --tree: #c9b2f0;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #161314; --card: #211c1e; --ink: #f6eef0; --muted: #c2b8bb; --line: #3a2f33; --accent: #f0a5ba;
+      --rule: #332c14; --rule-line: #8a7424; --ans: #16302a; --ans-line: #5fcf9a;
+      --easy: #7fe3b0; --easy-soft: #15302a; --medium: #ffd27a; --medium-soft: #3a2f14; --hard: #ff9d95; --hard-soft: #3a1f1d;
+      --tree: #c9b2f0;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    .page { max-width: 900px; margin: 0 auto; padding: 64px 16px 40px; }
+
+    .hero {
+      border-radius: 20px; padding: 28px 22px; color: #fff;
+      background: linear-gradient(135deg, #5a4fcf, #8e44ad 55%, #b0506c);
+    }
+    .kicker { margin: 0 0 4px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
+    .hero h1 { margin: 0 0 8px; font-size: clamp(26px, 5vw, 40px); line-height: 1.15; }
+    .lead { margin: 0; max-width: 60ch; }
+    .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .jump a {
+      color: #fff; text-decoration: none; font-size: 14px; font-weight: 600;
+      padding: 7px 12px; border-radius: 999px; background: rgba(255, 255, 255, .18);
+    }
+    .jump a:hover, .jump a:focus-visible { background: rgba(255, 255, 255, .32); }
+
+    .skill { margin-top: 40px; scroll-margin-top: 16px; }
+    .skill > h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; font-size: clamp(20px, 3vw, 26px); }
+    .num {
+      display: inline-grid; place-items: center; width: 34px; height: 34px; flex: none;
+      border-radius: 50%; background: var(--accent); color: var(--card); font-size: 16px;
+    }
+    .hint { margin: 0 0 14px; color: var(--muted); }
+
+    /* The key idea / formula for the skill, above its questions */
+    .rule {
+      background: var(--rule); border: 2px solid var(--rule-line); border-radius: 12px;
+      padding: 10px 14px; margin: 0 0 16px;
+    }
+    .rule b:first-child { display: block; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .rule p { margin: 4px 0; }
+    .rule .eq { font-size: 18px; font-weight: 700; text-align: center; margin: 6px 0; }
+
+    .q {
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+      padding: 16px 16px 18px; margin-bottom: 16px;
+    }
+    .q-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+    .q h3 { margin: 0; font-size: 18px; }
+    .q p { margin: 0 0 8px; }
+    .q ul, .q ol { margin: 0 0 10px; padding-left: 22px; }
+    .level { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; }
+    .level.easy { color: var(--easy); background: var(--easy-soft); }
+    .level.medium { color: var(--medium); background: var(--medium-soft); }
+    .level.hard { color: var(--hard); background: var(--hard-soft); }
+    .part { margin-top: 12px; }
+    .part > p:first-child { margin-bottom: 6px; }
+
+    .answer {
+      background: var(--ans); border-left: 4px solid var(--ans-line); border-radius: 8px;
+      padding: 10px 14px; margin: 8px 0 0;
+    }
+    .answer .label { display: block; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ans-line); }
+    .work { white-space: pre-line; margin: 4px 0 6px; }
+    .final { font-weight: 700; margin: 0; }
+    .answer .why { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
+    .answer ul { margin: 4px 0 0; }
+    .tree-diagram {
+      font-family: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace; font-size: 14px; line-height: 1.35;
+      white-space: pre; overflow-x: auto; color: var(--tree); margin: 6px 0;
+    }
+
+    /* Interactive tree explorer */
+    .scenario-picker { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .scenario-picker button, .view-toggle button, .reveal {
+      font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 999px;
+      border: 2px solid var(--line); background: var(--card); color: var(--ink); padding: 7px 12px;
+    }
+    .scenario-picker button[aria-pressed="true"], .view-toggle button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--card); }
+    .scenario-picker .level { margin-left: 4px; }
+    .view-toggle { display: flex; gap: 8px; margin: 12px 0; }
+    .canvas-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+    .canvas-wrap canvas { display: block; width: 100%; min-width: 720px; height: auto; }
+    .reveal { margin-top: 12px; background: var(--accent); border-color: var(--accent); color: var(--card); }
+    #scenario-solution[hidden] { display: none; }
+
+    @media print {
+      .jump, .scenario-picker, .view-toggle, .reveal { display: none; }
+      .q { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <p class="kicker">Topic 2 · Probability</p>
+      <h1>Probability Practice 🎯</h1>
+      <p class="lead">Every probability exercise in one place. The skills go in the same order as the lesson, and the questions in each skill go from easy to hard.</p>
+      <nav class="jump" aria-label="Jump to a skill">
+        <a href="#vocabulary">1 · Vocabulary</a>
+        <a href="#basic">2 · Basic probability</a>
+        <a href="#trees">3 · Tree diagrams</a>
+        <a href="#independent">4 · Independent (AND)</a>
+        <a href="#exclusive">5 · Mutually exclusive (OR)</a>
+        <a href="#explorer">6 · Probability trees</a>
+      </nav>
+    </header>
+    <div id="sp-selftest-anchor"></div>
+
+    <!-- ================= SKILL 1: VOCABULARY ================= -->
+    <section id="vocabulary" class="skill">
+      <h2><span class="num">1</span> Vocabulary</h2>
+      <div class="rule">
+        <b>Key words</b>
+        <p><b>Experiment:</b> an action with an uncertain result. <b>Outcome:</b> one possible result.</p>
+        <p><b>Event:</b> a group of one or more outcomes. <b>Sample space (S):</b> all possible outcomes.</p>
+      </div>
+
+      <article class="q">
+        <div class="q-head"><h3>Q1 · Social media scrolling 🤳</h3><span class="level easy">Easy</span></div>
+        <p>You open TikTok and scroll through your For You Page.</p>
+        <ol type="A">
+          <li>What is the <b>experiment</b>?</li>
+          <li>Name one <b>outcome</b>.</li>
+          <li>Give an example of an <b>event</b>.</li>
+          <li>What is the <b>sample space</b>?</li>
+        </ol>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <ol type="A">
+            <li>Opening TikTok and seeing which video appears on your For You Page.</li>
+            <li>Any ONE specific type of video, for example a dance video.</li>
+            <li>Any GROUP of outcomes, for example "seeing an entertainment video" (dance, comedy or music).</li>
+            <li>All the types of video that could appear: {dance, comedy, cooking, sports, music, gaming, …}.</li>
+          </ol>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q2 · Coffee order ☕</h3><span class="level easy">Easy</span></div>
+        <p>At a coffee shop, you order a random drink from the menu. The menu has 8 hot drinks and 6 cold drinks.</p>
+        <p><b>Which of these is an EVENT, not just one outcome?</b></p>
+        <ol type="A">
+          <li>Getting a caramel latte</li>
+          <li>Getting a hot drink</li>
+          <li>Getting exactly one drink</li>
+          <li>Getting an iced lemon tea</li>
+        </ol>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <p class="final">B) Getting a hot drink</p>
+          <p class="why">It is an event because it is a group of 8 outcomes (the 8 hot drinks). A and D are single outcomes (one drink each), and C always happens, so it tells you nothing about which drink you get.</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q3 · Playlist shuffle 🎵</h3><span class="level medium">Medium</span></div>
+        <p>Your playlist has 20 pop songs, 15 rap songs and 10 rock songs. You press shuffle and one song plays.</p>
+        <ol>
+          <li>What is the experiment?</li>
+          <li>How many outcomes are in the sample space?</li>
+          <li>Give an event with exactly 15 outcomes.</li>
+        </ol>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <ol>
+            <li>Shuffling the playlist and playing one random song.</li>
+            <li>20 + 15 + 10 = <b>45 outcomes</b> (every song is one outcome).</li>
+            <li>"Playing a rap song" (there are 15 rap songs).</li>
+          </ol>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= SKILL 2: BASIC PROBABILITY ================= -->
+    <section id="basic" class="skill">
+      <h2><span class="num">2</span> Basic probability</h2>
+      <div class="rule">
+        <b>Formula</b>
+        <p class="eq">P(A) = n(A)/n(S) = <span class="sp-frac"><span>number of favorable outcomes</span><span>total number of outcomes</span></span></p>
+        <p class="eq">P(not A) = 1 − P(A)</p>
+        <p>Always simplify the fraction. You can also give it as a decimal or a percentage.</p>
+      </div>
+
+      <article class="q">
+        <div class="q-head"><h3>Q4 · Food delivery 🍕</h3><span class="level easy">Easy</span></div>
+        <p>A food delivery app shows 12 pizza restaurants, 8 burger places, 6 sushi spots and 4 taco trucks nearby.</p>
+        <p><b>What is the probability of randomly selecting a sushi spot?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">Total restaurants: n(S) = 12 + 8 + 6 + 4 = 30
+Sushi spots: n(sushi) = 6
+P(sushi) = 6/30 = 1/5</div>
+          <p class="final">1/5 = 0.2 = 20%</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q5 · Class presentation 📊</h3><span class="level easy">Easy</span></div>
+        <p>Your teacher picks one student at random to present. The class has 8 students who finished their project and 4 who didn't. You finished yours.</p>
+        <div class="part">
+          <p><b>Part A:</b> What is the probability that <b>you</b> are picked?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">Total students: 8 + 4 = 12. You are 1 of them.
+P(you) = 1/12</div>
+            <p class="final">1/12 ≈ 0.083 ≈ 8.3%</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part B:</b> What is the probability that someone who finished is picked?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">Students who finished: 8 out of 12
+P(finished) = 8/12 = 2/3</div>
+            <p class="final">2/3 ≈ 0.667 ≈ 66.7%</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q6 · Streaming 📺</h3><span class="level medium">Medium</span></div>
+        <p>Your "Continue Watching" list has 6 shows you're bored of, 3 shows you love and 1 show you haven't started yet.</p>
+        <p><b>If you click one at random, what is the probability you pick something good (a show you love or the new one)?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">Total shows: 6 + 3 + 1 = 10
+Good shows: 3 + 1 = 4
+P(good) = 4/10 = 2/5</div>
+          <p class="final">2/5 = 0.4 = 40%</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q7 · Mystery box 📦</h3><span class="level medium">Medium</span></div>
+        <p>A mystery box contains 15 items: 5 tech gadgets, 7 clothing items and 3 gift cards.</p>
+        <p><b>What is the probability of NOT getting a tech gadget?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work"><b>Method 1 (count):</b> not tech = 7 + 3 = 10 items
+P(not tech) = 10/15 = 2/3
+<b>Method 2 (complement):</b> P(tech) = 5/15 = 1/3
+P(not tech) = 1 − 1/3 = 2/3</div>
+          <p class="final">2/3 ≈ 0.667 ≈ 66.7%</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q8 · Sneaker drop 👟</h3><span class="level medium">Medium</span></div>
+        <p>A limited sneaker drop has 500 pairs. 200,000 people enter the raffle, one entry each.</p>
+        <p><b>What is your probability of winning a pair?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">Winning entries: 500. Total entries: 200,000
+P(win) = 500/200,000 = 1/400</div>
+          <p class="final">1/400 = 0.0025 = 0.25%</p>
+          <p class="why">That is a 1 in 400 chance, which is why limited drops are so hard to win.</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= SKILL 3: TREE DIAGRAMS ================= -->
+    <section id="trees" class="skill">
+      <h2><span class="num">3</span> Counting outcomes with tree diagrams</h2>
+      <div class="rule">
+        <b>Key idea</b>
+        <p>Draw one set of branches for each choice. Every path from the start to the end is one outcome.</p>
+        <p class="eq">Total outcomes = (choices 1) × (choices 2) × (choices 3) …</p>
+      </div>
+
+      <article class="q">
+        <div class="q-head"><h3>Q9 · Fast food order 🍔</h3><span class="level easy">Easy</span></div>
+        <ul>
+          <li><b>Size:</b> Small (S) or Large (L)</li>
+          <li><b>Side:</b> Fries (F) or Salad (Sa)</li>
+        </ul>
+        <div class="part">
+          <p><b>Part A:</b> Draw a tree diagram and list all the meals.</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+<div class="tree-diagram">Size   Side    Meal
+      ┌─ F ── SF
+ ┌─ S ┤
+ │    └─ Sa ─ SSa
+─┤
+ │    ┌─ F ── LF
+ └─ L ┤
+      └─ Sa ─ LSa</div>
+            <p class="final">4 meals: SF, SSa, LF, LSa (2 × 2 = 4)</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part B:</b> What is the probability of getting a large meal?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">Large meals: LF, LSa = 2 out of 4
+P(large) = 2/4 = 1/2</div>
+            <p class="final">1/2 = 0.5 = 50%</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part C:</b> What is the probability of getting fries?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">Meals with fries: SF, LF = 2 out of 4
+P(fries) = 2/4 = 1/2</div>
+            <p class="final">1/2 = 0.5 = 50%</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q10 · Phone customization 📱</h3><span class="level easy">Easy</span></div>
+        <ul>
+          <li><b>Case colour:</b> Black (B), Clear (C) or Pink (P)</li>
+          <li><b>Pop socket:</b> Yes (Y) or No (N)</li>
+        </ul>
+        <div class="part">
+          <p><b>Part A:</b> Draw a tree diagram. How many options are there?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+<div class="tree-diagram">Case  Socket  Result
+      ┌─ Y ── BY
+ ┌─ B ┤
+ │    └─ N ── BN
+ │    ┌─ Y ── CY
+─┼─ C ┤
+ │    └─ N ── CN
+ │    ┌─ Y ── PY
+ └─ P ┤
+      └─ N ── PN</div>
+            <p class="final">6 options: BY, BN, CY, CN, PY, PN (3 × 2 = 6)</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part B:</b> What is the probability of choosing a coloured case (not clear) with a pop socket?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">Coloured case with a pop socket: BY, PY = 2 out of 6
+P(coloured and socket) = 2/6 = 1/3</div>
+            <p class="final">1/3 ≈ 0.333 ≈ 33.3%</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q11 · Getting ready 👕</h3><span class="level medium">Medium</span></div>
+        <ul>
+          <li><b>Shoes:</b> Sneakers (S) or Boots (B)</li>
+          <li><b>Jacket:</b> Denim (D) or Leather (L)</li>
+          <li><b>Hat:</b> Beanie (Be), Cap (C) or No hat (N)</li>
+        </ul>
+        <div class="part">
+          <p><b>Part A:</b> Draw a tree diagram. How many outfits are there?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+<div class="tree-diagram">Shoes Jacket  Hat    Outfit
+            ┌─ Be ─ SDBe
+      ┌─ D ─┼─ C ── SDC
+      │     └─ N ── SDN
+ ┌─ S ┤
+ │    │     ┌─ Be ─ SLBe
+ │    └─ L ─┼─ C ── SLC
+ │          └─ N ── SLN
+─┤
+ │          ┌─ Be ─ BDBe
+ │    ┌─ D ─┼─ C ── BDC
+ │    │     └─ N ── BDN
+ └─ B ┤
+      │     ┌─ Be ─ BLBe
+      └─ L ─┼─ C ── BLC
+            └─ N ── BLN</div>
+            <p class="final">12 outfits (2 × 2 × 3 = 12)</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part B:</b> What is the probability of wearing sneakers with a beanie?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">Sneakers and beanie: SDBe, SLBe = 2 out of 12
+P(sneakers and beanie) = 2/12 = 1/6</div>
+            <p class="final">1/6 ≈ 0.167 ≈ 16.7%</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q12 · Weekend plans 🎉</h3><span class="level hard">Hard</span></div>
+        <ul>
+          <li><b>Morning:</b> Gym (G) or Sleep in (S)</li>
+          <li><b>Afternoon:</b> Movie (M) or Mall (Ma)</li>
+          <li><b>Evening:</b> Party (P) or Chill (C)</li>
+        </ul>
+        <p>Each choice is equally likely.</p>
+        <div class="part">
+          <p><b>Part A:</b> How many different ways can your day go?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">2 × 2 × 2 = 8
+GMP, GMC, GMaP, GMaC, SMP, SMC, SMaP, SMaC</div>
+            <p class="final">8 ways</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part B:</b> What is the probability your day includes the gym AND the party?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">Gym and party: GMP, GMaP = 2 out of 8
+P(gym and party) = 2/8 = 1/4</div>
+            <p class="final">1/4 = 0.25 = 25%</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part C:</b> What is the probability you sleep in OR chill in the evening (or both)?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">Sleep in: SMP, SMC, SMaP, SMaC (4)
+Chill: GMC, GMaC, SMC, SMaC (4)
+Both: SMC, SMaC (2), so count them only once
+Sleep in or chill: SMP, SMC, SMaP, SMaC, GMC, GMaC = 6 out of 8
+P(sleep in or chill) = 6/8 = 3/4</div>
+            <p class="final">3/4 = 0.75 = 75%</p>
+            <p class="why">Check with the overlap rule: 4/8 + 4/8 − 2/8 = 6/8. Adding 4 + 4 = 8 would count SMC and SMaC twice.</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= SKILL 4: INDEPENDENT EVENTS ================= -->
+    <section id="independent" class="skill">
+      <h2><span class="num">4</span> Independent events (AND → multiply)</h2>
+      <div class="rule">
+        <b>Formula</b>
+        <p class="eq">P(A and B) = P(A) × P(B)</p>
+        <p>Use it only when one event does not change the probability of the other.</p>
+      </div>
+
+      <article class="q">
+        <div class="q-head"><h3>Q13 · Two spinners 🎡</h3><span class="level easy">Easy</span></div>
+        <ul>
+          <li><b>Spinner 1:</b> 4 equal sections (Red, Blue, Green, Yellow)</li>
+          <li><b>Spinner 2:</b> 2 equal sections (Win, Lose)</li>
+        </ul>
+        <p><b>What is the probability of spinning Blue AND Win?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">The spinners don't affect each other, so the events are independent.
+P(Blue) = 1/4, P(Win) = 1/2
+P(Blue and Win) = 1/4 × 1/2 = 1/8</div>
+          <p class="final">1/8 = 0.125 = 12.5%</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q14 · Social media posts 📸</h3><span class="level medium">Medium</span></div>
+        <p>When you post on Instagram, there is a 30% chance your crush likes it. When you post on TikTok, there is a 40% chance they view it. The two are independent.</p>
+        <p><b>You post on both today. What is the probability they like your Instagram post AND view your TikTok?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">P(like) = 0.30, P(view) = 0.40
+P(like and view) = 0.30 × 0.40 = 0.12</div>
+          <p class="final">0.12 = 12%</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q15 · Online shopping 🛒</h3><span class="level medium">Medium</span></div>
+        <p>You order from two different websites. Site A delivers on time 90% of the time, and Site B 85% of the time.</p>
+        <p><b>What is the probability BOTH orders arrive on time?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">The two deliveries are independent.
+P(both on time) = 0.90 × 0.85 = 0.765</div>
+          <p class="final">0.765 = 76.5%</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q16 · Free throws 🏀</h3><span class="level hard">Hard</span></div>
+        <p>A basketball player makes 75% of their free throws. They shoot 3 free throws, and each shot is independent.</p>
+        <p><b>What is the probability they make ALL THREE?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">P(make all 3) = P(1st) × P(2nd) × P(3rd)
+= 0.75 × 0.75 × 0.75 = 0.421875</div>
+          <p class="final">0.421875 ≈ 0.422 ≈ 42.2%</p>
+          <p class="why">Even a 75% shooter makes all three only about 42% of the time.</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= SKILL 5: MUTUALLY EXCLUSIVE EVENTS ================= -->
+    <section id="exclusive" class="skill">
+      <h2><span class="num">5</span> Mutually exclusive events (OR → add)</h2>
+      <div class="rule">
+        <b>Formula</b>
+        <p class="eq">P(A or B) = P(A) + P(B)</p>
+        <p>Use it only when A and B cannot happen at the same time. If they can overlap, use P(A or B) = P(A) + P(B) − P(A and B).</p>
+      </div>
+
+      <article class="q">
+        <div class="q-head"><h3>Q17 · Gaming loot box 🎮</h3><span class="level easy">Easy</span></div>
+        <p>A loot box contains 50 common, 30 rare, 15 epic and 5 legendary items. You open one box and get one item.</p>
+        <p><b>Are these events mutually exclusive or independent? Explain.</b></p>
+        <ul>
+          <li><b>Event A:</b> getting a rare item</li>
+          <li><b>Event B:</b> getting an epic item</li>
+        </ul>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <p class="final">Mutually exclusive</p>
+          <p class="why">One box gives exactly one item, so you cannot get a rare item AND an epic item from the same box. They are not independent: they are two results of the same box, not two separate experiments.</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q18 · Grade distribution 📝</h3><span class="level medium">Medium</span></div>
+        <p>In your class: A 15%, B 30%, C 35%, D 15%, F 5%.</p>
+        <p><b>What is the probability a randomly selected student has a passing grade (A, B or C)?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">A student has only one grade, so the grades are mutually exclusive.
+P(A or B or C) = 0.15 + 0.30 + 0.35 = 0.80</div>
+          <p class="final">0.80 = 80%</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q19 · Concert raffle 🎫</h3><span class="level medium">Medium</span></div>
+        <p>A radio station gives away: 1st prize to 5 winners, 2nd prize to 15 winners and 3rd prize to 10 winners. Each entry can win only one prize. There are 1,000 entries and you entered once.</p>
+        <p><b>What is the probability you win ANY prize?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">P(1st) = 5/1000, P(2nd) = 15/1000, P(3rd) = 10/1000
+P(any prize) = 5/1000 + 15/1000 + 10/1000 = 30/1000 = 3/100</div>
+          <p class="final">3/100 = 0.03 = 3%</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q20 · Video game drops 🗡️</h3><span class="level hard">Hard</span></div>
+        <p>When you defeat a boss you get exactly ONE reward: legendary weapon 10%, epic armour 25%, rare accessory 30%, common item 35%.</p>
+        <div class="part">
+          <p><b>Part A:</b> What is the probability of a legendary weapon OR epic armour?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">P(legendary or epic) = 0.10 + 0.25 = 0.35</div>
+            <p class="final">0.35 = 35%</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part B:</b> What is the probability of at least a rare item (rare, epic or legendary)?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">P(rare or epic or legendary) = 0.30 + 0.25 + 0.10 = 0.65
+Check: 1 − P(common) = 1 − 0.35 = 0.65</div>
+            <p class="final">0.65 = 65%</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part C:</b> Are you more likely to get something rare or better, or something common?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <p class="final">Rare or better (65% is more than 35%)</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= SKILL 6: PROBABILITY TREES (INTERACTIVE) ================= -->
+    <section id="explorer" class="skill">
+      <h2><span class="num">6</span> Probability trees: put it all together</h2>
+      <div class="rule">
+        <b>Key idea</b>
+        <p><b>Multiply along a path</b> to get the probability of that outcome (AND).</p>
+        <p><b>Add between paths</b> when the question allows several outcomes (OR). All the outcomes together add up to 1.</p>
+      </div>
+      <p class="hint">Pick a scenario, work out every outcome's probability on paper, then press "Show answers" to check. Switch to the table view to see the same outcomes in a grid.</p>
+
+      <div class="q">
+        <div class="scenario-picker" role="group" aria-label="Scenario" id="scenario-picker"></div>
+        <div id="scenario-content"></div>
+        <div class="view-toggle" role="group" aria-label="View">
+          <button type="button" data-view="tree" aria-pressed="true">🌳 Tree diagram</button>
+          <button type="button" data-view="table" aria-pressed="false">📊 Table</button>
+        </div>
+        <div class="canvas-wrap"><canvas id="canvas" role="img" aria-label="Tree diagram for the selected scenario"></canvas></div>
+        <button type="button" class="reveal" id="reveal">✅ Show answers</button>
+        <div class="answer" id="scenario-solution" hidden></div>
+      </div>
+    </section>
+
+    <!-- ================= BONUS ================= -->
+    <section class="skill">
+      <h2><span class="num">★</span> Bonus: create your own problem</h2>
+      <article class="q">
+        <div class="q-head"><h3>Your hobby, your question</h3><span class="level hard">Challenge</span></div>
+        <p>Write a probability problem about something you like. Include:</p>
+        <ul>
+          <li>the experiment and its sample space,</li>
+          <li>a clear probability question,</li>
+          <li>the full solution with working.</li>
+        </ul>
+        <div class="answer">
+          <span class="label">Example</span>
+          <p><b>Problem:</b> I have 6 Nike balls, 4 Adidas balls and 2 Puma balls. I grab one at random. What is the probability it is a Nike or a Puma ball?</p>
+          <div class="work">Total balls: 6 + 4 + 2 = 12
+Nike or Puma: 6 + 2 = 8 (a ball can't be both, so the events are mutually exclusive)
+P(Nike or Puma) = 8/12 = 2/3</div>
+          <p class="final">2/3 ≈ 66.7%</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    let currentScenario = 0;
+    let currentView = 'tree';
+    let showAnswers = false;
+
+    // Ordered from easy to hard. Branch probabilities marked `calculate` are hidden
+    // until "Show answers"; outcome probabilities are hidden when `needsCalculation`.
+    const scenarios = [
+      {
+        emoji: '🧋',
+        title: 'Bubble Tea at Tealive',
+        level: 'easy',
+        description: 'You pick your drink at random (Brown Sugar or Matcha), then your topping at random (Pearl or Jelly).',
+        questions: ['Find the probability of each drink and each topping.', 'Find the probability of each combination.', 'What is P(Matcha with Pearl)?'],
+        events: ['Drink Choice', 'Topping Choice'],
+        options: [
+          { label: 'Brown Sugar', short: 'BS', prob: 0.5, display: '1/2', calculate: true },
+          { label: 'Matcha', short: 'M', prob: 0.5, display: '1/2', calculate: true }
+        ],
+        options2: [
+          { label: 'Pearl', short: 'P', prob: 0.5, display: '1/2', calculate: true },
+          { label: 'Jelly', short: 'J', prob: 0.5, display: '1/2', calculate: true }
+        ],
+        outcomes: ['BS, Pearl', 'BS, Jelly', 'Matcha, Pearl', 'Matcha, Jelly'],
+        needsCalculation: true,
+        solution: `Each choice: 2 equally likely options, so P = 1/2 on every branch.
+Each combination: 1/2 × 1/2 = 1/4 = 0.25
+Check: 0.25 + 0.25 + 0.25 + 0.25 = 1
+P(Matcha with Pearl) = 1/4 = 25%`
+      },
+      {
+        emoji: '🎁',
+        title: 'Shopee Lucky Draw',
+        level: 'medium',
+        description: 'A box has 3 red balls and 2 blue balls (5 in total). You draw one ball, put it back, then draw again.',
+        questions: ['Find the probability of each colour on each draw.', 'Find the probability of each outcome.', 'What is P(both balls are the same colour)?'],
+        note: 'Hint: Probability = <span class="sp-frac"><span>favorable outcomes</span><span>total outcomes</span></span>. For red: 3/5 = ?',
+        events: ['First Draw', 'Second Draw'],
+        options: [
+          { label: 'Red', short: 'R', prob: 0.6, calculate: true },
+          { label: 'Blue', short: 'B', prob: 0.4, calculate: true }
+        ],
+        options2: [
+          { label: 'Red', short: 'R', prob: 0.6, calculate: true },
+          { label: 'Blue', short: 'B', prob: 0.4, calculate: true }
+        ],
+        outcomes: ['Red, Red', 'Red, Blue', 'Blue, Red', 'Blue, Blue'],
+        needsCalculation: true,
+        solution: `P(Red) = 3/5 = 0.6 and P(Blue) = 2/5 = 0.4 on both draws (the ball is put back).
+P(Red, Red) = 0.6 × 0.6 = 0.36
+P(Red, Blue) = 0.6 × 0.4 = 0.24
+P(Blue, Red) = 0.4 × 0.6 = 0.24
+P(Blue, Blue) = 0.4 × 0.4 = 0.16
+Check: 0.36 + 0.24 + 0.24 + 0.16 = 1
+P(same colour) = 0.36 + 0.16 = 0.52 = 52%`
+      },
+      {
+        emoji: '📱',
+        title: 'Posting on TikTok',
+        level: 'medium',
+        description: 'Your video goes Viral (P = 0.3) or Flops (P = 0.7). Whatever happens to the video, a brand reaches out for a deal: Yes (P = 0.4) or No (P = 0.6). The two events are independent.',
+        questions: ['Find the probability of each outcome.', 'What is P(the video goes viral AND you get a deal)?', 'What is P(you get a deal)?'],
+        events: ['Video Result', 'Brand Deal'],
+        options: [
+          { label: 'Viral', short: 'V', prob: 0.3 },
+          { label: 'Flop', short: 'F', prob: 0.7 }
+        ],
+        options2: [
+          { label: 'Deal', short: 'D', prob: 0.4 },
+          { label: 'No Deal', short: 'N', prob: 0.6 }
+        ],
+        outcomes: ['Viral, Deal', 'Viral, No Deal', 'Flop, Deal', 'Flop, No Deal'],
+        needsCalculation: true,
+        solution: `P(Viral, Deal) = 0.3 × 0.4 = 0.12
+P(Viral, No Deal) = 0.3 × 0.6 = 0.18
+P(Flop, Deal) = 0.7 × 0.4 = 0.28
+P(Flop, No Deal) = 0.7 × 0.6 = 0.42
+Check: 0.12 + 0.18 + 0.28 + 0.42 = 1
+P(viral and deal) = 0.12 = 12%
+P(deal) = 0.12 + 0.28 = 0.40 = 40% (the same as 0.4, because the events are independent)`
+      },
+      {
+        emoji: '🛵',
+        title: 'GrabFood Delivery',
+        level: 'hard',
+        description: 'Delivery is Fast (60%) or Slow (40%). The food arrives Hot (70%) or Cold (30%). You Tip (50%) or don\'t tip (50%). Assume the three are independent.',
+        questions: ['Find the probability of all 8 outcomes.', 'What is P(fast AND hot)?', 'What is P(slow AND cold AND no tip)?'],
+        events: ['Delivery Speed', 'Food Temp', 'Tip Decision'],
+        options: [
+          { label: 'Fast', short: 'F', prob: 0.6, display: '60%' },
+          { label: 'Slow', short: 'S', prob: 0.4, display: '40%' }
+        ],
+        options2: [
+          { label: 'Hot', short: 'H', prob: 0.7, display: '70%' },
+          { label: 'Cold', short: 'C', prob: 0.3, display: '30%' }
+        ],
+        options3: [
+          { label: 'Tip', short: 'T', prob: 0.5, display: '50%' },
+          { label: 'No Tip', short: 'N', prob: 0.5, display: '50%' }
+        ],
+        outcomes: ['F, H, T', 'F, H, N', 'F, C, T', 'F, C, N', 'S, H, T', 'S, H, N', 'S, C, T', 'S, C, N'],
+        isThreeLevel: true,
+        needsCalculation: true,
+        solution: `P(F, H, T) = 0.6 × 0.7 × 0.5 = 0.21
+P(F, H, N) = 0.6 × 0.7 × 0.5 = 0.21
+P(F, C, T) = 0.6 × 0.3 × 0.5 = 0.09
+P(F, C, N) = 0.6 × 0.3 × 0.5 = 0.09
+P(S, H, T) = 0.4 × 0.7 × 0.5 = 0.14
+P(S, H, N) = 0.4 × 0.7 × 0.5 = 0.14
+P(S, C, T) = 0.4 × 0.3 × 0.5 = 0.06
+P(S, C, N) = 0.4 × 0.3 × 0.5 = 0.06
+Check: the 8 outcomes add up to 1
+P(fast and hot) = 0.6 × 0.7 = 0.42 = 42% (or 0.21 + 0.21)
+P(slow and cold and no tip) = 0.06 = 6%`
+      },
+      {
+        emoji: '🎮',
+        title: 'Mobile Legends Ranked',
+        level: 'hard',
+        description: 'From your last 20 ranked games you won 12 and lost 8. If you WIN, you gain a star (70%) or your rank stays the same (30%). If you LOSE, you lose a star (80%) or star protection keeps your rank the same (20%).',
+        questions: ['Find P(Win) and P(Lose).', 'Find the probability of each outcome.', 'What is P(your rank stays the same)?'],
+        note: 'Hint: Win probability = 12/20 = ? | Lose = 8/20 = ? The second branches depend on the result, so follow the branches after Win or Lose.',
+        events: ['Game Result', 'Rank Change'],
+        options: [
+          { label: 'Win', short: 'W', prob: 0.6, calculate: true,
+            next: [
+              { label: 'Star+', short: '+', prob: 0.7 },
+              { label: 'Same', short: '=', prob: 0.3 }
+            ] },
+          { label: 'Lose', short: 'L', prob: 0.4, calculate: true,
+            next: [
+              { label: 'Star−', short: '−', prob: 0.8 },
+              { label: 'Same', short: '=', prob: 0.2 }
+            ] }
+        ],
+        // Column headings for the table view; each row uses its own `next` branches.
+        options2: [
+          { label: 'Star changes', short: '±' },
+          { label: 'Rank stays', short: '=' }
+        ],
+        outcomes: ['Win, Star+', 'Win, Same', 'Lose, Star−', 'Lose, Same'],
+        needsCalculation: true,
+        solution: `P(Win) = 12/20 = 3/5 = 0.6 and P(Lose) = 8/20 = 2/5 = 0.4
+P(Win, Star+) = 0.6 × 0.7 = 0.42
+P(Win, Same) = 0.6 × 0.3 = 0.18
+P(Lose, Star−) = 0.4 × 0.8 = 0.32
+P(Lose, Same) = 0.4 × 0.2 = 0.08
+Check: 0.42 + 0.18 + 0.32 + 0.08 = 1
+P(rank stays the same) = 0.18 + 0.08 = 0.26 = 26%`
+      }
+    ];
+
+    const LEVEL_NAMES = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
+
+    function renderPicker() {
+      document.getElementById('scenario-picker').innerHTML = scenarios.map((s, i) =>
+        `<button type="button" data-scenario="${i}" aria-pressed="${i === currentScenario}">${s.emoji} ${s.title}<span class="level ${s.level}">${LEVEL_NAMES[s.level]}</span></button>`
+      ).join('');
+    }
+
+    function selectScenario(index) {
+      currentScenario = index;
+      showAnswers = false;
+      renderPicker();
+      updateScenarioContent();
+      update();
+    }
+
+    function switchView(view) {
+      currentView = view;
+      document.querySelectorAll('.view-toggle button').forEach(btn => {
+        btn.setAttribute('aria-pressed', btn.dataset.view === view ? 'true' : 'false');
+      });
+      drawVisualization();
+    }
+
+    function updateScenarioContent() {
+      const scenario = scenarios[currentScenario];
+      document.getElementById('scenario-content').innerHTML = `
+        <div class="q-head"><h3>${scenario.emoji} ${scenario.title}</h3><span class="level ${scenario.level}">${LEVEL_NAMES[scenario.level]}</span></div>
+        <p>${scenario.description}</p>
+        <ol>${scenario.questions.map(q => `<li>${q}</li>`).join('')}</ol>
+        ${scenario.note ? `<p class="hint">💡 ${scenario.note}</p>` : ''}
+      `;
+    }
+
+    function update() {
+      const solution = document.getElementById('scenario-solution');
+      solution.hidden = !showAnswers;
+      solution.innerHTML = `<span class="label">Answer</span><div class="work">${scenarios[currentScenario].solution}</div>`;
+      document.getElementById('reveal').textContent = showAnswers ? '🔄 Hide answers' : '✅ Show answers';
+      drawVisualization();
+    }
+
+    function drawVisualization() {
+      const scenario = scenarios[currentScenario];
+      if (currentView === 'tree') {
+        canvas.width = 880;
+        canvas.height = scenario.isThreeLevel ? 740 : 560;
+        drawTreeDiagram(scenario);
+      } else {
+        canvas.width = 1000;
+        canvas.height = scenario.isThreeLevel ? 440 : 600;
+        drawTable(scenario);
+      }
+    }
+
+    function drawTreeDiagram(scenario) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (scenario.isThreeLevel) {
+            drawThreeLevelTree(scenario);
+        } else {
+            drawTwoLevelTree(scenario);
+        }
+    }
+
+    function drawTwoLevelTree(scenario) {
+        const startX = 100;
+        // A little below the middle, so the top branch labels clear the column headings
+        const startY = canvas.height / 2 + 15;
+        
+        // Start point
+        drawCircle(startX, startY, 15, '#667eea');
+        ctx.fillStyle = '#333';
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Start', startX, startY - 25);
+        
+        // First level
+        const level1X = 350;
+        const numOptions = scenario.options.length;
+        const spacing1 = numOptions === 2 ? 150 : 120;
+        const startOffset = numOptions === 2 ? spacing1 : spacing1 * 1.5;
+        
+        scenario.options.forEach((opt, i) => {
+            const y = startY - startOffset + i * spacing1 * (numOptions === 2 ? 2 : 1.5);
+            drawBranch(startX, startY, level1X, y);
+            drawCircle(level1X, y, 12, '#667eea');
+            
+            if (scenario.needsCalculation && opt.calculate && !showAnswers) {
+                drawBranchLabel(startX, startY, level1X, y, opt.short, '?', 'P=?');
+            } else {
+                const displayProb = opt.display ? `P=${opt.display}` : null;
+                drawBranchLabel(startX, startY, level1X, y, opt.short, opt.prob, displayProb);
+            }
+        });
+        
+        // Second level
+        const level2X = 650;
+        const spacing2 = 70;
+        
+        let outcomeIndex = 0;
+        scenario.options.forEach((opt1, i) => {
+            const y1 = startY - startOffset + i * spacing1 * (numOptions === 2 ? 2 : 1.5);
+            
+            (opt1.next || scenario.options2).forEach((opt2, j) => {
+                const y2 = y1 - spacing2 + j * spacing2 * 2;
+                drawBranch(level1X, y1, level2X, y2);
+                drawCircle(level2X, y2, 12, '#667eea');
+                
+                if (scenario.needsCalculation && opt2.calculate && !showAnswers) {
+                    drawBranchLabel(level1X, y1, level2X, y2, opt2.short, '?', 'P=?');
+                } else {
+                    const displayProb = opt2.display ? `P=${opt2.display}` : null;
+                    drawBranchLabel(level1X, y1, level2X, y2, opt2.short, opt2.prob, displayProb);
+                }
+                
+                // Outcome
+                const prob = (opt1.prob * opt2.prob).toFixed(3);
+                const displayOutcomeProb = (scenario.needsCalculation && !showAnswers) ? '?' : prob;
+                drawOutcome(level2X + 80, y2, scenario.outcomes[outcomeIndex], displayOutcomeProb);
+                outcomeIndex++;
+            });
+        });
+        
+        // Labels
+        ctx.fillStyle = '#764ba2';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(scenario.events[0], level1X, 30);
+        ctx.fillText(scenario.events[1], level2X, 30);
+    }
+
+    function drawThreeLevelTree(scenario) {
+        const startX = 80;
+        const startY = canvas.height / 2 + 20;
+        
+        // Start point
+        drawCircle(startX, startY, 15, '#667eea');
+        ctx.fillStyle = '#333';
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Start', startX, startY - 25);
+        
+        // Level 1
+        const level1X = 250;
+        const spacing1 = 180;
+        
+        scenario.options.forEach((opt, i) => {
+            const y = startY - spacing1 + i * spacing1 * 2;
+            drawBranch(startX, startY, level1X, y);
+            drawCircle(level1X, y, 10, '#667eea');
+            
+            if (scenario.needsCalculation && opt.calculate && !showAnswers) {
+                drawBranchLabel(startX, startY, level1X, y, opt.short, '?', 'P=?');
+            } else {
+                const displayProb = opt.display ? `P=${opt.display}` : null;
+                drawBranchLabel(startX, startY, level1X, y, opt.short, opt.prob, displayProb);
+            }
+        });
+        
+        // Level 2
+        const level2X = 450;
+        const spacing2 = 85;
+        
+        scenario.options.forEach((opt1, i) => {
+            const y1 = startY - spacing1 + i * spacing1 * 2;
+            
+            scenario.options2.forEach((opt2, j) => {
+                const y2 = y1 - spacing2 + j * spacing2 * 2;
+                drawBranch(level1X, y1, level2X, y2);
+                drawCircle(level2X, y2, 10, '#667eea');
+                
+                if (scenario.needsCalculation && opt2.calculate && !showAnswers) {
+                    drawBranchLabel(level1X, y1, level2X, y2, opt2.short, '?', 'P=?');
+                } else {
+                    const displayProb = opt2.display ? `P=${opt2.display}` : null;
+                    drawBranchLabel(level1X, y1, level2X, y2, opt2.short, opt2.prob, displayProb);
+                }
+            });
+        });
+        
+        // Level 3
+        const level3X = 680;
+        const spacing3 = 40;
+        
+        let outcomeIndex = 0;
+        scenario.options.forEach((opt1, i) => {
+            const y1 = startY - spacing1 + i * spacing1 * 2;
+            
+            scenario.options2.forEach((opt2, j) => {
+                const y2 = y1 - spacing2 + j * spacing2 * 2;
+                
+                scenario.options3.forEach((opt3, k) => {
+                    const y3 = y2 - spacing3 + k * spacing3 * 2;
+                    drawBranch(level2X, y2, level3X, y3);
+                    drawCircle(level3X, y3, 8, '#667eea');
+                    
+                    if (scenario.needsCalculation && opt3.calculate && !showAnswers) {
+                        drawBranchLabel(level2X, y2, level3X, y3, opt3.short, '?', 'P=?');
+                    } else {
+                        const displayProb = opt3.display ? `P=${opt3.display}` : null;
+                        drawBranchLabel(level2X, y2, level3X, y3, opt3.short, opt3.prob, displayProb);
+                    }
+                    
+                    // Outcome
+                    const prob = (opt1.prob * opt2.prob * opt3.prob).toFixed(3);
+                    const displayOutcomeProb = (scenario.needsCalculation && !showAnswers) ? '?' : prob;
+                    drawOutcome(level3X + 85, y3, scenario.outcomes[outcomeIndex], displayOutcomeProb);
+                    outcomeIndex++;
+                });
+            });
+        });
+        
+        // Labels
+        ctx.fillStyle = '#764ba2';
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(scenario.events[0], level1X, 25);
+        ctx.fillText(scenario.events[1], level2X, 25);
+        ctx.fillText(scenario.events[2], level3X, 25);
+    }
+
+    function drawTable(scenario) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        if (scenario.isThreeLevel) {
+            drawThreeLevelTable(scenario);
+        } else {
+            drawTwoLevelTable(scenario);
+        }
+    }
+
+    function drawTwoLevelTable(scenario) {
+        const startX = 260;
+        const startY = 150;
+        const cellW = 180;
+        const cellH = 100;
+        const headerH = 70;
+        const numRows = scenario.options.length;
+        
+        // Adjust for 3 options
+        if (numRows > 2) {
+            canvas.height = 700;
+        }
+        
+        // Title
+        ctx.fillStyle = '#764ba2';
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Outcome Table', canvas.width / 2, 50);
+        
+        // Column headers
+        ctx.fillStyle = '#667eea';
+        ctx.fillRect(startX, startY, cellW * 2, headerH);
+        ctx.strokeStyle = '#764ba2';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(startX, startY, cellW * 2, headerH);
+        
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 18px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(scenario.events[1], startX + cellW, startY + headerH / 2);
+        
+        // Column labels
+        scenario.options2.forEach((opt, i) => {
+            ctx.fillStyle = '#667eea';
+            ctx.fillRect(startX + i * cellW, startY + headerH, cellW, headerH);
+            ctx.strokeRect(startX + i * cellW, startY + headerH, cellW, headerH);
+            
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 20px Arial';
+            ctx.fillText(opt.label, startX + i * cellW + cellW / 2, startY + headerH + headerH / 2);
+        });
+        
+        // Row header
+        ctx.save();
+        ctx.translate(startX - 115, startY + headerH * 2 + cellH * (numRows / 2));
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillStyle = '#764ba2';
+        ctx.font = 'bold 18px Arial';
+        ctx.fillText(scenario.events[0], 0, 0);
+        ctx.restore();
+        
+        // Rows
+        let outcomeIndex = 0;
+        scenario.options.forEach((opt1, i) => {
+            // Row label
+            ctx.fillStyle = '#667eea';
+            ctx.fillRect(startX - 90, startY + headerH * 2 + i * cellH, 90, cellH);
+            ctx.strokeRect(startX - 90, startY + headerH * 2 + i * cellH, 90, cellH);
+            
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(opt1.label, startX - 45, startY + headerH * 2 + i * cellH + cellH / 2);
+            
+            // Cells
+            (opt1.next || scenario.options2).forEach((opt2, j) => {
+                const x = startX + j * cellW;
+                const y = startY + headerH * 2 + i * cellH;
+                
+                ctx.fillStyle = '#e0e7ff';
+                ctx.fillRect(x, y, cellW, cellH);
+                ctx.strokeRect(x, y, cellW, cellH);
+                
+                ctx.fillStyle = '#764ba2';
+                ctx.font = 'bold 24px Arial';
+                ctx.fillText(scenario.outcomes[outcomeIndex], x + cellW / 2, y + cellH / 2 - 10);
+                
+                ctx.font = '14px Arial';
+                if (scenario.needsCalculation && !showAnswers) {
+                    ctx.fillText('P = ?', x + cellW / 2, y + cellH / 2 + 20);
+                } else {
+                    const prob = (opt1.prob * opt2.prob).toFixed(3);
+                    ctx.fillText(`P = ${prob}`, x + cellW / 2, y + cellH / 2 + 20);
+                }
+                
+                outcomeIndex++;
+            });
+        });
+    }
+
+    function drawThreeLevelTable(scenario) {
+        ctx.fillStyle = '#764ba2';
+        ctx.font = 'bold 20px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('All Possible Outcomes', canvas.width / 2, 40);
+        
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#666';
+        ctx.fillText('(For 3 events, listing format is clearer than a 3D table)', canvas.width / 2, 65);
+        
+        const startY = 120;
+        const rowHeight = 70;
+        const cols = 4;
+        const cellW = 220;
+        const cellH = 60;
+        
+        scenario.outcomes.forEach((outcome, i) => {
+            const col = i % cols;
+            const row = Math.floor(i / cols);
+            const x = 50 + col * cellW;
+            const y = startY + row * rowHeight;
+            
+            // Background
+            ctx.fillStyle = '#667eea';
+            ctx.fillRect(x, y, cellW - 10, cellH);
+            ctx.strokeStyle = '#764ba2';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(x, y, cellW - 10, cellH);
+            
+            // Outcome
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(outcome, x + (cellW - 10) / 2, y + cellH / 2 - 8);
+            
+            // Probability
+            const parts = outcome.split(', ');
+            let prob = 1;
+            parts.forEach((part, idx) => {
+                const opts = [scenario.options, scenario.options2, scenario.options3][idx];
+                const opt = opts.find(o => o.short === part);
+                if (opt) prob *= opt.prob;
+            });
+            
+            ctx.font = '12px Arial';
+            const displayProb = (scenario.needsCalculation && !showAnswers) ? '?' : prob.toFixed(3);
+            ctx.fillText(`P = ${displayProb}`, x + (cellW - 10) / 2, y + cellH / 2 + 12);
+        });
+    }
+
+    function drawCircle(x, y, radius, color) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#764ba2';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    }
+
+    function drawBranch(x1, y1, x2, y2) {
+        ctx.strokeStyle = '#764ba2';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+    }
+
+    function drawBranchLabel(x1, y1, x2, y2, label, prob, displayProb) {
+        const midX = (x1 + x2) / 2;
+        const midY = (y1 + y2) / 2;
+        
+        // Label above branch
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+        const offsetX = Math.sin(angle) * 20;
+        const offsetY = -Math.cos(angle) * 20;
+        
+        ctx.fillStyle = '#764ba2';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(label, x2, y2 - 18);
+        
+        // Probability
+        ctx.fillStyle = '#667eea';
+        ctx.font = 'bold 12px Arial';
+        const probText = displayProb || (prob === '?' ? '?' : `P=${prob}`);
+        const fraction = probText.match(/^P=(\d+)\/(\d+)$/);
+        if (fraction) drawFraction('P =', fraction[1], fraction[2], midX + offsetX, midY + offsetY);
+        else ctx.fillText(probText, midX + offsetX, midY + offsetY);
+    }
+
+    // Draws a label such as "P = 1/2" with the fraction stacked (top over bottom),
+    // centred on x, y, in the current font and colour.
+    function drawFraction(prefix, top, bottom, x, y) {
+        const size = parseInt(ctx.font.match(/(\d+)px/)[1], 10);
+        const prefixW = ctx.measureText(prefix + ' ').width;
+        const fracW = Math.max(ctx.measureText(top).width, ctx.measureText(bottom).width) + 4;
+        const left = x - (prefixW + fracW) / 2;
+        const baseline = ctx.textBaseline;
+        ctx.save();
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        // fillText uses the caller's baseline; convert y to the middle of the text
+        const midY = baseline === 'middle' ? y : y - size * 0.35;
+        ctx.fillText(prefix, left, midY);
+        ctx.textAlign = 'center';
+        const fracX = left + prefixW + fracW / 2;
+        ctx.fillText(top, fracX, midY - size * 0.62);
+        ctx.fillText(bottom, fracX, midY + size * 0.72);
+        ctx.fillRect(left + prefixW, midY - 0.5, fracW, 1.5);
+        ctx.restore();
+    }
+
+    function drawOutcome(x, y, label, prob) {
+        const width = 120;
+        const height = 50;
+        
+        ctx.fillStyle = '#667eea';
+        ctx.fillRect(x - width/2, y - height/2, width, height);
+        ctx.strokeStyle = '#764ba2';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(x - width/2, y - height/2, width, height);
+        
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, x, y - 8);
+        
+        ctx.font = '11px Arial';
+        ctx.fillText(`P=${prob}`, x, y + 12);
+    }
+
+    document.getElementById('scenario-picker').addEventListener('click', e => {
+      const btn = e.target.closest('[data-scenario]');
+      if (btn) selectScenario(Number(btn.dataset.scenario));
+    });
+    document.querySelectorAll('.view-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => switchView(btn.dataset.view));
+    });
+    document.getElementById('reveal').addEventListener('click', () => {
+      showAnswers = !showAnswers;
+      update();
+    });
+
+    renderPicker();
+    updateScenarioContent();
+    update();
+  </script>
+</body>
+</html>
