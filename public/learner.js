@@ -3,6 +3,7 @@
  * - Lesson pages (<script src="learner.js" data-lesson="id">): Home button,
  *   "mark as done" + "next lesson" bar, and self-test mode on the answer key.
  * - Landing page (data-lesson="home"): learning path progress on the cards.
+ * - Every page: fractions written as "3/10" are shown as stacked fractions.
  * Progress lives in localStorage and every access is guarded, so pages still
  * work when storage is unavailable.
  */
@@ -97,7 +98,13 @@
     '.sp-answer:focus-visible { outline: 3px solid #b0506c; outline-offset: 3px; }',
     '.sp-selftest { margin: 16px auto; max-width: 900px; padding: 14px 18px; border-radius: 14px; background: #fff4f7; border: 1px solid #f1d3dc; color: #5b2a39; font-size: 15px; line-height: 1.5; }',
     '.sp-selftest b { color: #7a3a4d; }',
-    '.sp-selftest button { margin-top: 8px; }'
+    '.sp-selftest button { margin-top: 8px; }',
+    /* Stacked fractions (see typesetFractions) */
+    '.sp-frac { display: inline-flex; flex-direction: column; align-items: stretch; vertical-align: middle;',
+    '  text-align: center; line-height: 1.15; margin: 0 .1em; white-space: nowrap; font-size: .95em; }',
+    '.sp-frac > span { display: block; padding: 0 .15em; }',
+    '.sp-frac > span:last-child { border-top: max(1px, .07em) solid currentColor; }',
+    '.sp-frac > .sp-frac-slash { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }'
   ].join('\n');
 
   function injectStyles() {
@@ -309,8 +316,86 @@
     });
   }
 
+  /*
+   * Fractions: "3/10", "500/200,000" and "n(A)/n(S)" in the page text are shown as
+   * stacked fractions, and so is anything already written as
+   * <span class="sp-frac"><span>top</span><span>bottom</span></span>.
+   * Pages that build their content with JavaScript are watched, so new text is
+   * typeset too. The slash stays in the page (hidden), so copying and screen
+   * readers still get "3/10".
+   */
+  var TERM = '(?:\\d+(?:,\\d{3})*(?:\\.\\d+)?|n\\([^()\\s]+\\))';
+  var FRACTION = new RegExp('(?<![\\w.,/])(' + TERM + ')/(' + TERM + ')(?![\\w/])', 'g');
+  var SKIP = 'script, style, textarea, input, select, code, svg, .tex, .katex, .sp-frac, .sp-ui, [data-no-frac]';
+
+  function fraction(top, bottom) {
+    var f = document.createElement('span');
+    f.className = 'sp-frac';
+    [top, '/', bottom].forEach(function (part, i) {
+      var el = document.createElement('span');
+      if (i === 1) el.className = 'sp-frac-slash';
+      el.textContent = part;
+      f.appendChild(el);
+    });
+    return f;
+  }
+
+  function typesetText(node) {
+    var text = node.nodeValue;
+    FRACTION.lastIndex = 0;
+    if (!FRACTION.test(text)) return;
+    var frag = document.createDocumentFragment();
+    var last = 0;
+    FRACTION.lastIndex = 0;
+    text.replace(FRACTION, function (match, top, bottom, at) {
+      if (at > last) frag.appendChild(document.createTextNode(text.slice(last, at)));
+      frag.appendChild(fraction(top, bottom));
+      last = at + match.length;
+      return match;
+    });
+    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  }
+
+  function typesetFractions(root) {
+    if (root.nodeType === 3) {
+      if (root.parentElement && !root.parentElement.closest(SKIP)) typesetText(root);
+      return;
+    }
+    if (root.nodeType !== 1 || root.closest(SKIP)) return;
+    // Hand-written fractions: add the hidden slash between top and bottom.
+    root.querySelectorAll('.sp-frac').forEach(function (f) {
+      if (f.children.length === 2) {
+        var slash = document.createElement('span');
+        slash.className = 'sp-frac-slash';
+        slash.textContent = '/';
+        f.insertBefore(slash, f.lastElementChild);
+      }
+    });
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        return n.parentElement.closest(SKIP) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(typesetText);
+  }
+
+  function watchFractions() {
+    typesetFractions(document.body);
+    if (!window.MutationObserver) return;
+    new MutationObserver(function (records) {
+      records.forEach(function (r) {
+        if (r.type === 'characterData') typesetFractions(r.target);
+        else r.addedNodes.forEach(function (n) { if (n.isConnected) typesetFractions(n); });
+      });
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+
   function init() {
     injectStyles();
+    watchFractions();
     if (lessonId === 'home') { renderTopics(); homePage(); bindReset(); }
     else if (lessonId) lessonPage();
   }

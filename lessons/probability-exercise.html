@@ -299,7 +299,7 @@
                     'Blue, Red',
                     'Blue, Blue'
                 ],
-                note: '💡 Hint: Calculate probability = (favorable outcomes) ÷ (total outcomes). For red: 3÷5 = ?',
+                note: 'Hint: Probability = <span class="sp-frac"><span>favorable outcomes</span><span>total outcomes</span></span>. For red: 3/5 = ?',
                 needsCalculation: true
             },
             {
@@ -331,7 +331,7 @@
                     'Lose, Star−',
                     'Lose, Same'
                 ],
-                note: '💡 Hint: Win probability = 12÷20 = ? | Lose = 8÷20 = ? The rank change depends on the result, so follow the branches after Win or Lose.',
+                note: 'Hint: Win probability = 12/20 = ? | Lose = 8/20 = ? The rank change depends on the result, so follow the branches after Win or Lose.',
                 needsCalculation: true
             }
         ];
@@ -752,7 +752,31 @@
             ctx.fillStyle = '#667eea';
             ctx.font = 'bold 12px Arial';
             const probText = displayProb || (prob === '?' ? '?' : `P=${prob}`);
-            ctx.fillText(probText, midX + offsetX, midY + offsetY);
+            const fraction = probText.match(/^P=(\d+)\/(\d+)$/);
+            if (fraction) drawFraction('P =', fraction[1], fraction[2], midX + offsetX, midY + offsetY);
+            else ctx.fillText(probText, midX + offsetX, midY + offsetY);
+        }
+
+        // Draws a label such as "P = 1/2" with the fraction stacked (top over bottom),
+        // centred on x, y, in the current font and colour.
+        function drawFraction(prefix, top, bottom, x, y) {
+            const size = parseInt(ctx.font.match(/(\d+)px/)[1], 10);
+            const prefixW = ctx.measureText(prefix + ' ').width;
+            const fracW = Math.max(ctx.measureText(top).width, ctx.measureText(bottom).width) + 4;
+            const left = x - (prefixW + fracW) / 2;
+            const baseline = ctx.textBaseline;
+            ctx.save();
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            // fillText uses the caller's baseline; convert y to the middle of the text
+            const midY = baseline === 'middle' ? y : y - size * 0.35;
+            ctx.fillText(prefix, left, midY);
+            ctx.textAlign = 'center';
+            const fracX = left + prefixW + fracW / 2;
+            ctx.fillText(top, fracX, midY - size * 0.62);
+            ctx.fillText(bottom, fracX, midY + size * 0.72);
+            ctx.fillRect(left + prefixW, midY - 0.5, fracW, 1.5);
+            ctx.restore();
         }
 
         function drawOutcome(x, y, label, prob) {
