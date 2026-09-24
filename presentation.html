@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Probability Presentation &amp; Practice Arena</title>
+    <title>Probability Presentation</title>
     <link rel="stylesheet" href="/src/presentation.css" />
     <style>
         /* Custom scrollbar to match aesthetics */
@@ -48,90 +48,6 @@
     </div>
 
 <script>
-// Quiz Database from Teacher Copy
-const practiceQuestions = [
-  { q: 1, topic: "Vocabulary", difficulty: "Easy",
-    scenario: "You open TikTok and scroll through your For You Page.\n\nPart A: What is the experiment?\nPart B: Name one outcome.\nPart C: Give an example of an event.\nPart D: What is the sample space?",
-    answer: "• Experiment: Opening TikTok and seeing what video appears\n• Outcome: Seeing a dance video (one specific type)\n• Event: Seeing any entertainment video (multiple types: dance, comedy, etc.)\n• Sample Space: All possible types of videos that could appear"
-  },
-  { q: 2, topic: "Vocabulary", difficulty: "Easy",
-    scenario: "At a coffee shop, you order a random drink from the menu. The menu has 8 hot drinks and 6 cold drinks.\n\nWhich of these is an EVENT, not just an outcome?\n• A) Getting a caramel latte\n• B) Getting a hot drink\n• C) Getting exactly one beverage\n• D) Getting a drink that costs $5.50",
-    answer: "B) Getting a hot drink\n\nThis is an event because it includes multiple outcomes (8 different hot drinks). The others are either single outcomes (A, D) or guaranteed results (C)."
-  },
-  { q: 3, topic: "Vocabulary", difficulty: "Easy",
-    scenario: "Your playlist has 20 pop songs, 15 rap songs, and 10 rock songs.\n\nIdentify each:\n1. The experiment\n2. The sample space (how many total outcomes?)\n3. An event with exactly 15 outcomes",
-    answer: "1. Experiment: Shuffling and playing one random song\n2. Sample Space: 45 total songs (20+15+10=45 outcomes)\n3. Event with 15 outcomes: Playing a rap song (15 rap songs)"
-  },
-  { q: 4, topic: "Vocabulary", difficulty: "Easy-Medium",
-    scenario: "A loot box contains: 50 common items, 30 rare items, 15 epic items, and 5 legendary items.\n\nAre these events mutually exclusive or independent?\n• Event A: Getting a rare item\n• Event B: Getting an epic item",
-    answer: "Mutually Exclusive\n\nYou open ONE loot box and get ONE item. You can't get both a rare AND an epic item from the same box. They cannot happen at the same time."
-  },
-  { q: 5, topic: "Basic Probability", difficulty: "Easy",
-    scenario: "A food delivery app shows 12 pizza restaurants, 8 burger places, 6 sushi spots, and 4 taco trucks nearby.\n\nWhat's the probability of randomly selecting a sushi spot?",
-    answer: "Step 1: Total restaurants = 12+8+6+4 = 30\nStep 2: Favorable outcomes (sushi) = 6\nStep 3: P(sushi) = 6/30 = 1/5 = 0.2 = 20%"
-  },
-  { q: 6, topic: "Basic Probability", difficulty: "Easy",
-    scenario: "A mystery box contains 15 items: 5 tech gadgets, 7 clothing items, and 3 gift cards.\n\nWhat's the probability of NOT getting a tech gadget?",
-    answer: "Method 1: Not tech = clothing or gift cards = 7+3 = 10 items. P(not tech) = 10/15 = 2/3 ≈ 66.7%\nMethod 2 (Complement): P(tech) = 5/15 = 1/3. P(not tech) = 1 − 1/3 = 2/3 ≈ 66.7%"
-  },
-  { q: 7, topic: "Basic Probability", difficulty: "Medium",
-    scenario: "A limited sneaker drop has 500 pairs available. 200,000 people enter the raffle.\n\nWhat's your probability of winning?",
-    answer: "P(winning) = 500/200,000 = 1/400 = 0.0025 = 0.25%\n\nReality check: That's a 1 in 400 chance. Pretty rare! This is why limited drops are so competitive."
-  },
-  { q: 8, topic: "Basic Probability", difficulty: "Medium",
-    scenario: "Your teacher randomly selects students to present. Your class has 8 students who finished their project and 4 who didn't. You finished yours.\n\nWhat's the probability that:\nPart A: You get selected?\nPart B: Someone who finished gets selected?",
-    answer: "Part A: P(you selected) = 1/12 ≈ 8.3%\n(Total students = 12, you are 1 person)\n\nPart B: P(finished student) = 8/12 = 2/3 ≈ 66.7%\n(8 students finished out of 12 total)"
-  },
-  { q: 9, topic: "Basic Probability", difficulty: "Medium",
-    scenario: "Your 'Continue Watching' list has 6 shows you're bored of, 3 shows you love, and 1 show you haven't started yet.\n\nIf you click randomly, what's the probability you'll pick something good (either love it or it's new)?",
-    answer: "Step 1: Total shows = 6+3+1 = 10\nStep 2: Favorable = shows you love OR new = 3+1 = 4\nStep 3: P(good choice) = 4/10 = 2/5 = 40%"
-  },
-  { q: 10, topic: "Tree Diagrams", difficulty: "Medium",
-    scenario: "You're getting dressed:\n• Shoes: Sneakers (S) or Boots (B)\n• Jacket: Denim (D) or Leather (L)\n• Hat: Beanie (B) or Cap (C) or No Hat (N)\n\nPart A: Draw a tree diagram showing all outfit combinations.\nPart B: How many total outfit combinations are there?\nPart C: What's the probability of wearing sneakers with a beanie?",
-    answer: "Part A: A tree with 3 tiers (Shoes -> Jacket -> Hat).\nPart B: Total combinations = 12 (2 shoes × 2 jackets × 3 hats = 12)\nPart C: Favorable outcomes (SDB, SLB) = 2 outcomes. P(Sneakers + Beanie) = 2/12 = 1/6 ≈ 16.7%"
-  },
-  { q: 11, topic: "Tree Diagrams", difficulty: "Medium",
-    scenario: "You're ordering at a fast food place:\n• Size: Small (S) or Large (L)\n• Side: Fries (F) or Salad (Sa)\n\nUsing a tree diagram:\nPart A: List all possible meal combinations.\nPart B: What's the probability of getting a large meal?\nPart C: What's the probability of getting fries?",
-    answer: "Part A: Combinations: SF, SSa, LF, LSa (4 meals)\nPart B: P(large) = 2/4 = 1/2 = 50%\nPart C: P(fries) = 2/4 = 1/2 = 50%"
-  },
-  { q: 12, topic: "Tree Diagrams", difficulty: "Medium",
-    scenario: "You're customizing your phone:\n• Case Color: Black (B), Clear (C), or Pink (P)\n• Pop Socket: Yes (Y) or No (N)\n\nPart A: Create a tree diagram.\nPart B: How many total customization options exist?\nPart C: What's the probability of choosing a colored case (not clear) with a pop socket?",
-    answer: "Part B: Total options = 6 (3 cases × 2 socket choices = 6)\nPart C: Colored cases with pop socket are BY, PY (2 outcomes). P(colored+socket) = 2/6 = 1/3 ≈ 33.3%"
-  },
-  { q: 13, topic: "Tree Diagrams", difficulty: "Medium",
-    scenario: "Planning your Saturday:\n• Morning: Gym (G) or Sleep In (S)\n• Afternoon: Movie (M) or Mall (Ma)\n• Evening: Party (P) or Chill (C)\n\nPart A: How many different ways can your day go?\nPart B: What's the probability your day includes going to the gym AND the party?\nPart C: What's the probability you sleep in OR chill in the evening (or both)?",
-    answer: "Part A: Total ways = 2 × 2 × 2 = 8 different days\nPart B: Outcomes with Gym AND Party (GMP, GMaP) = 2. P(G and P) = 2/8 = 25%\nPart C: Unique outcomes for Sleep OR Chill (SMP, SMC, SMaP, SMaC, GMC, GMaC) = 6. P(S or C) = 6/8 = 75%"
-  },
-  { q: 14, topic: "Independent Events", difficulty: "Medium",
-    scenario: "You have two spinners:\n• Spinner 1: 4 equal sections (Red, Blue, Green, Yellow)\n• Spinner 2: 2 equal sections (Win, Lose)\n\nWhat's the probability of spinning Blue AND Win?",
-    answer: "These are independent events.\nUse multiplication rule: P(A AND B) = P(A) × P(B)\n• P(Blue) = 1/4\n• P(Win) = 1/2\nP(Blue AND Win) = 1/4 × 1/2 = 1/8 = 12.5%"
-  },
-  { q: 15, topic: "Independent Events", difficulty: "Medium",
-    scenario: "When you post on Instagram, there's a 30% chance your crush will like it. When you post on TikTok, there's a 40% chance they'll view it.\n\nIf you post on BOTH platforms today, what's the probability your crush will like your Instagram post AND view your TikTok?",
-    answer: "These are independent events.\nUse multiplication rule:\n• P(Like IG) = 0.30\n• P(View TikTok) = 0.40\nP(Like AND View) = 0.30 × 0.40 = 0.12 = 12%"
-  },
-  { q: 16, topic: "Independent Events", difficulty: "Hard",
-    scenario: "A basketball player makes 75% of their free throws. They get to shoot 3 free throws.\n\nWhat's the probability they make ALL THREE shots?",
-    answer: "Each shot is independent.\nUse multiplication rule:\n• P(Make shot 1) = 0.75\n• P(Make shot 2) = 0.75\n• P(Make shot 3) = 0.75\nP(Make all 3) = 0.75 × 0.75 × 0.75 = 0.421875 ≈ 42.2%"
-  },
-  { q: 17, topic: "Independent Events", difficulty: "Medium",
-    scenario: "You order from two different websites:\n• Site A: 90% chance your order arrives on time\n• Site B: 85% chance your order arrives on time\n\nWhat's the probability BOTH orders arrive on time?",
-    answer: "Deliveries are independent events.\nUse multiplication rule:\n• P(A on time) = 0.90\n• P(B on time) = 0.85\nP(Both on time) = 0.90 × 0.85 = 0.765 = 76.5%"
-  },
-  { q: 18, topic: "Mutually Exclusive", difficulty: "Medium",
-    scenario: "In your class, the grade distribution is:\n• A: 15%\n• B: 30%\n• C: 35%\n• D: 15%\n• F: 5%\n\nWhat's the probability a randomly selected student has a passing grade (A, B, or C)?",
-    answer: "These grades are mutually exclusive.\nUse addition rule: P(A OR B OR C) = P(A) + P(B) + P(C)\nP(Passing) = 0.15 + 0.30 + 0.35 = 0.80 = 80%"
-  },
-  { q: 19, topic: "Mutually Exclusive", difficulty: "Medium",
-    scenario: "A radio station is giving away concert tickets. They'll randomly select:\n• 1st prize: Front row seats (5 winners)\n• 2nd prize: Regular seats (15 winners)\n• 3rd prize: Meet & greet pass (10 winners)\n\nYou entered once. There are 1,000 total entries.\nWhat's the probability you win ANY prize?",
-    answer: "Prizes are mutually exclusive.\nUse addition rule:\n• P(1st prize) = 5/1000 = 0.005\n• P(2nd prize) = 15/1000 = 0.015\n• P(3rd prize) = 10/1000 = 0.010\nP(Any prize) = 0.005 + 0.015 + 0.010 = 0.030 = 3%\n\nOr simply: Total prizes = 30. P(Any) = 30/1000 = 3%"
-  },
-  { q: 20, topic: "Mutually Exclusive", difficulty: "Medium",
-    scenario: "In a video game, when you defeat a boss:\n• 10% chance: Legendary weapon drops\n• 25% chance: Epic armor drops\n• 30% chance: Rare accessory drops\n• 35% chance: Common item drops\n\nPart A: What's the probability you get a legendary weapon OR epic armor?\nPart B: What's the probability you get at least a rare item (rare, epic, or legendary)?\nPart C: Are you more likely to get something rare+ or something common?",
-    answer: "All outcomes are mutually exclusive.\nPart A: P(L or E) = 0.10 + 0.25 = 0.35 = 35%\nPart B: P(At least Rare) = 0.30 + 0.25 + 0.10 = 0.65 = 65%\nPart C: P(Common) = 35%, P(Rare+) = 65%. You're more likely to get rare or better! (65% > 35%)"
-  }
-];
-
 const slides = [
   {
     type: 'title',
@@ -479,11 +395,6 @@ const slides = [
     footer: 'Probability is literally everywhere. Now you can understand it. 🎯'
   },
   {
-    type: 'quiz-gallery',
-    title: 'PRACTICE ARENA ⚔️',
-    subtitle: 'Select a question below from the 20 Practice Scenarios.'
-  },
-  {
     type: 'tree-calculation',
     title: 'TREE CALCULATION',
     problem: 'You have 2 tops (T-shirt, Hoodie) and 2 bottoms (Jeans, Shorts). What\'s P(wearing jeans)?',
@@ -505,6 +416,20 @@ const slides = [
     badge: 'PROBABILITY EXPERT 🎓'
   },
   {
+    type: 'practice-link',
+    title: 'READY TO PRACTISE? ⚔️',
+    subtitle: 'All the probability exercises are on one page, sorted by skill from easy to hard.',
+    skills: [
+      'Vocabulary',
+      'Basic probability',
+      'Counting outcomes with tree diagrams',
+      'Independent events (AND → multiply)',
+      'Mutually exclusive events (OR → add)',
+      'Probability trees: put it all together'
+    ],
+    url: 'probability-practice.html'
+  },
+  {
     type: 'final',
     title: 'YOU JUST LEVELED UP 🎉',
     achievements: [
@@ -523,10 +448,6 @@ let currentSlide = 0;
 let selectedAnswer = null;
 let activeAnimationId = null;
 let audioContext = null;
-
-// Quiz State
-window.currentQuizQuestionIndex = 0;
-window.quizAnswerRevealed = false;
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
@@ -599,51 +520,6 @@ window.selectAnswer = function(index) {
     }
 };
 
-window.setQuizIndex = function(idx) {
-    window.currentQuizQuestionIndex = idx;
-    window.quizAnswerRevealed = false;
-    renderSlide();
-};
-
-window.nextQuizQuestion = function() {
-    if (window.currentQuizQuestionIndex < practiceQuestions.length - 1) {
-        window.currentQuizQuestionIndex++;
-        window.quizAnswerRevealed = false;
-        renderSlide();
-    }
-};
-
-window.prevQuizQuestion = function() {
-    if (window.currentQuizQuestionIndex > 0) {
-        window.currentQuizQuestionIndex--;
-        window.quizAnswerRevealed = false;
-        renderSlide();
-    }
-};
-
-window.goHome = function() {
-    currentSlide = 0;
-    window.quizAnswerRevealed = false;
-    renderSlide();
-};
-
-window.toggleQuizAnswer = function() {
-    window.quizAnswerRevealed = !window.quizAnswerRevealed;
-    const ans = document.getElementById('quiz-answer-content');
-    const btn = document.getElementById('quiz-reveal-btn');
-    if (ans && btn) {
-        if (window.quizAnswerRevealed) {
-            ans.classList.remove('hidden');
-            ans.classList.add('animate-fadeIn');
-            btn.innerText = 'Hide Answer';
-        } else {
-            ans.classList.add('hidden');
-            ans.classList.remove('animate-fadeIn');
-            btn.innerText = 'Reveal Answer';
-        }
-    }
-};
-
 function renderSlide() {
     cancelAnimations();
     const slide = slides[currentSlide];
@@ -661,9 +537,9 @@ function renderSlide() {
                 <h1 class="text-4xl md:text-6xl font-black text-white mb-3 animate-pulse">${slide.title}</h1>
                 <p class="text-xl md:text-3xl text-white/90">${slide.subtitle}</p>
                 ${slide.note ? `<p class="text-xs md:text-sm text-white/70 mt-6">${slide.note}</p>` : ''}
-                <button onclick="currentSlide = slides.findIndex(s => s.type === 'quiz-gallery'); renderSlide();" class="mt-10 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white font-bold py-3 px-8 rounded-full shadow-[0_0_15px_rgba(236,72,153,0.5)] transition transform hover:scale-105 border-2 border-pink-300/50 text-sm md:text-lg">
-                    Jump to Practice Arena ⚔️
-                </button>
+                <a href="probability-practice.html" class="inline-block mt-10 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white font-bold py-3 px-8 rounded-full shadow-[0_0_15px_rgba(236,72,153,0.5)] transition transform hover:scale-105 border-2 border-pink-300/50 text-sm md:text-lg">
+                    Jump to Practice Exercises ⚔️
+                </a>
             </div>
         `;
     } 
@@ -1013,71 +889,19 @@ function renderSlide() {
             </div>
         `;
     }
-    // New Interactive Quiz Gallery Slide
-    else if (slide.type === 'quiz-gallery') {
-        const q = practiceQuestions[window.currentQuizQuestionIndex];
-
-        const navBtns = practiceQuestions.map((_, i) => `
-            <button onclick="window.setQuizIndex(${i})" class="w-8 h-8 md:w-10 md:h-10 rounded-lg text-xs md:text-sm font-bold transition-all ${i === window.currentQuizQuestionIndex ? 'bg-gradient-to-br from-pink-500 to-purple-500 text-white shadow-lg scale-110' : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600 border border-slate-600/30'} flex items-center justify-center m-0.5">
-                ${i + 1}
-            </button>
-        `).join('');
-
-        let diffColor = 'text-green-400';
-        if(q.difficulty.includes('Medium')) diffColor = 'text-yellow-400';
-        if(q.difficulty.includes('Hard')) diffColor = 'text-red-400';
-
+    else if (slide.type === 'practice-link') {
         html = `
-            <div class="animate-fadeIn max-w-5xl w-full flex flex-col h-full max-h-[85vh]">
-                <div class="flex justify-end mb-2 shrink-0">
-                    <button onclick="window.goHome()" class="bg-slate-700/80 hover:bg-pink-600 text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-semibold shadow-lg transition transform hover:scale-105 text-xs md:text-sm border border-slate-500/50 flex items-center gap-1.5">
-                        ⏮ Back to start
-                    </button>
+            <div class="text-center animate-fadeIn w-full max-w-2xl px-4">
+                <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">${slide.title}</h2>
+                <p class="text-lg md:text-2xl text-white/90 mb-6">${slide.subtitle}</p>
+                <div class="bg-slate-800/80 rounded-xl p-5 md:p-6 border-2 border-purple-400/30 shadow-2xl text-left">
+                    <ol class="list-decimal list-inside space-y-2 text-white text-sm md:text-lg">
+                        ${slide.skills.map(skill => `<li>${skill}</li>`).join('')}
+                    </ol>
                 </div>
-                <h2 class="text-2xl md:text-4xl font-bold text-white mb-2 text-center">${slide.title}</h2>
-                <p class="text-white/80 text-center text-xs md:text-base mb-4 md:mb-6">${slide.subtitle}</p>
-
-                <div class="flex flex-wrap justify-center mb-4 md:mb-6 shrink-0 w-full max-w-3xl mx-auto px-2">
-                    ${navBtns}
-                </div>
-
-                <div class="flex-1 bg-slate-800/80 rounded-xl border-2 border-purple-400/30 shadow-2xl flex flex-col min-h-0 relative overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent pointer-events-none"></div>
-                    
-                    <div class="p-4 md:p-8 overflow-y-auto flex-1 custom-scrollbar relative z-10 flex flex-col">
-                        <div class="flex justify-between items-center mb-4 border-b border-purple-500/30 pb-3 shrink-0">
-                            <span class="bg-purple-600/50 border border-purple-400/30 text-purple-100 px-3 md:px-4 py-1 rounded-full text-[10px] md:text-xs font-semibold uppercase tracking-wider">${q.topic}</span>
-                            <span class="${diffColor} text-xs md:text-sm font-bold uppercase tracking-wider flex items-center gap-1">
-                                <span class="hidden md:inline text-white/50">Difficulty:</span> ${q.difficulty}
-                            </span>
-                        </div>
-
-                        <div class="text-white text-sm md:text-xl font-medium leading-relaxed whitespace-pre-line mb-8 shrink-0">
-                            ${q.scenario}
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row justify-center items-center gap-2 md:gap-3 mt-auto pt-4 shrink-0">
-                            <button onclick="window.prevQuizQuestion()" ${window.currentQuizQuestionIndex === 0 ? 'disabled' : ''} class="bg-slate-700/80 hover:bg-slate-600 disabled:opacity-30 disabled:cursor-not-allowed text-white px-4 md:px-6 py-2 md:py-3 rounded-xl font-bold shadow-lg transition transform hover:scale-105 text-sm md:text-base border border-slate-500/50 w-full sm:w-auto flex items-center justify-center gap-2">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                                Previous Q
-                            </button>
-                            <button onclick="window.toggleQuizAnswer()" id="quiz-reveal-btn" class="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white px-6 md:px-8 py-2 md:py-3 rounded-xl font-bold shadow-lg transition transform hover:scale-105 text-sm md:text-base border border-pink-400/30 w-full sm:w-auto">
-                                ${window.quizAnswerRevealed ? 'Hide Answer' : 'Reveal Answer'}
-                            </button>
-                            <button onclick="window.nextQuizQuestion()" ${window.currentQuizQuestionIndex === practiceQuestions.length - 1 ? 'disabled' : ''} class="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 disabled:opacity-30 disabled:cursor-not-allowed text-white px-4 md:px-6 py-2 md:py-3 rounded-xl font-bold shadow-lg transition transform hover:scale-105 text-sm md:text-base border border-cyan-400/30 w-full sm:w-auto flex items-center justify-center gap-2">
-                                Next Q
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                            </button>
-                        </div>
-
-                        <div id="quiz-answer-content" class="${window.quizAnswerRevealed ? 'animate-fadeIn' : 'hidden'} mt-6 bg-green-900/30 border-2 border-green-500/30 rounded-xl p-4 md:p-6 shrink-0 shadow-inner">
-                            <h4 class="text-green-400 font-bold mb-3 text-xs md:text-sm tracking-wider uppercase border-b border-green-500/20 pb-2">Solution</h4>
-                            <div class="text-green-50 text-sm md:text-lg whitespace-pre-line leading-relaxed font-mono">
-                                ${q.answer}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <a href="${slide.url}" class="inline-block mt-8 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white font-bold py-3 px-8 rounded-full shadow-[0_0_15px_rgba(236,72,153,0.5)] transition transform hover:scale-105 border-2 border-pink-300/50 text-sm md:text-lg">
+                    Go to Probability Practice ⚔️
+                </a>
             </div>
         `;
     }

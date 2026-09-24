@@ -32,18 +32,14 @@
       title: 'Topic 2 · Probability',
       intro: 'Experiments, outcomes and events, tree diagrams, and independent and mutually exclusive events.',
       lessons: [
-        { id: 'presentation', title: 'Probability Presentation & Practice Arena', url: 'presentation.html',
+        { id: 'presentation', title: 'Probability Presentation', url: 'presentation.html',
           tag: 'Learn', word: 'learn', c1: '#f3c2cf', c2: '#c9a07e',
-          blurb: 'Slides with animated tree diagrams, then a 20-question Practice Arena at the end.',
+          blurb: 'Slides with animated tree diagrams, worked examples and quick "try it" questions.',
           how: 'Use Next / Previous at your own speed. Answer each question before you reveal it.' },
-        { id: 'probability-exercise', title: 'Gen Z Probability Exercises', url: 'probability-exercise.html',
+        { id: 'probability-practice', title: 'Probability Practice', url: 'probability-practice.html',
           tag: 'Practice', word: 'practice', c1: '#fff0e3', c2: '#f3c2cf',
-          blurb: 'Five real-life Malaysian scenarios, from easy to hard, with tree diagrams and tables.',
-          how: 'Work it out on paper, then press "Show All Answers".' },
-        { id: 'answer-key', title: 'Practice Worksheet & Answers', url: 'answer-key.html',
-          tag: 'Self-check', word: 'self-check', c1: '#d9e8d4', c2: '#f3c2cf',
-          blurb: 'A full 20-point worksheet. Answers start hidden so you can test yourself.',
-          how: 'Tap a blurred answer to reveal it and mark your own score.' }
+          blurb: 'Every probability exercise on one page, sorted by skill from easy to hard, with an interactive tree diagram explorer.',
+          how: 'Work each question on paper, then tap the blurred answer to check it.' }
       ]
     }
   ];
@@ -176,12 +172,12 @@
     }
     document.body.appendChild(bar);
 
-    if (lessonId === 'answer-key') selfTest();
+    if (lessonId === 'probability-practice') selfTest();
   }
 
   function selfTest() {
     // Everything that gives an answer away: answers, working, the correct choice,
-    // finished tree diagrams and teacher notes. "Key Formula" notes stay visible as hints.
+    // finished tree diagrams and notes. "Key Formula" notes stay visible as hints.
     var answers = [];
     document.querySelectorAll('.answer, .work-shown, .multiple-choice-correct, .tree-diagram, .note').forEach(function (el) {
       if (el.classList.contains('note') && el.querySelector('.formula')) return;
@@ -227,7 +223,7 @@
     renderToggle();
     box.appendChild(toggle);
 
-    var anchor = document.querySelector('h2') || document.body.firstElementChild;
+    var anchor = document.getElementById('sp-selftest-anchor') || document.querySelector('h2') || document.body.firstElementChild;
     anchor.parentNode.insertBefore(box, anchor.nextSibling);
 
     function hiddenAnswerFor(target) {

@@ -6,7 +6,8 @@ https://dina85hai.github.io/STATISTICS_PROBABILITY/
 ## Learning path
 
 1. **Statistics**: Mean, Mode, Median, Range, Variance & Standard Deviation (`statistics-notes.html`)
-2. **Probability**: Presentation & Practice Arena (`presentation.html`) → Gen Z Exercises → Worksheet & Answers
+2. **Probability**: Presentation (`presentation.html`) → Practice (`lessons/probability-practice.html`): every exercise on one page,
+   grouped by skill and ordered from easy to hard
 
 ## Files
 
@@ -14,7 +15,7 @@ https://dina85hai.github.io/STATISTICS_PROBABILITY/
 |---|---|
 | `index.html` | Landing page (learning path, progress) |
 | `statistics-notes.html` | Statistics notes (formulas are rendered by `src/statistics.ts`) |
-| `presentation.html` | Probability slides + Practice Arena (styles compiled by Tailwind) |
+| `presentation.html` | Probability slides (styles compiled by Tailwind) |
 | `lessons/*.html` | Stand-alone lesson pages, copied to the site as they are |
 | `public/learner.js` | Lesson list (`TOPICS`), Home / Mark as done / Next buttons, progress, self-test mode |
 
