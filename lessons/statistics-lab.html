@@ -120,6 +120,7 @@ table.box input.cell{margin:0;min-width:70px;text-align:center;padding:6px}
 table.data{border-collapse:collapse;margin:10px 0;text-align:center}
 table.data th,table.data td{border:1px solid var(--line);padding:6px 12px}
 table.data th{background:var(--blue-soft);text-align:left}
+.gresult{font-weight:700;color:var(--green);min-height:1.2em;margin:4px 0 0}
 .progressline{font-size:14px;font-weight:650;color:var(--muted)}
 .progressline b{color:var(--green)}
 
@@ -177,6 +178,7 @@ body.sp-lesson header .top{padding-left:max(0px,calc(112px - max(0px,(100vw - 11
       <button role="tab" id="tab-intro" aria-controls="intro" aria-selected="true" data-tab="intro">🏠 Intro</button>
       <button role="tab" id="tab-averages" aria-controls="averages" aria-selected="false" tabindex="-1" data-tab="averages">📘 Averages</button>
       <button role="tab" id="tab-spread" aria-controls="spread" aria-selected="false" tabindex="-1" data-tab="spread">📗 Spread</button>
+      <button role="tab" id="tab-grouped" aria-controls="grouped" aria-selected="false" tabindex="-1" data-tab="grouped">📊 Grouped</button>
       <button role="tab" id="tab-advanced" aria-controls="advanced" aria-selected="false" tabindex="-1" data-tab="advanced">➗ Advanced</button>
       <button role="tab" id="tab-practice" aria-controls="practice" aria-selected="false" tabindex="-1" data-tab="practice">🎮 Practice</button>
       <button role="tab" id="tab-tips" aria-controls="tips" aria-selected="false" tabindex="-1" data-tab="tips">💡 Tips</button>
@@ -225,7 +227,7 @@ body.sp-lesson header .top{padding-left:max(0px,calc(112px - max(0px,(100vw - 11
     <div class="grid3">
       <div><b>📘 Averages</b><br><small>Mean, median and mode from a list and from a frequency table.</small></div>
       <div><b>📗 Spread</b><br><small>Range, variance and standard deviation, drawn as real squares.</small></div>
-      <div><b>➗ Advanced</b><br><small>Grouped data formulas and what happens when every value changes.</small></div>
+      <div><b>📊 Grouped &amp; ➗ Advanced</b><br><small>Grouped data with the formulas from the notes, and what happens when every value changes.</small></div>
     </div>
     <p style="margin-top:14px">In every section you fill in <b>one box at a time</b>. A box turns <span style="color:var(--green);font-weight:700">green</span> when it is right and <span style="color:var(--red);font-weight:700">red</span> when it needs another look. Stuck? Press <b>💡 Hint</b>.</p>
   </div>
@@ -341,40 +343,93 @@ body.sp-lesson header .top{padding-left:max(0px,calc(112px - max(0px,(100vw - 11
   </div>
 </section>
 
-<!-- ======================= ADVANCED ======================= -->
-<section id="advanced" class="panel" role="tabpanel" aria-labelledby="tab-advanced">
-  <div class="eyebrow">Advanced · Grouped data and transformations</div>
-  <h1>When data comes in classes</h1>
-  <p>With grouped data we no longer know each exact value, so we use the <b>midpoint</b> of each class as its representative value. The answers are <b>estimates</b>.</p>
+<!-- ======================= GROUPED DATA ======================= -->
+<section id="grouped" class="panel" role="tabpanel" aria-labelledby="tab-grouped">
+  <div class="eyebrow">Grouped data · Same formulas as the statistics notes</div>
+  <h1>Grouped data, step by step</h1>
+  <p>With grouped data we don't know each exact value, so we use the <b>midpoint</b> of each class. Work through the five measures in the same order as the notes: <b>mean, mode, median, range, then variance &amp; σ</b>. Every box checks itself as you type.</p>
 
   <div class="card">
-    <h2>🧮 Box Method 5: the grouped data table</h2>
-    <div class="formula">midpoint <span class="v">x</span> = <span class="sp-frac"><span>lower limit + upper limit</span><span class="sp-frac-slash">/</span><span>2</span></span> &nbsp; · &nbsp; class width <span class="v">c</span> = upper boundary − lower boundary</div>
-    <div class="actions"><button class="btn" id="grNew">New table ↻</button></div>
-    <div class="progressline" id="grProgress"></div>
-    <div id="grGrid"></div>
+    <h2>🧮 Step 0: choose a table and fill it in</h2>
+    <div class="actions">
+      <button class="btn primary" id="gNotes" aria-pressed="true">📱 Example from the notes</button>
+      <button class="btn" id="gRandom" aria-pressed="false">New random table ↻</button>
+      <button class="btn" id="gOwnToggle" aria-expanded="false">✏️ Type my own table</button>
+    </div>
+    <div id="gOwn" hidden>
+      <div class="controls">
+        <label>First class starts at<input id="gOwnLo" type="number" step="1" value="1" style="width:110px"></label>
+        <label>Class width<input id="gOwnC" type="number" min="1" max="100" step="1" value="2" style="width:90px"></label>
+        <label>Frequencies (commas)<input id="gOwnF" class="datainput" type="text" value="5, 8, 18, 7, 2" autocomplete="off" spellcheck="false"></label>
+        <button class="btn primary" id="gOwnUse">Use my table</button>
+      </div>
+      <small>Example: start 1, width 2 makes the classes 1 – 2, 3 – 4, 5 – 6, …</small>
+    </div>
+    <p id="gError" class="error" role="status"></p>
+    <h3 id="gTitle"></h3>
+    <p id="gText"></p>
+    <div class="formula" style="font-size:18px">midpoint <span class="v">x</span> = <span class="sp-frac"><span>lower limit + upper limit</span><span class="sp-frac-slash">/</span><span>2</span></span> &nbsp; · &nbsp; cumulative <span class="v">f</span> = running total of <span class="v">f</span></div>
+    <div class="progressline" id="gProgress"></div>
+    <div id="gGrid"></div>
     <div class="grid2">
       <div>
-        <h3>① Mean and standard deviation</h3>
-        <div id="grFlowMean" class="flow"></div>
-        <h3>② Median by formula</h3>
-        <div class="formula">median = <span class="v">L</span> + <span class="sp-frac"><span><span class="sp-frac"><span><span class="v">N</span></span><span class="sp-frac-slash">/</span><span>2</span></span> − <span class="v">F</span></span><span class="sp-frac-slash">/</span><span><span class="v">f</span><sub>m</sub></span></span> × <span class="v">c</span>
-          <small>L = lower boundary of the median class · F = cumulative frequency before it · f<sub>m</sub> = its frequency</small></div>
-        <div id="grFlowMedian" class="flow"></div>
-        <h3>③ Mode by formula</h3>
-        <div class="formula">mode = <span class="v">L</span> + <span class="sp-frac"><span><span class="v">d</span>₁</span><span class="sp-frac-slash">/</span><span><span class="v">d</span>₁ + <span class="v">d</span>₂</span></span> × <span class="v">c</span>
-          <small>L = lower boundary of the modal class · d₁ = its f minus the f before · d₂ = its f minus the f after</small></div>
-        <div id="grFlowMode" class="flow"></div>
+        <canvas id="gChart" class="tall" role="img" aria-label="Histogram of the grouped data"></canvas>
+        <div class="legend"><span><i style="background:var(--blue)"></i>Mean</span><span><i style="background:var(--violet)"></i>Mode</span><span><i style="background:var(--amber)"></i>Median</span></div>
+        <div class="actions"><button class="btn" id="gShowLines" aria-pressed="false">Show mean, mode &amp; median</button></div>
       </div>
       <div>
-        <canvas id="grChart" class="tall" role="img" aria-label="Histogram of the grouped data"></canvas>
-        <div class="legend"><span><i style="background:var(--blue)"></i>Mean</span><span><i style="background:var(--amber)"></i>Median</span><span><i style="background:var(--violet)"></i>Mode</span></div>
-        <div class="actions"><button class="btn" id="grShowLines" aria-pressed="false">Show mean, median &amp; mode</button></div>
-        <p class="notice">Boundaries sit halfway between classes. For classes 10 – 19 and 20 – 29, the boundary is 19.5, so the class 20 – 29 has lower boundary <b>19.5</b> and width <b>10</b>.</p>
+        <p class="notice">Boundaries sit halfway between classes. For classes 1 – 2 and 3 – 4 the boundary is <b>2.5</b>, so the class 3 – 4 has lower boundary <b>2.5</b> and width <b>c = 4.5 − 2.5 = 2</b>.</p>
       </div>
     </div>
-    <div class="actions"><button class="btn" id="grReveal">👀 Show all answers</button></div>
   </div>
+
+    <div class="card gcard" id="gCard1">
+      <h3><span class="num">1</span>Mean (<span class="bar">x</span>)</h3>
+      <div class="formula"><small>Formula (as in the notes)</small><span class="bar">x</span> = <span class="sp-frac"><span>Σ<span class="v">fx</span></span><span class="sp-frac-slash">/</span><span>Σ<span class="v">f</span></span></span> &nbsp;&nbsp; <span class="v">x</span> = class midpoint</div>
+      <div id="gFlow1" class="flow"></div>
+      <p class="gresult" id="gRes1" aria-live="polite"></p>
+    </div>
+
+    <div class="card gcard" id="gCard2">
+      <h3><span class="num">2</span>Mode</h3>
+      <div class="formula"><small>Formula (as in the notes)</small>Mode = <span class="v">L</span> + (<span class="sp-frac"><span><span class="v">d</span>₁</span><span class="sp-frac-slash">/</span><span><span class="v">d</span>₁ + <span class="v">d</span>₂</span></span>) × <span class="v">c</span><small>L = lower boundary of the modal class (highest f) · d₁ = difference with the class before · d₂ = difference with the class after · c = class width</small></div>
+      <div id="gFlow2" class="flow"></div>
+      <p class="gresult" id="gRes2" aria-live="polite"></p>
+    </div>
+
+    <div class="card gcard" id="gCard3">
+      <h3><span class="num">3</span>Median</h3>
+      <div class="formula"><small>Formula (as in the notes)</small>Median = <span class="v">L</span> + (<span class="sp-frac"><span><span class="sp-frac"><span><span class="v">N</span></span><span class="sp-frac-slash">/</span><span>2</span></span> − <span class="v">F</span></span><span class="sp-frac-slash">/</span><span><span class="v">f</span><sub>m</sub></span></span>) × <span class="v">c</span><small>L = lower boundary of the median class · F = cumulative f <b>before</b> the class · f<sub>m</sub> = frequency of the class · c = class width</small></div>
+      <div id="gFlow3" class="flow"></div>
+      <p class="gresult" id="gRes3" aria-live="polite"></p>
+    </div>
+
+    <div class="card gcard" id="gCard4">
+      <h3><span class="num">4</span>Range</h3>
+      <div class="formula"><small>Formula (as in the notes)</small>Range = midpoint of last class − midpoint of first class</div>
+      <div id="gFlow4" class="flow"></div>
+      <p class="gresult" id="gRes4" aria-live="polite"></p>
+    </div>
+
+    <div class="card gcard" id="gCard5">
+      <h3><span class="num">5</span>Variance (σ²) &amp; standard deviation (σ)</h3>
+      <div class="formula"><small>Formula (as in the notes)</small><span class="v">σ</span>² = <span class="sp-frac"><span>Σ<span class="v">fx</span>²</span><span class="sp-frac-slash">/</span><span>Σ<span class="v">f</span></span></span> − <span class="bar">x</span>² &nbsp;&nbsp; <span class="v">σ</span> = √<span class="v">σ</span>²<small>💡 Keep the full mean until the very last step. Rounding early makes the answer slightly wrong.</small></div>
+      <div id="gFlow5" class="flow"></div>
+      <p class="gresult" id="gRes5" aria-live="polite"></p>
+    </div>
+
+  <div class="card">
+    <h3>✓ Summary</h3>
+    <div class="tablewrap"><table class="box" id="gSummary"></table></div>
+    <div class="actions"><button class="btn" id="gReveal">👀 Show all answers</button></div>
+  </div>
+</section>
+
+<!-- ======================= ADVANCED ======================= -->
+<section id="advanced" class="panel" role="tabpanel" aria-labelledby="tab-advanced">
+  <div class="eyebrow">Advanced · Transformations</div>
+  <h1>When every value changes</h1>
+  <p>Grouped data now has its own tab: <button class="btn" data-go="grouped">📊 Go to Grouped data</button></p>
 
   <div class="card">
     <h2>🔁 What if every value changes?</h2>
@@ -418,6 +473,7 @@ body.sp-lesson header .top{padding-left:max(0px,calc(112px - max(0px,(100vw - 11
             <option value="mixed">Mixed</option>
             <option value="avg">Averages</option>
             <option value="spread">Spread</option>
+            <option value="grouped">Grouped data</option>
           </select></label>
       </div>
       <div class="stats" aria-live="polite">
@@ -490,6 +546,12 @@ body.sp-lesson header .top{padding-left:max(0px,calc(112px - max(0px,(100vw - 11
         <span class="bar">x</span> = <span class="sp-frac"><span>Σ<span class="v">x</span></span><span class="sp-frac-slash">/</span><span><span class="v">N</span></span></span> &nbsp;or&nbsp; <span class="sp-frac"><span>Σ<span class="v">fx</span></span><span class="sp-frac-slash">/</span><span>Σ<span class="v">f</span></span></span><br>
         <span class="v">σ</span>² = <span class="sp-frac"><span>Σ(<span class="v">x</span> − <span class="bar">x</span>)²</span><span class="sp-frac-slash">/</span><span><span class="v">N</span></span></span> = <span class="sp-frac"><span>Σ<span class="v">x</span>²</span><span class="sp-frac-slash">/</span><span><span class="v">N</span></span></span> − <span class="bar">x</span>²<br>
         <span class="v">σ</span>² = <span class="sp-frac"><span>Σ<span class="v">fx</span>²</span><span class="sp-frac-slash">/</span><span>Σ<span class="v">f</span></span></span> − <span class="bar">x</span>² &nbsp; · &nbsp; <span class="v">σ</span> = √<span class="v">σ</span>²
+      </div>
+      <p><b>Grouped data</b> (x = class midpoint):</p>
+      <div class="formula" style="font-size:18px">
+        Mode = <span class="v">L</span> + (<span class="sp-frac"><span><span class="v">d</span>₁</span><span class="sp-frac-slash">/</span><span><span class="v">d</span>₁ + <span class="v">d</span>₂</span></span>) × <span class="v">c</span><br>
+        Median = <span class="v">L</span> + (<span class="sp-frac"><span><span class="sp-frac"><span><span class="v">N</span></span><span class="sp-frac-slash">/</span><span>2</span></span> − <span class="v">F</span></span><span class="sp-frac-slash">/</span><span><span class="v">f</span><sub>m</sub></span></span>) × <span class="v">c</span><br>
+        Range = midpoint of last class − midpoint of first class
       </div></div>
     <div class="card"><h3>🧘 A calm solving routine</h3>
       <ol class="tight">
@@ -809,7 +871,7 @@ function drawDotRows(canvas, rows, opts = {}) {
    5. Tabs
    ===================================================================== */
 const tabs = [...document.querySelectorAll('[role=tab]')];
-const drawers = { intro: [], averages: [], spread: [], advanced: [], practice: [], tips: [] };
+const drawers = { intro: [], averages: [], spread: [], grouped: [], advanced: [], practice: [], tips: [] };
 function redraw(id) { (drawers[id] || []).forEach(fn => fn()); }
 function activeTab() { return tabs.find(t => t.getAttribute('aria-selected') === 'true').dataset.tab; }
 function showTab(id, focus) {
@@ -1132,67 +1194,153 @@ $('fvNew').onclick = newFv;
 $('fvReveal').onclick = () => revealAll(fv.inputs);
 
 /* =====================================================================
-   11. Advanced A: grouped data
+   11. Grouped data tab: the five measures in the same order and with the
+       same formulas as the statistics notes (section C of each measure)
    ===================================================================== */
-const gr = { classes: [], st: null, inputs: [], showLines: false };
+// The worked example used throughout the statistics notes.
+const NOTES_EXAMPLE = { title: '📱 Social media hours', text: '40 teens recorded their daily social media time (hours). This is the same table as in the statistics notes, so you can compare every step.', unit: 'hours', lo: 1, c: 2, fs: [5, 8, 18, 7, 2] };
+// Contexts for random tables: class width c and possible first lower limits.
+const GROUP_CONTEXTS = [
+  { title: '📝 Quiz marks', text: 'Marks scored by students in a mathematics quiz.', unit: 'marks', c: 10, starts: [10, 20, 30, 40] },
+  { title: '📦 Parcel masses', text: 'Masses of parcels at a post office (kg).', unit: 'kg', c: 5, starts: [5, 10, 15, 20] },
+  { title: '🚌 Travel time to school', text: 'Time taken by students to travel to school (minutes).', unit: 'minutes', c: 5, starts: [1, 6, 11] },
+  { title: '📱 Screen time', text: 'Daily screen time of a group of teens (hours).', unit: 'hours', c: 2, starts: [1, 3] },
+  { title: '🌱 Plant heights', text: 'Heights of seedlings after two weeks (cm).', unit: 'cm', c: 4, starts: [1, 5, 9] }
+];
+// Whole-number class limits: lo – hi with hi = lo + c − 1.
+const buildClasses = (lo, c, fs) => fs.map((f, i) => ({ lo: lo + i * c, hi: lo + i * c + c - 1, f }));
 function makeClasses() {
-  const c = pick([5, 10]), k = 5;
-  const start = c === 10 ? 10 * randInt(0, 4) : 5 * randInt(2, 8);
-  const fs = uniqueMaxFreqs(k, 2, 14);
-  return fs.map((f, i) => ({ lo: start + i * c, hi: start + i * c + c - 1, f }));
+  const ctx = pick(GROUP_CONTEXTS);
+  const cl = buildClasses(pick(ctx.starts), ctx.c, uniqueMaxFreqs(5, 2, 14));
+  cl.ctx = ctx;                                      // lets practice questions describe the data
+  return cl;
 }
+const classLabel = c => `${c.lo} – ${c.hi}`;
+
+const gr = { classes: [], st: null, unit: '', inputs: [], cards: [], showLines: false };
 function drawGrouped() {
   if (!gr.st) return;
   const { classes, st } = gr;
   const lines = gr.showLines ? [
     { x: st.mean, color: cssVar('--blue') },
-    { x: st.medianEst, color: cssVar('--amber') },
-    { x: st.modeEst, color: cssVar('--violet') }] : [];
-  drawNumericBars($('grChart'), classes.map(c => ({ x0: c.lo - 0.5, x1: c.hi + 0.5, h: c.f })), {
-    xmin: classes[0].lo - 0.5 - st.width * 0.3, xmax: classes[classes.length - 1].hi + 0.5 + st.width * 0.3,
-    ticks: [...classes.map(c => ({ x: c.lo - 0.5, label: fmt(c.lo - 0.5) })), { x: classes[classes.length - 1].hi + 0.5, label: fmt(classes[classes.length - 1].hi + 0.5) }],
+    ...(st.modeTie ? [] : [{ x: st.modeEst, color: cssVar('--violet') }]),
+    { x: st.medianEst, color: cssVar('--amber') }] : [];
+  const last = classes[classes.length - 1];
+  drawNumericBars($('gChart'), classes.map(c => ({ x0: c.lo - 0.5, x1: c.hi + 0.5, h: c.f })), {
+    xmin: classes[0].lo - 0.5 - st.width * 0.3, xmax: last.hi + 0.5 + st.width * 0.3,
+    ticks: [...classes.map(c => ({ x: c.lo - 0.5, label: fmt(c.lo - 0.5) })), { x: last.hi + 0.5, label: fmt(last.hi + 0.5) }],
     lines
   });
 }
-function newGrouped() {
-  gr.classes = makeClasses();
-  gr.st = groupedStats(gr.classes);
-  gr.showLines = false; toggleBtn($('grShowLines'), false);
-  const { classes, st } = gr;
-  const onChange = () => showProgress($('grProgress'), gr.inputs);
-  const gridInputs = buildGrid($('grGrid'), ['Class', '<i>f</i>', 'Midpoint <i>x</i>', '<i>fx</i>', '<i>fx</i>²', 'Cumulative <i>F</i>'],
-    classes.map((c, i) => [`${c.lo} – ${c.hi}`, c.f, { t: st.mids[i] }, { t: st.fx[i] }, { t: st.fx2[i] }, { t: st.cum[i] }]),
-    ['Σ', { t: st.N }, '—', { t: st.sumFx }, { t: st.sumFx2 }, '—'], onChange);
-  const q = st.sumFx2 / st.N;
+// Summary table in the same layout as the notes' summary.
+function paintSummary() {
+  const st = gr.st, u = gr.unit;
+  const rows = [
+    ['Mean', 1, `${fmt(st.mean, 3)} ${u}`], ['Mode', 2, st.modeTie ? 'not defined (tie)' : `${fmt(st.modeEst, 3)} ${u}`],
+    ['Median', 3, `${fmt(st.medianEst, 3)} ${u}`], ['Range', 4, `${fmt(st.range, 3)} ${u}`],
+    ['Variance σ²', 5, fmt(st.variance, 3)], ['Std deviation σ', 5, `${fmt(st.sd, 3)} ${u}`]];
+  $('gSummary').innerHTML = '<thead><tr><th scope="col">Measure</th><th scope="col">Your result</th></tr></thead><tbody>' +
+    rows.map(([name, n, val]) => `<tr><td>${name}</td><td>${gr.cards[n - 1] && gr.cards[n - 1].done ? '<b>' + val + '</b>' : '<span class="muted">finish step ' + n + '</span>'}</td></tr>`).join('') + '</tbody>';
+}
+function renderGrouped(classes, title, text, unit) {
+  gr.classes = classes; gr.unit = unit;
+  const fs = classes.map(c => c.f), maxF = Math.max(...fs);
+  const st = gr.st = groupedStats(classes);
+  st.modeTie = fs.filter(f => f === maxF).length > 1;
+  const first = classes[0], last = classes[classes.length - 1];
+  st.midFirst = (first.lo + first.hi) / 2; st.midLast = (last.lo + last.hi) / 2; st.range = st.midLast - st.midFirst;
+  gr.showLines = false; toggleBtn($('gShowLines'), false);
+  $('gTitle').textContent = title; $('gText').textContent = text;
+
+  const refresh = () => {
+    showProgress($('gProgress'), gr.inputs);
+    gr.cards.forEach((card, i) => {
+      card.done = (card.inputs.length > 0 || st.modeTie) && card.inputs.every(inp => inp.classList.contains('good'));
+      $('gRes' + (i + 1)).textContent = card.done ? card.result : '';
+    });
+    paintSummary();
+  };
+  const gridInputs = buildGrid($('gGrid'),
+    ['Class', '<i>f</i>', 'Midpoint <i>x</i>', '<i>fx</i>', '<i>x</i>²', '<i>fx</i>²', 'Cumulative <i>f</i>'],
+    classes.map((c, i) => [classLabel(c), c.f, { t: st.mids[i] }, { t: st.fx[i] }, { t: st.mids[i] ** 2 }, { t: st.fx2[i] }, { t: st.cum[i] }]),
+    ['Σ', { t: st.N }, '—', { t: st.sumFx }, '—', { t: st.sumFx2 }, '—'], refresh);
+
+  const u = unit, sub = 'Substitute into the formula: ';
   const mc = classes[st.mi], oc = classes[st.oi];
-  const meanIn = buildFlow($('grFlowMean'), [
-    { t: st.mean, label: `${XBAR} = Σfx ÷ Σf`, hint: `${frac(fmt(st.sumFx), st.N)} = <b>${fmt(st.mean, 4)}</b>` },
-    { t: st.variance, label: `σ² = Σfx² ÷ Σf − ${XBAR}²`, hint: `${frac(fmt(st.sumFx2), st.N)} − ${fmt(st.mean, 4)}² = ${fmt(q, 4)} − ${fmt(st.mean * st.mean, 4)} = <b>${fmt(st.variance, 4)}</b>` },
-    { t: st.sd, label: 'σ = √σ²', hint: `√${fmt(st.variance, 4)} = <b>${fmt(st.sd, 4)}</b>` }
-  ], onChange);
-  const medIn = buildFlow($('grFlowMedian'), [
-    { t: st.half, label: 'N ÷ 2', hint: `${st.N} ÷ 2 = <b>${fmt(st.half)}</b>` },
-    { t: st.L, label: 'L (lower boundary of the median class)', hint: `The first cumulative F to reach ${fmt(st.half)} is in class ${mc.lo} – ${mc.hi}. Its lower boundary is ${mc.lo} − 0.5 = <b>${fmt(st.L)}</b>.` },
-    { t: st.F, label: 'F (cumulative F before that class)', hint: st.mi ? `The row above has cumulative F = <b>${st.F}</b>.` : 'It is the first class, so nothing comes before it: <b>F = 0</b>.' },
-    { t: st.fm, label: 'f<sub>m</sub> (frequency of the median class)', hint: `<b>${st.fm}</b>` },
-    { t: st.width, label: 'c (class width)', hint: `${fmt(mc.hi + 0.5)} − ${fmt(mc.lo - 0.5)} = <b>${st.width}</b>` },
-    { t: st.medianEst, label: 'Median', hint: `${fmt(st.L)} + ${frac(fmt(st.half) + ' − ' + st.F, st.fm)} × ${st.width} = <b>${fmt(st.medianEst, 4)}</b>` }
-  ], onChange);
   const prevF = st.oi ? classes[st.oi - 1].f : 0, nextF = st.oi < classes.length - 1 ? classes[st.oi + 1].f : 0;
-  const modeIn = buildFlow($('grFlowMode'), [
-    { t: st.modeL, label: 'L (lower boundary of the modal class)', hint: `The highest f is ${oc.f}, in class ${oc.lo} – ${oc.hi}. L = ${oc.lo} − 0.5 = <b>${fmt(st.modeL)}</b>.` },
-    { t: st.d1, label: 'd₁ = f − f(before)', hint: `${oc.f} − ${prevF} = <b>${st.d1}</b>` + (st.oi ? '' : ' (no class before, so use 0)') },
-    { t: st.d2, label: 'd₂ = f − f(after)', hint: `${oc.f} − ${nextF} = <b>${st.d2}</b>` + (st.oi < classes.length - 1 ? '' : ' (no class after, so use 0)') },
-    { t: st.modeEst, label: 'Mode', hint: `${fmt(st.modeL)} + ${frac(st.d1, st.d1 + ' + ' + st.d2)} × ${st.width} = <b>${fmt(st.modeEst, 4)}</b>` }
-  ], onChange);
-  gr.inputs = [...gridInputs, ...meanIn, ...medIn, ...modeIn];
-  onChange();
+  const q = st.sumFx2 / st.N;
+  const specs = [
+    { steps: [
+      { t: st.mean, label: `${XBAR} = Σfx ÷ Σf`, hint: `Use the midpoint of each class as x, for example ${frac(first.lo + ' + ' + first.hi, 2)} = ${fmt(st.mids[0])}. ${sub}${XBAR} = ${frac(fmt(st.sumFx), st.N)} = <b>${fmt(st.mean, 3)}</b>` }],
+      result: `Mean ≈ ${fmt(st.mean)} ${u}` },
+    { steps: st.modeTie ? [] : [
+      { t: st.modeL, label: 'L (lower boundary of the modal class)', hint: `Modal class = the class with the highest frequency = ${classLabel(oc)} (f = ${oc.f}). L = ${oc.lo} − 0.5 = <b>${fmt(st.modeL)}</b>` },
+      { t: st.d1, label: 'd₁ (difference with the class before)', hint: `d₁ = ${oc.f} − ${prevF} = <b>${st.d1}</b>` + (st.oi ? '' : ' (there is no class before, so use 0)') },
+      { t: st.d2, label: 'd₂ (difference with the class after)', hint: `d₂ = ${oc.f} − ${nextF} = <b>${st.d2}</b>` + (st.oi < classes.length - 1 ? '' : ' (there is no class after, so use 0)') },
+      { t: st.width, label: 'c (class width)', hint: `c = ${fmt(oc.hi + 0.5)} − ${fmt(oc.lo - 0.5)} = <b>${st.width}</b>` },
+      { t: st.modeEst, label: 'Mode', hint: `${sub}Mode = ${fmt(st.modeL)} + (${frac(st.d1, st.d1 + ' + ' + st.d2)}) × ${st.width} = ${fmt(st.modeL)} + ${fmt(st.d1 / (st.d1 + st.d2) * st.width, 3)} = <b>${fmt(st.modeEst, 3)}</b>` }],
+      result: st.modeTie ? 'Mode: not defined, because two classes tie for the highest frequency' : `Mode ≈ ${fmt(st.modeEst)} ${u}` },
+    { steps: [
+      { t: st.half, label: 'N ÷ 2 (middle position)', hint: `${frac('N', 2)} = ${frac(st.N, 2)} = <b>${fmt(st.half)}</b>` },
+      { t: st.L, label: 'L (lower boundary of the median class)', hint: `Cumulative f: ${st.cum.join(', ')}. The ${fmt(st.half)}th value is in class ${classLabel(mc)}, so L = ${mc.lo} − 0.5 = <b>${fmt(st.L)}</b>` },
+      { t: st.F, label: 'F (cumulative f before the class)', hint: st.mi ? `F = <b>${st.F}</b> (the cumulative f of the class before)` : 'It is the first class, so nothing comes before it: <b>F = 0</b>' },
+      { t: st.fm, label: 'f<sub>m</sub> (frequency of the class)', hint: `f<sub>m</sub> = <b>${st.fm}</b>` },
+      { t: st.width, label: 'c (class width)', hint: `c = ${fmt(mc.hi + 0.5)} − ${fmt(mc.lo - 0.5)} = <b>${st.width}</b>` },
+      { t: st.medianEst, label: 'Median', hint: `${sub}Median = ${fmt(st.L)} + (${frac(fmt(st.half) + ' − ' + st.F, st.fm)}) × ${st.width} = ${fmt(st.L)} + ${fmt((st.half - st.F) / st.fm * st.width, 3)} = <b>${fmt(st.medianEst, 3)}</b>` }],
+      result: `Median ≈ ${fmt(st.medianEst)} ${u}` },
+    { steps: [
+      { t: st.midLast, label: `Midpoint of the last class (${classLabel(last)})`, hint: `${frac(last.lo + ' + ' + last.hi, 2)} = <b>${fmt(st.midLast)}</b>` },
+      { t: st.midFirst, label: `Midpoint of the first class (${classLabel(first)})`, hint: `${frac(first.lo + ' + ' + first.hi, 2)} = <b>${fmt(st.midFirst)}</b>` },
+      { t: st.range, label: 'Range', hint: `${sub}Range = ${fmt(st.midLast)} − ${fmt(st.midFirst)} = <b>${fmt(st.range)}</b>` }],
+      result: `Range = ${fmt(st.range)} ${u}` },
+    { steps: [
+      { t: q, label: 'Σfx² ÷ Σf', hint: `${frac(fmt(st.sumFx2), st.N)} = <b>${fmt(q, 4)}</b>` },
+      { t: st.mean * st.mean, label: `${XBAR}² (use the full mean)`, hint: `From step 1: ${XBAR} = ${fmt(st.mean, 4)}, so ${XBAR}² = <b>${fmt(st.mean * st.mean, 4)}</b>` },
+      { t: st.variance, label: 'Variance σ²', hint: `${sub}σ² = ${frac(fmt(st.sumFx2), st.N)} − ${fmt(st.mean, 4)}² = ${fmt(q, 4)} − ${fmt(st.mean * st.mean, 4)} = <b>${fmt(st.variance, 4)}</b>` },
+      { t: st.sd, label: 'Standard deviation σ = √σ²', hint: `σ = √${fmt(st.variance, 4)} = <b>${fmt(st.sd, 3)}</b>` }],
+      result: `σ² ≈ ${fmt(st.variance)}, σ ≈ ${fmt(st.sd)} ${u}` }
+  ];
+  gr.cards = specs.map((spec, i) => ({ result: '✓ ' + spec.result, inputs: buildFlow($('gFlow' + (i + 1)), spec.steps, refresh) }));
+  if (st.modeTie) $('gFlow2').innerHTML = '<p class="notice">Two or more classes share the highest frequency, so there is no single modal class and the mode formula cannot be used. Try another table.</p>';
+  gr.inputs = [...gridInputs, ...gr.cards.flatMap(c => c.inputs)];
+  refresh();
   drawGrouped();
 }
-$('grNew').onclick = newGrouped;
-$('grShowLines').onclick = () => { gr.showLines = !gr.showLines; toggleBtn($('grShowLines'), gr.showLines); drawGrouped(); };
-$('grReveal').onclick = () => revealAll(gr.inputs);
-drawers.advanced.push(drawGrouped);
+function setSource(which) {
+  toggleBtn($('gNotes'), which === 'notes'); toggleBtn($('gRandom'), which === 'random');
+  $('gNotes').classList.toggle('primary', which === 'notes'); $('gRandom').classList.toggle('primary', which === 'random');
+}
+function groupedNotes() {
+  const e = NOTES_EXAMPLE; setSource('notes'); $('gError').textContent = '';
+  renderGrouped(buildClasses(e.lo, e.c, e.fs), e.title, e.text, e.unit);
+}
+function groupedRandom() {
+  const ctx = pick(GROUP_CONTEXTS); setSource('random'); $('gError').textContent = '';
+  const fs = uniqueMaxFreqs(randInt(5, 6), 2, 14);
+  renderGrouped(buildClasses(pick(ctx.starts), ctx.c, fs), ctx.title, `${ctx.text} Σf = ${sum(fs)}.`, ctx.unit);
+}
+function groupedOwn() {
+  const lo = parseNum($('gOwnLo').value), c = parseNum($('gOwnC').value);
+  const { values, bad } = parseList($('gOwnF').value);
+  let err = '';
+  if (!Number.isInteger(lo) || Math.abs(lo) > 10000) err = 'The first class must start at a whole number.';
+  else if (!Number.isInteger(c) || c < 1 || c > 1000) err = 'The class width must be a whole number from 1 to 1000.';
+  else if (bad.length || values.some(f => !Number.isInteger(f) || f < 0)) err = 'Frequencies must be whole numbers, 0 or more.';
+  else if (values.length < 2 || values.length > 8) err = 'Please type between 2 and 8 frequencies.';
+  else if (sum(values) === 0 || sum(values) > 100000) err = 'The total frequency must be between 1 and 100000.';
+  $('gError').textContent = err;
+  if (err) return;
+  setSource('own');
+  renderGrouped(buildClasses(lo, c, values), '✏️ Your own table', `Classes of width ${c}, starting at ${lo}. Σf = ${sum(values)}.`, '');
+}
+$('gNotes').onclick = groupedNotes;
+$('gRandom').onclick = groupedRandom;
+$('gOwnToggle').onclick = () => { const h = !$('gOwn').hidden; $('gOwn').hidden = h; $('gOwnToggle').setAttribute('aria-expanded', String(!h)); };
+$('gOwnUse').onclick = groupedOwn;
+$('gOwnF').addEventListener('keydown', e => { if (e.key === 'Enter') groupedOwn(); });
+$('gShowLines').onclick = () => { gr.showLines = !gr.showLines; toggleBtn($('gShowLines'), gr.showLines); drawGrouped(); };
+$('gReveal').onclick = () => revealAll(gr.inputs);
+drawers.grouped.push(drawGrouped);
 
 /* =====================================================================
    12. Advanced B: transformations (multiply by m, then add k)
@@ -1286,6 +1434,13 @@ const GENERATORS = {
         steps: [{ t: m, label: `Mean ${XBAR}` }, { t: v, label: 'Variance σ²' }], final: { t: Math.sqrt(v), label: 'Standard deviation σ' },
         solution: [`${XBAR} = ${frac(sum(a), 5)} = ${fmt(m)}`, `Deviations: ${d.map(x => fmt(x)).join(', ')}. Squares: ${sq.join(', ')}`, `Σ(x − x̄)² = ${SS}, so σ² = ${frac(SS, 5)} = ${fmt(v, 4)}`, `σ = √${fmt(v, 4)} = <b>${fmt(Math.sqrt(v))}</b>`] };
     },
+    function groupedRange() {
+      const cl = makeClasses(), a = cl[0], z = cl[cl.length - 1], m1 = (a.lo + a.hi) / 2, m2 = (z.lo + z.hi) / 2;
+      return { topic: 'grouped', title: 'Range of grouped data', question: `${cl.ctx.text} Find the range of this grouped data.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'),
+        steps: [{ t: m2, label: 'Midpoint of the last class' }, { t: m1, label: 'Midpoint of the first class' }], final: { t: m2 - m1, label: 'Range' },
+        solution: ['Formula: Range = midpoint of last class − midpoint of first class', `Midpoint of the last class (${classLabel(z)}): ${frac(z.lo + ' + ' + z.hi, 2)} = ${fmt(m2)}`,
+          `Midpoint of the first class (${classLabel(a)}): ${frac(a.lo + ' + ' + a.hi, 2)} = ${fmt(m1)}`, `Substitute into the formula: Range = ${fmt(m2)} − ${fmt(m1)} = <b>${fmt(m2 - m1)}</b>`] };
+    },
     function missingValue() {
       for (;;) {
         const n = randInt(4, 6), m = randInt(6, 20), known = Array.from({ length: n - 1 }, () => randInt(2, 30)), k = m * n - sum(known);
@@ -1299,19 +1454,36 @@ const GENERATORS = {
   hard: [
     function groupedMean() {
       const cl = makeClasses(), st = groupedStats(cl);
-      return { topic: 'avg', title: 'Mean of grouped data', question: 'Marks of students in a quiz. Estimate the mean mark.', data: dataTable(cl.map(c => `${c.lo} – ${c.hi}`), cl.map(c => c.f), 'Marks'),
+      return { topic: 'grouped', title: 'Mean of grouped data', question: `${cl.ctx.text} Estimate the mean.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'),
         grid: { headers: ['Class', '<i>f</i>', 'Midpoint <i>x</i>', '<i>fx</i>'], rows: cl.map((c, i) => [`${c.lo} – ${c.hi}`, c.f, { t: st.mids[i] }, { t: st.fx[i] }]), foot: ['Σ', { t: st.N }, '—', { t: st.sumFx }] },
         steps: [], final: { t: st.mean, label: `Mean ${XBAR}` },
-        solution: [`Midpoints: ${st.mids.map(x => fmt(x)).join(', ')}`, `Σfx = ${fmt(st.sumFx)}, Σf = ${st.N}`, `${XBAR} = ${frac(fmt(st.sumFx), st.N)} = <b>${fmt(st.mean)}</b>`] };
+        solution: ['Formula: x̄ = Σfx ÷ Σf, where x = (lower limit + upper limit) ÷ 2', `Midpoints: ${st.mids.map(x => fmt(x)).join(', ')}`, `Σfx = ${fmt(st.sumFx)}, Σf = ${st.N}`, `${XBAR} = ${frac(fmt(st.sumFx), st.N)} = <b>${fmt(st.mean)}</b>`] };
     },
     function groupedMedian() {
       const cl = makeClasses(), st = groupedStats(cl), mc = cl[st.mi];
-      return { topic: 'avg', title: 'Median of grouped data', question: 'Masses (kg) of parcels at a post office. Estimate the median mass.', data: dataTable(cl.map(c => `${c.lo} – ${c.hi}`), cl.map(c => c.f), 'Mass (kg)'),
+      return { topic: 'grouped', title: 'Median of grouped data', question: `${cl.ctx.text} Estimate the median.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'),
         grid: { headers: ['Class', '<i>f</i>', 'Cumulative <i>F</i>'], rows: cl.map((c, i) => [`${c.lo} – ${c.hi}`, c.f, { t: st.cum[i] }]) },
         steps: [{ t: st.half, label: 'N ÷ 2' }, { t: st.L, label: 'L' }, { t: st.F, label: 'F' }, { t: st.fm, label: 'f<sub>m</sub>' }, { t: st.width, label: 'c' }],
         final: { t: st.medianEst, label: 'Median' },
-        solution: [`N = ${st.N}, so N ÷ 2 = ${fmt(st.half)}. Cumulative F: ${st.cum.join(', ')}`, `Median class: ${mc.lo} – ${mc.hi}, so L = ${fmt(st.L)}, F = ${st.F}, f<sub>m</sub> = ${st.fm}, c = ${st.width}`,
+        solution: ['Formula: Median = L + ((N/2 − F) ÷ f<sub>m</sub>) × c', `N = ${st.N}, so N ÷ 2 = ${fmt(st.half)}. Cumulative F: ${st.cum.join(', ')}`, `Median class: ${mc.lo} – ${mc.hi}, so L = ${fmt(st.L)}, F = ${st.F}, f<sub>m</sub> = ${st.fm}, c = ${st.width}`,
           `Median = ${fmt(st.L)} + ${frac(fmt(st.half) + ' − ' + st.F, st.fm)} × ${st.width} = <b>${fmt(st.medianEst)}</b>`] };
+    },
+    function groupedMode() {
+      const cl = makeClasses(), st = groupedStats(cl), oc = cl[st.oi];
+      return { topic: 'grouped', title: 'Mode of grouped data', question: `${cl.ctx.text} Estimate the mode of this grouped data using the formula.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'),
+        steps: [{ t: st.modeL, label: 'L (lower boundary of the modal class)' }, { t: st.d1, label: 'd₁' }, { t: st.d2, label: 'd₂' }, { t: st.width, label: 'c' }],
+        final: { t: st.modeEst, label: 'Mode' },
+        solution: ['Formula: Mode = L + (d₁ ÷ (d₁ + d₂)) × c', `Modal class = the class with the highest frequency = ${classLabel(oc)} (f = ${oc.f}), so L = ${fmt(st.modeL)}`,
+          `d₁ = ${oc.f} − ${st.oi ? cl[st.oi - 1].f : 0} = ${st.d1} (difference with the class before), d₂ = ${oc.f} − ${st.oi < cl.length - 1 ? cl[st.oi + 1].f : 0} = ${st.d2} (difference with the class after), c = ${st.width}`,
+          `Substitute into the formula: Mode = ${fmt(st.modeL)} + (${frac(st.d1, st.d1 + ' + ' + st.d2)}) × ${st.width} = <b>${fmt(st.modeEst)}</b>`] };
+    },
+    function groupedSD() {
+      const cl = makeClasses(), st = groupedStats(cl), q = st.sumFx2 / st.N;
+      return { topic: 'grouped', title: 'Standard deviation of grouped data', question: `${cl.ctx.text} Find the variance and standard deviation of this grouped data.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'),
+        grid: { headers: ['Class', '<i>f</i>', 'Midpoint <i>x</i>', '<i>fx</i>', '<i>x</i>²', '<i>fx</i>²'], rows: cl.map((c, i) => [classLabel(c), c.f, { t: st.mids[i] }, { t: st.fx[i] }, { t: st.mids[i] ** 2 }, { t: st.fx2[i] }]), foot: ['Σ', { t: st.N }, '—', { t: st.sumFx }, '—', { t: st.sumFx2 }] },
+        steps: [{ t: st.mean, label: `Mean ${XBAR}` }, { t: st.variance, label: 'Variance σ²' }], final: { t: st.sd, label: 'Standard deviation σ' },
+        solution: ['Formula: σ² = Σfx² ÷ Σf − x̄², σ = √σ²', `Use the midpoints as x: Σf = ${st.N}, Σfx = ${fmt(st.sumFx)}, Σfx² = ${fmt(st.sumFx2)}`, `${XBAR} = ${frac(fmt(st.sumFx), st.N)} = ${fmt(st.mean, 4)} (keep the full value)`,
+          `Substitute into the formula: σ² = ${frac(fmt(st.sumFx2), st.N)} − ${fmt(st.mean, 4)}² = ${fmt(q, 4)} − ${fmt(st.mean ** 2, 4)} = ${fmt(st.variance, 4)}`, `σ = √${fmt(st.variance, 4)} = <b>${fmt(st.sd)}</b>`] };
     },
     function sdFreq() {
       const k = 4, s0 = randInt(1, 5), xs = Array.from({ length: k }, (_, i) => s0 + i), fs = Array.from({ length: k }, () => randInt(1, 9)), st = freqStats(xs, fs), q = st.sumFx2 / st.N;
@@ -1419,7 +1591,7 @@ $('pTopic').onchange = newProblem;
 /* =====================================================================
    15. Start
    ===================================================================== */
-newSeason(); newWeek(); renderRaw(); newFreq(); renderDev(); newFv(); newGrouped(); renderTf(); newProblem(); updateScore();
+newSeason(); newWeek(); renderRaw(); newFreq(); renderDev(); newFv(); groupedNotes(); renderTf(); newProblem(); updateScore();
 const startTab = location.hash.slice(1);
 showTab(drawers[startTab] ? startTab : 'intro');
 // A #tab link would otherwise make the browser jump to the section, below the heading.
