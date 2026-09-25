@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Statistics Lab · Averages & Spread</title>
+<style>
+/* ---------- Colour tokens (light, then dark) ---------- */
+:root{
+  --blue:#2459d6;--blue-soft:#e9f0ff;--blue-line:#c9d8fb;
+  --green:#15803d;--green-soft:#e8f7ee;
+  --red:#c42a3b;--red-soft:#fdecee;
+  --amber:#b45309;--amber-soft:#fff4e0;
+  --violet:#7c3aed;
+  --bg:#f4f7fc;--card:#ffffff;--ink:#16243d;--muted:#56657d;--line:#dbe3ef;--chip:#f1f5fb;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --blue:#7aa2ff;--blue-soft:#1b2a4a;--blue-line:#34487a;
+    --green:#4ade80;--green-soft:#12311f;
+    --red:#fb7185;--red-soft:#3b1820;
+    --amber:#f6b95a;--amber-soft:#3a2a12;
+    --violet:#b69cff;
+    --bg:#0e1522;--card:#162033;--ink:#e6eefb;--muted:#9fb0c8;--line:#2b3a53;--chip:#1c2940;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --blue:#7aa2ff;--blue-soft:#1b2a4a;--blue-line:#34487a;
+  --green:#4ade80;--green-soft:#12311f;
+  --red:#fb7185;--red-soft:#3b1820;
+  --amber:#f6b95a;--amber-soft:#3a2a12;
+  --violet:#b69cff;
+  --bg:#0e1522;--card:#162033;--ink:#e6eefb;--muted:#9fb0c8;--line:#2b3a53;--chip:#1c2940;
+  color-scheme:dark;
+}
+
+/* ---------- Base ---------- */
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,select{font:inherit;color:inherit}
+h1{font-size:clamp(28px,4.4vw,44px);line-height:1.15;letter-spacing:-1px;margin:8px 0 12px}
+h2{font-size:24px;letter-spacing:-.4px;margin:0 0 10px}
+h3{font-size:19px;margin:0 0 8px}
+p{margin:6px 0 14px}
+small,.muted{color:var(--muted)}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 16px}
+header{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header .wrap{padding-top:14px;padding-bottom:12px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-weight:800;font-size:22px;letter-spacing:-.5px}.brand span{color:var(--blue)}
+.badge{background:var(--blue-soft);color:var(--blue);padding:5px 12px;border-radius:30px;font-size:13px;font-weight:700}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--blue);font-weight:750}
+
+/* ---------- Tabs ---------- */
+nav[role=tablist]{display:flex;gap:6px;margin-top:12px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+nav button{flex:0 0 auto;border:1px solid var(--line);background:var(--card);padding:9px 15px;border-radius:10px;cursor:pointer;font-weight:650;white-space:nowrap}
+nav button:hover{border-color:var(--blue)}
+nav button[aria-selected=true]{background:var(--blue);border-color:var(--blue);color:#fff}
+:focus-visible{outline:3px solid var(--blue-line);outline-offset:2px}
+.panel{display:none}.panel.active{display:block}
+
+/* ---------- Layout pieces ---------- */
+.hero{background:var(--blue-soft);border:1px solid var(--blue-line);border-radius:18px;padding:26px;margin-bottom:20px}
+.hero p{font-size:19px;max-width:760px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid2>*,.grid3>*{min-width:0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:20px}
+.card>:last-child{margin-bottom:0}
+.num{display:inline-grid;place-items:center;background:var(--blue-soft);color:var(--blue);border-radius:9px;width:32px;height:32px;margin-right:8px;font-size:15px;font-weight:800}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+button.btn{border:1px solid var(--line);background:var(--card);padding:9px 16px;border-radius:10px;cursor:pointer;font-weight:650}
+button.btn:hover{border-color:var(--blue);background:var(--blue-soft)}
+button.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+button.primary:hover{background:var(--blue);filter:brightness(1.08)}
+.controls{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin:12px 0}
+.controls label{font-size:14px;font-weight:650}
+.controls input,.controls select{display:block;margin-top:4px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card)}
+.datainput{width:min(100%,420px)}
+.notice{background:var(--amber-soft);border-radius:10px;padding:11px 15px;font-size:15px}
+.error{color:var(--red);font-weight:650;min-height:1.2em;margin:4px 0}
+canvas{display:block;width:100%;height:240px;border-radius:12px;background:var(--chip)}
+canvas.tall{height:300px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:14px;height:4px;border-radius:2px;vertical-align:middle;margin-right:6px}
+
+/* ---------- Math typography ---------- */
+.math,.formula{font-family:"Cambria Math","STIX Two Math",Georgia,"Times New Roman",serif}
+.formula{font-size:21px;background:var(--blue-soft);border-left:4px solid var(--blue);padding:10px 16px;border-radius:6px;margin:12px 0;overflow-x:auto;line-height:2}
+.formula small{font-family:system-ui,sans-serif;font-size:13px;display:block;line-height:1.4}
+.v{font-style:italic}
+.bar{text-decoration:overline;font-style:italic}
+.sp-frac{position:relative;display:inline-flex;flex-direction:column;align-items:stretch;vertical-align:middle;text-align:center;line-height:1.2;margin:0 .1em}
+.sp-frac>span{display:block;padding:0 .15em}
+.sp-frac>span:last-child{border-top:max(1px,.07em) solid currentColor}
+.sp-frac>.sp-frac-slash{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- Box method: step cards and table grids ---------- */
+.flow{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:14px 0}
+.step{background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.step label{display:block;font-size:15px;font-weight:600}
+.stepno{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;font-size:13px;margin-right:4px}
+input.cell{display:block;width:100%;margin-top:6px;padding:8px 10px;border:2px solid var(--line);border-radius:8px;background:var(--card);font-size:17px;transition:background .15s,border-color .15s}
+input.good{border-color:var(--green);background:var(--green-soft)}
+input.bad{border-color:var(--red);background:var(--red-soft)}
+.feedback{display:block;min-height:20px;font-size:13px;font-weight:650;margin-top:3px}
+.feedback.ok{color:var(--green)}.feedback.no{color:var(--red)}
+.hintbtn{border:0;background:none;color:var(--blue);cursor:pointer;padding:2px 0;font-size:14px;font-weight:650}
+.hint{font-size:15px;background:var(--card);border:1px dashed var(--blue-line);border-radius:8px;padding:8px 10px;margin-top:6px;overflow-x:auto}
+.tablewrap{overflow-x:auto;margin:12px 0;border-radius:10px;border:1px solid var(--line)}
+table.box{border-collapse:collapse;width:100%;min-width:420px;text-align:center}
+table.box th,table.box td{border:1px solid var(--line);padding:6px 8px}
+table.box th{background:var(--blue-soft);font-family:"Cambria Math",Georgia,serif;font-size:17px}
+table.box td{font-size:17px}
+table.box td:first-child{white-space:nowrap}
+table.box tfoot td{background:var(--chip);font-weight:700}
+table.box input.cell{margin:0;min-width:70px;text-align:center;padding:6px}
+table.data{border-collapse:collapse;margin:10px 0;text-align:center}
+table.data th,table.data td{border:1px solid var(--line);padding:6px 12px}
+table.data th{background:var(--blue-soft);text-align:left}
+.progressline{font-size:14px;font-weight:650;color:var(--muted)}
+.progressline b{color:var(--green)}
+
+/* ---------- Number boxes (sorted row) ---------- */
+.row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px}
+.nbox{min-width:46px;padding:6px 8px;border:2px solid var(--line);border-radius:9px;background:var(--card);text-align:center;font-weight:700;display:flex;flex-direction:column;align-items:center;line-height:1.2}
+.nbox small{font-weight:500;font-size:11px}
+.nbox.med{border-color:var(--amber);background:var(--amber-soft)}
+.nbox.mode{box-shadow:0 0 0 3px var(--violet)}
+.rowlabel{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+
+/* ---------- Practice ---------- */
+.stats{display:flex;gap:26px;flex-wrap:wrap}
+.stats strong{display:block;font-size:28px;color:var(--blue);line-height:1.1}
+.stats small{font-size:13px}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:30px;padding:3px 11px;font-size:13px;font-weight:650;background:var(--chip)}
+.pill.easy{color:var(--green)}.pill.medium{color:var(--amber)}.pill.hard{color:var(--red)}
+.solution{border-left:4px solid var(--green);background:var(--green-soft);border-radius:8px;padding:14px 18px;margin-top:14px}
+.solution ol{margin:6px 0;padding-left:22px}.solution li{margin-bottom:8px}
+.final{max-width:320px}
+.status{font-weight:700;min-height:1.4em}
+.status.ok{color:var(--green)}.status.no{color:var(--red)}
+details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0;background:var(--card)}
+summary{cursor:pointer;font-weight:700}
+ul.tight{margin:6px 0;padding-left:20px}ul.tight li{margin-bottom:6px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:10px 16px 30px}
+[hidden]{display:none!important}
+
+@media (max-width:760px){
+  body{font-size:16px}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .hero{padding:18px}.hero p{font-size:17px}
+  .card{padding:16px}
+  .formula{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">📊 Statistics<span>Lab</span></div>
+      <span class="badge">Topic 1 · Mean, median, mode &amp; spread</span>
+    </div>
+    <nav role="tablist" aria-label="Lesson sections">
+      <button role="tab" id="tab-intro" aria-controls="intro" aria-selected="true" data-tab="intro">🏠 Intro</button>
+      <button role="tab" id="tab-averages" aria-controls="averages" aria-selected="false" tabindex="-1" data-tab="averages">📘 Averages</button>
+      <button role="tab" id="tab-spread" aria-controls="spread" aria-selected="false" tabindex="-1" data-tab="spread">📗 Spread</button>
+      <button role="tab" id="tab-advanced" aria-controls="advanced" aria-selected="false" tabindex="-1" data-tab="advanced">➗ Advanced</button>
+      <button role="tab" id="tab-practice" aria-controls="practice" aria-selected="false" tabindex="-1" data-tab="practice">🎮 Practice</button>
+      <button role="tab" id="tab-tips" aria-controls="tips" aria-selected="false" tabindex="-1" data-tab="tips">💡 Tips</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ======================= INTRO ======================= -->
+<section id="intro" class="panel active" role="tabpanel" aria-labelledby="tab-intro">
+  <div class="hero">
+    <div class="eyebrow">Why statistics matters</div>
+    <h1>One number can hide the whole story 📊</h1>
+    <p>An <b>average</b> tells you what is typical. A measure of <b>spread</b> tells you how far the data wanders from it. You need both to make a good decision.</p>
+    <button class="btn primary" data-go="averages">Start with averages →</button>
+  </div>
+
+  <div class="grid2">
+    <article class="card">
+      <h3><span class="num">01</span>🏀 Who takes the last shot?</h3>
+      <p>The coach looks at 8 games. Aina and Ben <b>both average 15 points</b>. So are they equally good choices for the final?</p>
+      <canvas id="introPlayers" role="img" aria-label="Bar chart of points per game for Aina and Ben, with a dashed line at the shared mean of 15"></canvas>
+      <div class="legend"><span><i style="background:var(--blue)"></i>Aina</span><span><i style="background:var(--violet)"></i>Ben</span><span><i style="background:var(--muted)"></i>Mean = 15</span></div>
+      <div class="actions"><button class="btn" id="newSeason">Play a new season ↻</button></div>
+      <p id="playersText" aria-live="polite"></p>
+      <small>Same mean, different spread. The standard deviation (📗 Spread) measures how consistent a player is.</small>
+    </article>
+
+    <article class="card">
+      <h3><span class="num">02</span>🍛 The nasi lemak stall</h3>
+      <p>Mak Cik Siti records how many packs she sells each day. To plan tomorrow, she wants the “typical” day. Then a festival day happens…</p>
+      <canvas id="introStall" role="img" aria-label="Bar chart of daily nasi lemak sales, with lines for the mean and the median"></canvas>
+      <div class="legend"><span><i style="background:var(--blue)"></i>Mean</span><span><i style="background:var(--amber)"></i>Median</span></div>
+      <div class="actions">
+        <button class="btn" id="festival" aria-pressed="false">Add a festival day 🎉</button>
+        <button class="btn" id="newWeek">New week ↻</button>
+      </div>
+      <p id="stallText" aria-live="polite"></p>
+      <small>One extreme value (an <b>outlier</b>) pulls the mean a lot but barely moves the median.</small>
+    </article>
+  </div>
+
+  <div class="card">
+    <h3>Your learning route</h3>
+    <div class="grid3">
+      <div><b>📘 Averages</b><br><small>Mean, median and mode from a list and from a frequency table.</small></div>
+      <div><b>📗 Spread</b><br><small>Range, variance and standard deviation, drawn as real squares.</small></div>
+      <div><b>➗ Advanced</b><br><small>Grouped data formulas and what happens when every value changes.</small></div>
+    </div>
+    <p style="margin-top:14px">In every section you fill in <b>one box at a time</b>. A box turns <span style="color:var(--green);font-weight:700">green</span> when it is right and <span style="color:var(--red);font-weight:700">red</span> when it needs another look. Stuck? Press <b>💡 Hint</b>.</p>
+  </div>
+</section>
+
+<!-- ======================= CONCEPT 1: AVERAGES ======================= -->
+<section id="averages" class="panel" role="tabpanel" aria-labelledby="tab-averages">
+  <div class="eyebrow">Concept 1 · Measures of central tendency</div>
+  <h1>Mean, median and mode</h1>
+  <div class="grid3">
+    <div class="card"><h3>Mean <span class="math bar">x</span></h3><p>The fair share: add everything, then share it equally.</p><div class="formula"><span class="bar">x</span> = <span class="sp-frac"><span>Σ<span class="v">x</span></span><span class="sp-frac-slash">/</span><span><span class="v">N</span></span></span></div></div>
+    <div class="card"><h3>Median</h3><p>The middle value once the data is <b>sorted</b>.</p><div class="formula">position = <span class="sp-frac"><span><span class="v">N</span> + 1</span><span class="sp-frac-slash">/</span><span>2</span></span></div></div>
+    <div class="card"><h3>Mode</h3><p>The value that appears <b>most often</b>. There can be more than one, or none.</p><div class="formula">mode = most frequent value</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🔢 Box Method 1: a list of numbers</h2>
+    <p>Type your own data (negatives and decimals are fine) or make a random set. Then work down the numbered boxes.</p>
+    <div class="controls">
+      <label>Data (separate with commas)<input id="rawInput" class="datainput" type="text" value="12, 8, 5, 5, 9, 18, 12" autocomplete="off" spellcheck="false"></label>
+      <button class="btn primary" id="rawUse">Use this data</button>
+      <button class="btn" id="rawRandom">Random data ↻</button>
+    </div>
+    <p id="rawError" class="error" role="status"></p>
+    <div class="grid2">
+      <div>
+        <div class="rowlabel">As given</div>
+        <div id="rawOriginal" class="row"></div>
+        <div class="rowlabel">Sorted (small number = position)</div>
+        <div id="rawSorted" class="row"></div>
+        <div class="actions">
+          <button class="btn" id="rawShowMed" aria-pressed="false">Highlight the median</button>
+          <button class="btn" id="rawShowMode" aria-pressed="false">Highlight the mode</button>
+        </div>
+      </div>
+      <div>
+        <canvas id="rawBalance" role="img" aria-label="Dot plot of the data on a number line. A triangle marks the mean, the balance point."></canvas>
+        <div class="actions"><button class="btn" id="rawShowMean" aria-pressed="false">⚖️ Show the balance point</button></div>
+        <small>The mean is where the number line would <b>balance</b> if every dot weighed the same.</small>
+      </div>
+    </div>
+    <div class="progressline" id="rawProgress"></div>
+    <div id="rawFlow" class="flow"></div>
+    <div class="actions"><button class="btn" id="rawReveal">👀 Show all answers</button></div>
+  </div>
+
+  <div class="card">
+    <h2>🧮 Box Method 2: a frequency table</h2>
+    <p>Here each value <span class="v math">x</span> appears <span class="v math">f</span> times. Fill the <b>fx</b> column (value × frequency) and the <b>cumulative f</b> column (a running total), then the totals row.</p>
+    <div class="formula"><span class="bar">x</span> = <span class="sp-frac"><span>Σ<span class="v">fx</span></span><span class="sp-frac-slash">/</span><span>Σ<span class="v">f</span></span></span> &nbsp;&nbsp; <small>Σ means “add up the whole column”.</small></div>
+    <div class="actions"><button class="btn" id="freqNew">New table ↻</button></div>
+    <div class="grid2">
+      <div>
+        <div class="progressline" id="freqProgress"></div>
+        <div id="freqGrid"></div>
+      </div>
+      <div>
+        <canvas id="freqChart" role="img" aria-label="Bar chart of the frequency table"></canvas>
+        <div class="legend"><span><i style="background:var(--blue)"></i>Mean</span><span><i style="background:var(--amber)"></i>Median</span></div>
+        <div class="actions"><button class="btn" id="freqShowLines" aria-pressed="false">Show mean &amp; median on the chart</button></div>
+      </div>
+    </div>
+    <div id="freqFlow" class="flow"></div>
+    <div class="actions"><button class="btn" id="freqReveal">👀 Show all answers</button></div>
+    <p class="notice">Median trick: the cumulative f column tells you which positions each value covers. If cumulative f goes 8, 20, 35 then positions 9 to 20 all hold the second value.</p>
+  </div>
+</section>
+
+<!-- ======================= CONCEPT 2: SPREAD ======================= -->
+<section id="spread" class="panel" role="tabpanel" aria-labelledby="tab-spread">
+  <div class="eyebrow">Concept 2 · Measures of dispersion</div>
+  <h1>Range, variance and standard deviation</h1>
+  <div class="grid3">
+    <div class="card"><h3>Range</h3><p>The quickest measure of spread.</p><div class="formula">range = largest − smallest</div></div>
+    <div class="card"><h3>Variance <span class="math v">σ</span>²</h3><p>The average of the <b>squared</b> distances from the mean.</p><div class="formula"><span class="v">σ</span>² = <span class="sp-frac"><span>Σ(<span class="v">x</span> − <span class="bar">x</span>)²</span><span class="sp-frac-slash">/</span><span><span class="v">N</span></span></span></div></div>
+    <div class="card"><h3>Standard deviation <span class="math v">σ</span></h3><p>Square-root the variance to get back to the original units.</p><div class="formula"><span class="v">σ</span> = √<span class="v">σ</span>²</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🟦 Box Method 3: the deviation squares</h2>
+    <p>Each distance from the mean, <span class="math">(<span class="v">x</span> − <span class="bar">x</span>)</span>, becomes the side of a <b>real square</b> on the picture. The variance is the <b>average area</b> of those squares, and <span class="math v">σ</span> is the side of that average square (dashed).</p>
+    <div class="controls">
+      <label>Data (separate with commas)<input id="devInput" class="datainput" type="text" value="4, 8, 6, 5, 7" autocomplete="off" spellcheck="false"></label>
+      <button class="btn primary" id="devUse">Use this data</button>
+      <button class="btn" id="devRandom">Friendly random data ↻</button>
+    </div>
+    <p id="devError" class="error" role="status"></p>
+    <p id="devMean" class="formula"></p>
+    <div class="grid2">
+      <div>
+        <div class="progressline" id="devProgress"></div>
+        <div id="devGrid"></div>
+      </div>
+      <div>
+        <canvas id="devSquares" class="tall" role="img" aria-label="Squares whose sides are the distances of each value from the mean. A dashed square shows the standard deviation."></canvas>
+        <div class="legend"><span><i style="background:var(--red)"></i>below the mean</span><span><i style="background:var(--blue)"></i>above the mean</span><span><i style="background:var(--green)"></i>average square (side σ)</span></div>
+      </div>
+    </div>
+    <div id="devFlow" class="flow"></div>
+    <div class="actions"><button class="btn" id="devReveal">👀 Show all answers</button></div>
+    <p class="notice">Why square? The plain distances <span class="math">(<span class="v">x</span> − <span class="bar">x</span>)</span> always add up to <b>0</b>: the negatives cancel the positives. Squaring makes every distance count.</p>
+  </div>
+
+  <div class="card">
+    <h2>🧮 Box Method 4: variance from a frequency table</h2>
+    <p>For a frequency table, use the shortcut formula. Fill the <b>fx</b>, <b><span class="v">x</span>²</b> and <b>fx²</b> columns, then the totals.</p>
+    <div class="formula"><span class="v">σ</span>² = <span class="sp-frac"><span>Σ<span class="v">fx</span>²</span><span class="sp-frac-slash">/</span><span>Σ<span class="v">f</span></span></span> − <span class="bar">x</span>² <small>Keep the full value of <span class="bar">x</span> in your calculator. Round only the final answer to 2 decimal places.</small></div>
+    <div class="actions"><button class="btn" id="fvNew">New table ↻</button></div>
+    <div class="progressline" id="fvProgress"></div>
+    <div id="fvGrid"></div>
+    <div id="fvFlow" class="flow"></div>
+    <div class="actions"><button class="btn" id="fvReveal">👀 Show all answers</button></div>
+  </div>
+</section>
+
+<!-- ======================= ADVANCED ======================= -->
+<section id="advanced" class="panel" role="tabpanel" aria-labelledby="tab-advanced">
+  <div class="eyebrow">Advanced · Grouped data and transformations</div>
+  <h1>When data comes in classes</h1>
+  <p>With grouped data we no longer know each exact value, so we use the <b>midpoint</b> of each class as its representative value. The answers are <b>estimates</b>.</p>
+
+  <div class="card">
+    <h2>🧮 Box Method 5: the grouped data table</h2>
+    <div class="formula">midpoint <span class="v">x</span> = <span class="sp-frac"><span>lower limit + upper limit</span><span class="sp-frac-slash">/</span><span>2</span></span> &nbsp; · &nbsp; class width <span class="v">c</span> = upper boundary − lower boundary</div>
+    <div class="actions"><button class="btn" id="grNew">New table ↻</button></div>
+    <div class="progressline" id="grProgress"></div>
+    <div id="grGrid"></div>
+    <div class="grid2">
+      <div>
+        <h3>① Mean and standard deviation</h3>
+        <div id="grFlowMean" class="flow"></div>
+        <h3>② Median by formula</h3>
+        <div class="formula">median = <span class="v">L</span> + <span class="sp-frac"><span><span class="sp-frac"><span><span class="v">N</span></span><span class="sp-frac-slash">/</span><span>2</span></span> − <span class="v">F</span></span><span class="sp-frac-slash">/</span><span><span class="v">f</span><sub>m</sub></span></span> × <span class="v">c</span>
+          <small>L = lower boundary of the median class · F = cumulative frequency before it · f<sub>m</sub> = its frequency</small></div>
+        <div id="grFlowMedian" class="flow"></div>
+        <h3>③ Mode by formula</h3>
+        <div class="formula">mode = <span class="v">L</span> + <span class="sp-frac"><span><span class="v">d</span>₁</span><span class="sp-frac-slash">/</span><span><span class="v">d</span>₁ + <span class="v">d</span>₂</span></span> × <span class="v">c</span>
+          <small>L = lower boundary of the modal class · d₁ = its f minus the f before · d₂ = its f minus the f after</small></div>
+        <div id="grFlowMode" class="flow"></div>
+      </div>
+      <div>
+        <canvas id="grChart" class="tall" role="img" aria-label="Histogram of the grouped data"></canvas>
+        <div class="legend"><span><i style="background:var(--blue)"></i>Mean</span><span><i style="background:var(--amber)"></i>Median</span><span><i style="background:var(--violet)"></i>Mode</span></div>
+        <div class="actions"><button class="btn" id="grShowLines" aria-pressed="false">Show mean, median &amp; mode</button></div>
+        <p class="notice">Boundaries sit halfway between classes. For classes 10 – 19 and 20 – 29, the boundary is 19.5, so the class 20 – 29 has lower boundary <b>19.5</b> and width <b>10</b>.</p>
+      </div>
+    </div>
+    <div class="actions"><button class="btn" id="grReveal">👀 Show all answers</button></div>
+  </div>
+
+  <div class="card">
+    <h2>🔁 What if every value changes?</h2>
+    <p>Start with the data <b id="tfBase"></b>. Multiply every value by <span class="math v">m</span>, then add <span class="math v">k</span>. Predict the new mean and standard deviation, then check the picture.</p>
+    <div class="controls">
+      <label>Multiply by <span class="v">m</span>
+        <select id="tfM"><option>-3</option><option>-2</option><option>-1</option><option>-0.5</option><option>0</option><option>0.5</option><option selected>1</option><option>2</option><option>3</option></select></label>
+      <label>Then add <span class="v">k</span>: <b id="tfKOut">0</b>
+        <input id="tfK" type="range" min="-10" max="10" step="1" value="0" style="width:200px"></label>
+    </div>
+    <div class="grid2">
+      <div>
+        <div class="formula">new <span class="bar">x</span> = <span class="v">m</span> × <span class="bar">x</span> + <span class="v">k</span><br>new <span class="v">σ</span> = |<span class="v">m</span>| × <span class="v">σ</span>
+          <small>Adding k slides every value: the centre moves but the spread does not. Multiplying by m stretches the spread by |m| (spread is never negative).</small></div>
+        <p id="tfNewData"></p>
+        <div id="tfFlow" class="flow"></div>
+      </div>
+      <div>
+        <canvas id="tfChart" role="img" aria-label="Dot plots of the original data and the transformed data"></canvas>
+        <div class="legend"><span><i style="background:var(--muted)"></i>original</span><span><i style="background:var(--blue)"></i>new data</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= PRACTICE ======================= -->
+<section id="practice" class="panel" role="tabpanel" aria-labelledby="tab-practice">
+  <div class="eyebrow">Practice · Endless new questions</div>
+  <h1>Your next small win 🎯</h1>
+  <div class="card">
+    <div class="top">
+      <div class="controls">
+        <label>Difficulty
+          <select id="pLevel">
+            <option value="easy">Easy (Basics)</option>
+            <option value="medium">Medium (Intermediate)</option>
+            <option value="hard">Hard (Challenge)</option>
+          </select></label>
+        <label>Topic
+          <select id="pTopic">
+            <option value="mixed">Mixed</option>
+            <option value="avg">Averages</option>
+            <option value="spread">Spread</option>
+          </select></label>
+      </div>
+      <div class="stats" aria-live="polite">
+        <div><strong id="pScore">0 / 0</strong><small>Correct / attempted</small></div>
+        <div><strong id="pAcc">—</strong><small>Accuracy</small></div>
+        <div><strong id="pStreak">0</strong><small>Streak 🔥</small></div>
+      </div>
+    </div>
+    <p id="pLevels" class="muted" style="margin:6px 0 0"></p>
+    <small>Your first <b>Check</b> on each question is scored. Opening the solution before checking counts as an attempt. You can always keep trying after that.</small>
+  </div>
+
+  <div class="card">
+    <span id="pTag" class="pill"></span>
+    <h2 id="pQuestion" style="margin-top:12px"></h2>
+    <div id="pData"></div>
+    <div id="pGrid"></div>
+    <div id="pFlow" class="flow"></div>
+    <div class="final">
+      <label for="pAnswer"><b id="pFinalLabel">Final answer</b></label>
+      <input id="pAnswer" class="cell" type="text" autocomplete="off" spellcheck="false" placeholder="Type your answer">
+    </div>
+    <small>Round to 2 decimal places unless the answer is a whole number. Fractions like 23/4 are accepted.</small>
+    <div class="actions">
+      <button class="btn primary" id="pCheck">Check answer</button>
+      <button class="btn" id="pShow">Show solution</button>
+      <button class="btn" id="pNext">New problem ↻</button>
+    </div>
+    <p id="pStatus" class="status" aria-live="polite"></p>
+    <div id="pSolution" class="solution" hidden></div>
+  </div>
+</section>
+
+<!-- ======================= TIPS ======================= -->
+<section id="tips" class="panel" role="tabpanel" aria-labelledby="tab-tips">
+  <div class="eyebrow">Keep these nearby</div>
+  <h1>Tips, tricks and traps</h1>
+  <div class="grid2">
+    <div class="card"><h3>🧠 Which average should I use?</h3>
+      <ul class="tight">
+        <li><b>Mean</b>: when the data has no extreme values. It uses every value.</li>
+        <li><b>Median</b>: when there are outliers, like one very high salary or a festival day.</li>
+        <li><b>Mode</b>: for the most popular choice, like shoe size or favourite flavour. It even works for words.</li>
+      </ul></div>
+    <div class="card"><h3>✅ Sanity checks</h3>
+      <ul class="tight">
+        <li>The mean and median always lie between the smallest and largest value.</li>
+        <li>Σ(<span class="v">x</span> − <span class="bar">x</span>) is always 0. If yours is not, recheck the mean.</li>
+        <li>Variance and standard deviation are <b>never negative</b>. If you get a negative variance, you probably squared the rounded mean or mixed up Σ<span class="v">fx</span>² with (Σ<span class="v">fx</span>)².</li>
+        <li>If every value is the same, the spread is 0.</li>
+      </ul></div>
+    <div class="card"><h3>⚠️ Common slips</h3>
+      <ul class="tight">
+        <li>Forgetting to <b>sort</b> before finding the median.</li>
+        <li>Using the median <b>position</b> as the answer. Position 4 means “the 4th value”, not “4”.</li>
+        <li>Dividing by the number of rows instead of Σ<span class="v">f</span> in a frequency table.</li>
+        <li><span class="v">fx</span>² means <span class="v">f</span> × <span class="v">x</span>², not (<span class="v">fx</span>)².</li>
+        <li>Rounding <span class="bar">x</span> too early. Keep the full value until the last step.</li>
+      </ul></div>
+    <div class="card"><h3>🧩 Edge cases</h3>
+      <ul class="tight">
+        <li><b>Negative numbers</b>: sort them properly, −8 is smaller than −2. Squared distances are still positive.</li>
+        <li><b>Zero</b>: a value of 0 still counts in <span class="v">N</span>. A frequency of 0 adds nothing.</li>
+        <li><b>Even N</b>: the median is halfway between the two middle values.</li>
+        <li><b>Mode</b>: if two values tie, both are modes. If every value appears equally often, there is no mode.</li>
+        <li><b>One value only</b>: mean = median = mode = that value, and σ = 0.</li>
+      </ul></div>
+    <div class="card"><h3>📋 Formula sheet</h3>
+      <div class="formula" style="font-size:18px">
+        <span class="bar">x</span> = <span class="sp-frac"><span>Σ<span class="v">x</span></span><span class="sp-frac-slash">/</span><span><span class="v">N</span></span></span> &nbsp;or&nbsp; <span class="sp-frac"><span>Σ<span class="v">fx</span></span><span class="sp-frac-slash">/</span><span>Σ<span class="v">f</span></span></span><br>
+        <span class="v">σ</span>² = <span class="sp-frac"><span>Σ(<span class="v">x</span> − <span class="bar">x</span>)²</span><span class="sp-frac-slash">/</span><span><span class="v">N</span></span></span> = <span class="sp-frac"><span>Σ<span class="v">x</span>²</span><span class="sp-frac-slash">/</span><span><span class="v">N</span></span></span> − <span class="bar">x</span>²<br>
+        <span class="v">σ</span>² = <span class="sp-frac"><span>Σ<span class="v">fx</span>²</span><span class="sp-frac-slash">/</span><span>Σ<span class="v">f</span></span></span> − <span class="bar">x</span>² &nbsp; · &nbsp; <span class="v">σ</span> = √<span class="v">σ</span>²
+      </div></div>
+    <div class="card"><h3>🧘 A calm solving routine</h3>
+      <ol class="tight">
+        <li>Read what is being asked: centre (average) or spread?</li>
+        <li>Is the data a list, a frequency table, or grouped classes?</li>
+        <li>Draw the table and fill <b>one column at a time</b>.</li>
+        <li>Add up each column, then put the totals into the formula.</li>
+        <li>Ask: does my answer make sense for this data?</li>
+      </ol>
+      <button class="btn primary" data-go="practice">Try a practice question →</button></div>
+  </div>
+</section>
+</main>
+<footer>Statistics Lab · Works offline · Uses population variance (divide by N), as in the statistics notes</footer>
+
+<script>
+'use strict';
+/* =====================================================================
+   1. Small helpers: DOM, numbers, parsing
+   ===================================================================== */
+const $ = id => document.getElementById(id);
+function el(tag, cls, html) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html != null) e.innerHTML = html;
+  return e;
+}
+const EPS = 1e-9;
+const sum = a => a.reduce((s, v) => s + v, 0);
+const randInt = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const isWhole = x => Math.abs(x - Math.round(x)) < 1e-9;
+const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = randInt(0, i); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+// Round half away from zero, then print without trailing zeros and with a true minus sign.
+function fmt(x, d = 2) {
+  if (!Number.isFinite(x)) return '—';
+  const p = 10 ** d;
+  const r = Math.sign(x) * Math.round(Math.abs(x) * p + EPS) / p;
+  return String(Number(r.toFixed(d))).replace('-', '−');
+}
+// Wraps negative numbers in brackets inside working, e.g. 3 − (−2).
+const br = x => (x < 0 ? `(${fmt(x, 4)})` : fmt(x, 4));
+// A stacked fraction, in the same markup the shared learner.js uses.
+const frac = (top, bottom) => `<span class="sp-frac"><span>${top}</span><span class="sp-frac-slash">/</span><span>${bottom}</span></span>`;
+const XBAR = '<span class="bar">x</span>';
+
+// Accepts "3.5", "−2", "23/4" and "-7 / 2". Returns NaN for anything else.
+function parseNum(raw) {
+  const s = String(raw).trim().replace(/[−–]/g, '-').replace(/\s+/g, '');
+  if (s === '') return NaN;
+  const m = s.match(/^(-?\d*\.?\d+)\/(-?\d*\.?\d+)$/);
+  if (m) { const b = Number(m[2]); return b === 0 ? NaN : Number(m[1]) / b; }
+  if (!/^-?(\d+\.?\d*|\.\d+)$/.test(s)) return NaN;
+  return Number(s);
+}
+// Splits a typed list on commas, semicolons or spaces.
+function parseList(raw) {
+  const tokens = String(raw).replace(/[−–]/g, '-').split(/[,;\s]+/).filter(t => t !== '');
+  const values = [], bad = [];
+  tokens.forEach(t => { const v = parseNum(t); if (Number.isFinite(v)) values.push(v); else bad.push(t); });
+  return { values, bad };
+}
+function validateData(values, bad, maxN) {
+  if (bad.length) return `“${escapeHtml(bad[0])}” is not a number. Use digits, a minus sign and a decimal point.`;
+  if (!values.length) return 'Type at least one number.';
+  if (values.length > maxN) return `Please use ${maxN} numbers or fewer so the table stays readable.`;
+  if (values.some(v => Math.abs(v) > 10000)) return 'Please keep every value between −10000 and 10000.';
+  return '';
+}
+
+/* =====================================================================
+   2. Statistics maths
+   ===================================================================== */
+const mean = a => sum(a) / a.length;
+function median(sorted) {
+  const n = sorted.length, m = Math.floor(n / 2);
+  return n % 2 ? sorted[m] : (sorted[m - 1] + sorted[m]) / 2;
+}
+// Every value with the highest count. If all values appear equally often
+// (and there is more than one distinct value) there is no mode: [].
+function modes(a) {
+  const counts = new Map();
+  a.forEach(v => counts.set(v, (counts.get(v) || 0) + 1));
+  const max = Math.max(...counts.values());
+  if (counts.size > 1 && [...counts.values()].every(c => c === max)) return [];
+  return [...counts.keys()].filter(k => counts.get(k) === max).sort((x, y) => x - y);
+}
+// Population variance: the average squared distance from the mean (divide by N).
+const variance = a => { const m = mean(a); return sum(a.map(x => (x - m) ** 2)) / a.length; };
+
+// Frequency-table helpers. xs are values, fs their frequencies.
+function freqStats(xs, fs) {
+  const N = sum(fs);
+  const fx = xs.map((x, i) => x * fs[i]);
+  const fx2 = xs.map((x, i) => x * x * fs[i]);
+  const cum = []; fs.reduce((s, f, i) => (cum[i] = s + f), 0);
+  const m = sum(fx) / N;
+  // The value at 1-based position p is the first x whose cumulative f reaches p.
+  const at = p => xs[cum.findIndex(c => c >= p)];
+  const med = N % 2 ? at((N + 1) / 2) : (at(N / 2) + at(N / 2 + 1)) / 2;
+  const maxF = Math.max(...fs);
+  const mode = xs.filter((x, i) => fs[i] === maxF);
+  const v = sum(fx2) / N - m * m;
+  return { N, fx, fx2, cum, sumFx: sum(fx), sumFx2: sum(fx2), mean: m, median: med, mode, variance: Math.max(0, v), sd: Math.sqrt(Math.max(0, v)) };
+}
+// Grouped data: classes are whole-number limits lo – hi, so boundaries are lo − 0.5 and hi + 0.5.
+function groupedStats(classes) {
+  const fs = classes.map(c => c.f);
+  const mids = classes.map(c => (c.lo + c.hi) / 2);
+  const width = classes[0].hi - classes[0].lo + 1;
+  const base = freqStats(mids, fs);
+  const half = base.N / 2;
+  const mi = base.cum.findIndex(c => c >= half);                 // median class
+  const L = classes[mi].lo - 0.5, F = mi ? base.cum[mi - 1] : 0, fm = fs[mi];
+  const medianEst = L + (half - F) / fm * width;
+  const maxF = Math.max(...fs), oi = fs.indexOf(maxF);          // modal class (generator keeps it unique)
+  const d1 = maxF - (oi ? fs[oi - 1] : 0), d2 = maxF - (oi < fs.length - 1 ? fs[oi + 1] : 0);
+  const modeEst = classes[oi].lo - 0.5 + d1 / (d1 + d2) * width;
+  return { ...base, mids, width, half, mi, L, F, fm, medianEst, oi, modeL: classes[oi].lo - 0.5, d1, d2, modeEst };
+}
+// Random frequencies with a single highest value (so the mode is unique).
+function uniqueMaxFreqs(k, lo, hi) {
+  for (;;) {
+    const fs = Array.from({ length: k }, () => randInt(lo, hi));
+    const max = Math.max(...fs);
+    if (fs.filter(f => f === max).length === 1) return fs;
+  }
+}
+
+/* =====================================================================
+   3. The Box Method engine: self-checking cells, step cards, grids
+   ===================================================================== */
+// spec: { t: target, tol?: number, kind?: 'num' | 'set' }
+function tolOf(spec) {
+  if (spec.tol != null) return spec.tol;
+  return isWhole(spec.t) ? 1e-6 : Math.max(0.011, Math.abs(spec.t) * 0.001);
+}
+function matches(raw, spec) {
+  if (spec.kind === 'set') {                       // a list of modes, or "none"
+    const t = raw.trim().toLowerCase();
+    if (!spec.t.length) return /^(none|no mode|no|tiada|-|—)$/.test(t);
+    const { values, bad } = parseList(raw);
+    if (bad.length || !values.length) return false;
+    const got = [...new Set(values.map(v => Math.round(v * 1e6) / 1e6))].sort((a, b) => a - b);
+    return got.length === spec.t.length && got.every((v, i) => Math.abs(v - spec.t[i]) < 1e-6);
+  }
+  const v = parseNum(raw);
+  return Number.isFinite(v) && Math.abs(v - spec.t) <= tolOf(spec);
+}
+const answerText = spec => spec.kind === 'set' ? (spec.t.length ? spec.t.map(v => fmt(v, 4)).join(', ') : 'none') : fmt(spec.t, 2);
+
+// An input box that turns green or red as the student types.
+function makeCell(spec, onChange, label) {
+  const input = el('input', 'cell');
+  input.type = 'text'; input.autocomplete = 'off'; input.spellcheck = false;
+  input.placeholder = spec.ph || '?';
+  if (label) input.setAttribute('aria-label', label);
+  input.spec = spec;
+  input.check = () => {
+    if (input.value.trim() === '') { input.classList.remove('good', 'bad'); input.removeAttribute('aria-invalid'); return null; }
+    const ok = matches(input.value, spec);
+    input.classList.toggle('good', ok); input.classList.toggle('bad', !ok);
+    input.setAttribute('aria-invalid', String(!ok));
+    return ok;
+  };
+  input.addEventListener('input', () => { input.check(); if (onChange) onChange(input); });
+  return input;
+}
+
+// Numbered step cards: label, live-checked input, feedback and an optional hint.
+function buildFlow(container, steps, onChange) {
+  container.innerHTML = '';
+  return steps.map((s, i) => {
+    const card = el('div', 'step');
+    const lab = el('label', null, `<span class="stepno">${i + 1}</span> ${s.label}`);
+    const fb = el('span', 'feedback'); fb.setAttribute('aria-live', 'polite');
+    const input = makeCell(s, inp => {
+      const r = inp.check();
+      fb.textContent = r === null ? '' : r ? '✓ Correct!' : '✗ Not yet. Check this step.';
+      fb.className = 'feedback' + (r === null ? '' : r ? ' ok' : ' no');
+      if (onChange) onChange(inp);
+    });
+    input.feedback = fb;
+    lab.append(input);
+    card.append(lab, fb);
+    if (s.hint) {
+      const b = el('button', 'hintbtn', '💡 Hint'); b.type = 'button'; b.setAttribute('aria-expanded', 'false');
+      const h = el('div', 'hint', s.hint); h.hidden = true;
+      b.onclick = () => { h.hidden = !h.hidden; b.setAttribute('aria-expanded', String(!h.hidden)); };
+      card.append(b, h);
+    }
+    container.append(card);
+    return input;
+  });
+}
+
+// A table where some cells are given and some are self-checking inputs.
+// Cells: plain value/string = given; { t, ... } = input to fill.
+function buildGrid(container, headers, rows, foot, onChange) {
+  container.innerHTML = '';
+  const inputs = [];
+  const wrap = el('div', 'tablewrap');
+  const table = el('table', 'box');
+  table.innerHTML = `<thead><tr>${headers.map(h => `<th scope="col">${h}</th>`).join('')}</tr></thead>`;
+  const plainHeaders = headers.map(h => h.replace(/<[^>]+>/g, ''));
+  const addRow = (parent, cells, r) => {
+    const tr = el('tr');
+    cells.forEach((c, j) => {
+      const td = el('td');
+      if (c !== null && typeof c === 'object') {
+        const inp = makeCell(c, onChange, `${plainHeaders[j]}, ${r === 'total' ? 'total row' : 'row ' + (r + 1)}`);
+        inputs.push(inp); td.append(inp);
+      } else td.innerHTML = c;
+      tr.append(td);
+    });
+    parent.append(tr);
+  };
+  const tbody = el('tbody'); rows.forEach((r, i) => addRow(tbody, r, i)); table.append(tbody);
+  if (foot) { const tf = el('tfoot'); addRow(tf, foot, 'total'); table.append(tf); }
+  wrap.append(table); container.append(wrap);
+  return inputs;
+}
+function showProgress(out, inputs) {
+  const good = inputs.filter(i => i.classList.contains('good')).length;
+  out.innerHTML = `Boxes correct: <b>${good}</b> of ${inputs.length}` + (good === inputs.length && good ? ' 🎉 All done!' : '');
+}
+// Fills every box with its answer (for students who want to study a worked example).
+function revealAll(inputs) {
+  inputs.forEach(i => { i.value = answerText(i.spec); i.dispatchEvent(new Event('input')); });
+}
+
+/* =====================================================================
+   4. Canvas drawing helpers (colours come from the CSS tokens)
+   ===================================================================== */
+const cssVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+function prep(canvas) {
+  const r = canvas.getBoundingClientRect();
+  if (r.width < 20) return null;                     // hidden tab: draw later
+  const dpr = window.devicePixelRatio || 1;
+  const w = Math.round(r.width), h = Math.round(r.height);
+  if (canvas.width !== w * dpr || canvas.height !== h * dpr) { canvas.width = w * dpr; canvas.height = h * dpr; }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  ctx.font = '12px system-ui, sans-serif';
+  return { ctx, w, h };
+}
+// A "nice" tick step (1, 2, 5 × 10ⁿ) for about `count` ticks.
+function niceStep(span, count) {
+  const raw = span / Math.max(1, count), p = 10 ** Math.floor(Math.log10(raw)), n = raw / p;
+  return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p;
+}
+function axisRange(lo, hi, count) {
+  if (lo === hi) { lo -= 1; hi += 1; }
+  const step = niceStep(hi - lo, count);
+  return { lo: Math.floor(lo / step) * step, hi: Math.ceil(hi / step) * step, step };
+}
+function dashedV(ctx, x, top, bottom, color, label, labelY) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = 2.5; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(x, top); ctx.lineTo(x, bottom); ctx.stroke(); ctx.restore();
+  if (label) { ctx.fillStyle = color; ctx.font = 'bold 12px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(label, x, labelY); }
+}
+
+// Vertical bars on a numeric x axis (frequency charts and histograms).
+function drawNumericBars(canvas, bars, opts) {
+  const c = prep(canvas); if (!c) return; const { ctx, w, h } = c;
+  const ink = cssVar('--ink'), muted = cssVar('--muted'), line = cssVar('--line');
+  const L = 38, R = 14, T = 26, B = 30, pw = w - L - R, ph = h - T - B;
+  const xmin = opts.xmin, xmax = opts.xmax;
+  const ymax = axisRange(0, Math.max(...bars.map(b => b.h)), 4);
+  const X = v => L + (v - xmin) / (xmax - xmin) * pw, Y = v => T + ph - v / ymax.hi * ph;
+  ctx.strokeStyle = line; ctx.fillStyle = muted; ctx.textAlign = 'right'; ctx.lineWidth = 1;
+  for (let v = 0; v <= ymax.hi + EPS; v += ymax.step) { ctx.beginPath(); ctx.moveTo(L, Y(v)); ctx.lineTo(w - R, Y(v)); ctx.stroke(); ctx.fillText(fmt(v), L - 6, Y(v) + 4); }
+  bars.forEach(b => {
+    ctx.fillStyle = opts.barColor || cssVar('--blue-line');
+    ctx.fillRect(X(b.x0), Y(b.h), X(b.x1) - X(b.x0), Y(0) - Y(b.h));
+    ctx.strokeStyle = cssVar('--blue'); ctx.lineWidth = 1; ctx.strokeRect(X(b.x0), Y(b.h), X(b.x1) - X(b.x0), Y(0) - Y(b.h));
+  });
+  ctx.fillStyle = ink; ctx.textAlign = 'center';
+  opts.ticks.forEach(t => ctx.fillText(t.label, X(t.x), h - B + 16));
+  if (opts.xLabel) { ctx.fillStyle = muted; ctx.textAlign = 'right'; ctx.fillText(opts.xLabel, w - R, h - 3); }
+  (opts.lines || []).forEach(ln => dashedV(ctx, X(ln.x), T - 4, T + ph, ln.color, '', 0));
+}
+
+// Stacked dot plot of one or more rows on a shared number line.
+function drawDotRows(canvas, rows, opts = {}) {
+  const c = prep(canvas); if (!c) return; const { ctx, w, h } = c;
+  const all = rows.flatMap(r => r.values);
+  const ax = axisRange(Math.min(...all), Math.max(...all), 6);
+  const L = 18, R = 18, pw = w - L - R;
+  const X = v => L + (v - ax.lo) / (ax.hi - ax.lo) * pw;
+  const band = h / rows.length;
+  rows.forEach((row, ri) => {
+    const base = band * (ri + 1) - (row.fulcrum != null ? 44 : 26);
+    ctx.strokeStyle = cssVar('--muted'); ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(L, base); ctx.lineTo(w - R, base); ctx.stroke();
+    ctx.fillStyle = cssVar('--muted'); ctx.textAlign = 'center'; ctx.font = '12px system-ui';
+    for (let v = ax.lo; v <= ax.hi + EPS; v += ax.step) { ctx.beginPath(); ctx.moveTo(X(v), base); ctx.lineTo(X(v), base + 5); ctx.stroke(); ctx.fillText(fmt(v), X(v), base + 18); }
+    if (row.label) { ctx.textAlign = 'left'; ctx.font = 'bold 12px system-ui'; ctx.fillText(row.label, L, band * ri + 16); }
+    const stack = new Map();
+    const r = Math.max(4, Math.min(9, pw / 60));
+    row.values.forEach(v => {
+      const key = Math.round(v * 1e6), n = stack.get(key) || 0; stack.set(key, n + 1);
+      ctx.fillStyle = row.color; ctx.beginPath(); ctx.arc(X(v), base - r - 2 - n * (2 * r + 2), r, 0, Math.PI * 2); ctx.fill();
+    });
+    if (row.fulcrum != null) {                           // the balance point
+      const fx = X(row.fulcrum);
+      ctx.fillStyle = cssVar('--blue'); ctx.beginPath(); ctx.moveTo(fx, base + 2); ctx.lineTo(fx - 11, base + 20); ctx.lineTo(fx + 11, base + 20); ctx.closePath(); ctx.fill();
+      ctx.font = 'bold 13px system-ui'; ctx.textAlign = 'center'; ctx.fillText('x̄ = ' + fmt(row.fulcrum), fx, base + 34);
+    }
+  });
+}
+
+/* =====================================================================
+   5. Tabs
+   ===================================================================== */
+const tabs = [...document.querySelectorAll('[role=tab]')];
+const drawers = { intro: [], averages: [], spread: [], advanced: [], practice: [], tips: [] };
+function redraw(id) { (drawers[id] || []).forEach(fn => fn()); }
+function activeTab() { return tabs.find(t => t.getAttribute('aria-selected') === 'true').dataset.tab; }
+function showTab(id, focus) {
+  tabs.forEach(t => {
+    const on = t.dataset.tab === id;
+    t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1;
+    $(t.dataset.tab).classList.toggle('active', on);
+    if (on && focus) t.focus();
+  });
+  try { history.replaceState(null, '', '#' + id); } catch (e) { /* file:// or sandbox */ }
+  redraw(id);
+}
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => { showTab(t.dataset.tab); window.scrollTo({ top: 0 }); });
+  t.addEventListener('keydown', e => {
+    const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (d) { e.preventDefault(); showTab(tabs[(i + d + tabs.length) % tabs.length].dataset.tab, true); }
+  });
+});
+document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => { showTab(b.dataset.go); window.scrollTo({ top: 0 }); }));
+let resizeTimer;
+window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => redraw(activeTab()), 120); });
+try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => redraw(activeTab())); } catch (e) { /* old browser */ }
+function toggleBtn(btn, state) { btn.setAttribute('aria-pressed', String(state)); }
+
+/* =====================================================================
+   6. Intro stories
+   ===================================================================== */
+// Story 1: two players with exactly the same mean (15 over 8 games) but different spread.
+function season(spread) {
+  for (;;) {
+    const a = Array.from({ length: 7 }, () => Math.max(0, Math.round(15 + (Math.random() * 2 - 1) * spread)));
+    const last = 120 - sum(a);                       // forces the total to 8 × 15
+    if (last >= 0 && Math.abs(last - 15) <= spread) return [...a, last];
+  }
+}
+const players = { aina: [], ben: [] };
+function drawPlayers() {
+  const c = prep($('introPlayers')); if (!c) return; const { ctx, w, h } = c;
+  const L = 34, R = 10, T = 14, B = 26, pw = w - L - R, ph = h - T - B;
+  const ymax = axisRange(0, Math.max(30, ...players.aina, ...players.ben), 4);
+  const Y = v => T + ph - v / ymax.hi * ph;
+  ctx.strokeStyle = cssVar('--line'); ctx.fillStyle = cssVar('--muted'); ctx.textAlign = 'right';
+  for (let v = 0; v <= ymax.hi; v += ymax.step) { ctx.beginPath(); ctx.moveTo(L, Y(v)); ctx.lineTo(w - R, Y(v)); ctx.stroke(); ctx.fillText(v, L - 6, Y(v) + 4); }
+  const gw = pw / 8, bw = Math.min(18, gw * 0.36);
+  players.aina.forEach((v, i) => {
+    const x = L + gw * i + gw / 2;
+    ctx.fillStyle = cssVar('--blue'); ctx.fillRect(x - bw - 1, Y(v), bw, Y(0) - Y(v));
+    ctx.fillStyle = cssVar('--violet'); ctx.fillRect(x + 1, Y(players.ben[i]), bw, Y(0) - Y(players.ben[i]));
+    ctx.fillStyle = cssVar('--muted'); ctx.textAlign = 'center'; ctx.fillText('G' + (i + 1), x, h - 8);
+  });
+  ctx.save(); ctx.strokeStyle = cssVar('--ink'); ctx.setLineDash([6, 4]); ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(L, Y(15)); ctx.lineTo(w - R, Y(15)); ctx.stroke(); ctx.restore();
+}
+function newSeason() {
+  players.aina = season(3); players.ben = season(12);
+  const sa = Math.sqrt(variance(players.aina)), sb = Math.sqrt(variance(players.ben));
+  const steady = sa <= sb ? 'Aina' : 'Ben';
+  $('playersText').innerHTML = `Mean: both <b>15</b> points. Range: Aina <b>${fmt(Math.max(...players.aina) - Math.min(...players.aina))}</b>, Ben <b>${fmt(Math.max(...players.ben) - Math.min(...players.ben))}</b>. Standard deviation: Aina <b>${fmt(sa)}</b>, Ben <b>${fmt(sb)}</b>. <b>${steady}</b> is the more consistent scorer.`;
+  drawPlayers();
+}
+drawers.intro.push(drawPlayers);
+$('newSeason').onclick = newSeason;
+
+// Story 2: an outlier moves the mean far more than the median.
+const stall = { week: [], festival: false };
+const FESTIVAL = 185;
+function stallData() { return stall.festival ? [...stall.week, FESTIVAL] : stall.week; }
+function drawStall() {
+  const c = prep($('introStall')); if (!c) return; const { ctx, w, h } = c;
+  const data = stallData(), sorted = [...data].sort((a, b) => a - b);
+  const m = mean(data), md = median(sorted);
+  const L = 36, R = 58, T = 14, B = 26, pw = w - L - R, ph = h - T - B;
+  const ymax = axisRange(0, Math.max(...data), 4);
+  const Y = v => T + ph - v / ymax.hi * ph;
+  ctx.strokeStyle = cssVar('--line'); ctx.fillStyle = cssVar('--muted'); ctx.textAlign = 'right';
+  for (let v = 0; v <= ymax.hi; v += ymax.step) { ctx.beginPath(); ctx.moveTo(L, Y(v)); ctx.lineTo(w - R, Y(v)); ctx.stroke(); ctx.fillText(v, L - 6, Y(v) + 4); }
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Fest'];
+  const gw = pw / data.length, bw = gw * 0.62;
+  data.forEach((v, i) => {
+    const x = L + gw * i + (gw - bw) / 2;
+    ctx.fillStyle = i === 7 ? cssVar('--amber-soft') : cssVar('--blue-line');
+    ctx.fillRect(x, Y(v), bw, Y(0) - Y(v));
+    if (i === 7) { ctx.strokeStyle = cssVar('--amber'); ctx.strokeRect(x, Y(v), bw, Y(0) - Y(v)); }
+    ctx.fillStyle = cssVar('--muted'); ctx.textAlign = 'center'; ctx.fillText(days[i], x + bw / 2, h - 8);
+  });
+  [[m, cssVar('--blue'), 'mean'], [md, cssVar('--amber'), 'median']].forEach(([v, col, name], k) => {
+    ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.setLineDash([6, 4]);
+    ctx.beginPath(); ctx.moveTo(L, Y(v)); ctx.lineTo(w - R, Y(v)); ctx.stroke(); ctx.restore();
+    ctx.fillStyle = col; ctx.font = 'bold 12px system-ui'; ctx.textAlign = 'left';
+    ctx.fillText(name, w - R + 4, Y(v) + (k ? 12 : -2));
+  });
+}
+function describeStall() {
+  const base = stall.week, withF = [...base, FESTIVAL];
+  const m1 = mean(base), m2 = mean(withF);
+  const d1 = median([...base].sort((a, b) => a - b)), d2 = median([...withF].sort((a, b) => a - b));
+  $('stallText').innerHTML = stall.festival
+    ? `With the festival day, the mean jumps from <b>${fmt(m1)}</b> to <b>${fmt(m2)}</b> packs, but the median only moves from <b>${fmt(d1)}</b> to <b>${fmt(d2)}</b>. To plan a normal day, the <b>median</b> is the safer choice.`
+    : `A normal week: mean <b>${fmt(m1)}</b> packs, median <b>${fmt(d1)}</b> packs. They are close because there are no extreme days.`;
+  drawStall();
+}
+function newWeek() { stall.week = Array.from({ length: 7 }, () => randInt(36, 50)); describeStall(); }
+$('festival').onclick = () => { stall.festival = !stall.festival; toggleBtn($('festival'), stall.festival); $('festival').textContent = stall.festival ? 'Remove the festival day' : 'Add a festival day 🎉'; describeStall(); };
+$('newWeek').onclick = newWeek;
+drawers.intro.push(drawStall);
+
+/* =====================================================================
+   7. Concept 1A: raw data (sorted row, balance point, step cards)
+   ===================================================================== */
+const raw = { data: [], sorted: [], showMean: false, showMed: false, showMode: false, inputs: [] };
+function drawRaw() {
+  if (!raw.data.length) return;
+  drawDotRows($('rawBalance'), [{ values: raw.data, color: cssVar('--violet'), fulcrum: raw.showMean ? mean(raw.data) : null }]);
+}
+function paintSortedRow() {
+  const n = raw.sorted.length, mid = Math.floor(n / 2);
+  const medIdx = n % 2 ? [mid] : [mid - 1, mid];
+  const modeSet = modes(raw.data);
+  $('rawSorted').querySelectorAll('.nbox').forEach((b, i) => {
+    b.classList.toggle('med', raw.showMed && medIdx.includes(i));
+    b.classList.toggle('mode', raw.showMode && modeSet.includes(raw.sorted[i]));
+  });
+}
+function renderRaw() {
+  const { values, bad } = parseList($('rawInput').value);
+  const err = validateData(values, bad, 30);
+  $('rawError').innerHTML = err;
+  if (err) return;
+  raw.data = values; raw.sorted = [...values].sort((a, b) => a - b);
+  raw.showMean = false; toggleBtn($('rawShowMean'), false);
+  const N = values.length, S = sum(values), m = S / N, pos = (N + 1) / 2, md = median(raw.sorted), mo = modes(values);
+  $('rawOriginal').innerHTML = values.map(v => `<span class="nbox">${fmt(v, 4)}</span>`).join('');
+  $('rawSorted').innerHTML = raw.sorted.map((v, i) => `<span class="nbox"><span>${fmt(v, 4)}</span><small>${i + 1}</small></span>`).join('');
+  paintSortedRow();
+
+  const sumWorking = values.length <= 12 ? values.map((v, i) => (i ? (v < 0 ? ' − ' + fmt(-v, 4) : ' + ' + fmt(v, 4)) : fmt(v, 4))).join('') + ' = ' : '';
+  const medHint = N % 2
+    ? `N = ${N} is odd, so the median is the value at position ${fmt(pos)} in the sorted row: <b>${fmt(md, 4)}</b>.`
+    : `N = ${N} is even, so the position ${fmt(pos)} lies between the ${N / 2}th and ${N / 2 + 1}th values: ${frac(fmt(raw.sorted[N / 2 - 1], 4) + ' + ' + br(raw.sorted[N / 2]), 2)} = <b>${fmt(md, 4)}</b>.`;
+  const modeHint = mo.length === 0
+    ? 'Every value appears the same number of times, so there is <b>no mode</b>. Type “none”.'
+    : mo.length === 1 ? `Count each value in the sorted row. <b>${fmt(mo[0], 4)}</b> appears most often.`
+      : `There is a tie: <b>${mo.map(v => fmt(v, 4)).join(' and ')}</b> appear most often. Type them all, separated by commas.`;
+  raw.inputs = buildFlow($('rawFlow'), [
+    { t: S, label: 'Σx: add every value', hint: `${sumWorking}<b>${fmt(S, 4)}</b>` },
+    { t: N, label: 'N: how many values?', hint: `Count the boxes: <b>${N}</b>.` },
+    { t: m, label: `Mean ${XBAR} = Σx ÷ N`, hint: `${XBAR} = ${frac(fmt(S, 4), N)} = <b>${fmt(m, 4)}</b> (≈ ${fmt(m)})` },
+    { t: pos, label: 'Median position = (N + 1) ÷ 2', hint: `${frac(N + ' + 1', 2)} = <b>${fmt(pos)}</b>` },
+    { t: md, label: 'Median (use the sorted row)', hint: medHint },
+    { t: mo, kind: 'set', label: 'Mode (commas for ties, or “none”)', ph: 'e.g. 5, 12', hint: modeHint }
+  ], inp => {
+    showProgress($('rawProgress'), raw.inputs);
+    if (inp === raw.inputs[2] && inp.classList.contains('good') && !raw.showMean) { raw.showMean = true; toggleBtn($('rawShowMean'), true); drawRaw(); }
+  });
+  showProgress($('rawProgress'), raw.inputs);
+  drawRaw();
+}
+function randomRaw() {
+  const n = randInt(5, 9);
+  const vals = Array.from({ length: n }, () => randInt(1, 20));
+  vals[randInt(0, n - 1)] = pick(vals);            // usually creates a repeated value (a mode)
+  $('rawInput').value = vals.join(', ');
+  renderRaw();
+}
+$('rawUse').onclick = renderRaw;
+$('rawInput').addEventListener('keydown', e => { if (e.key === 'Enter') renderRaw(); });
+$('rawRandom').onclick = randomRaw;
+$('rawShowMean').onclick = () => { raw.showMean = !raw.showMean; toggleBtn($('rawShowMean'), raw.showMean); drawRaw(); };
+$('rawShowMed').onclick = () => { raw.showMed = !raw.showMed; toggleBtn($('rawShowMed'), raw.showMed); paintSortedRow(); };
+$('rawShowMode').onclick = () => { raw.showMode = !raw.showMode; toggleBtn($('rawShowMode'), raw.showMode); paintSortedRow(); };
+$('rawReveal').onclick = () => revealAll(raw.inputs);
+drawers.averages.push(drawRaw);
+
+/* =====================================================================
+   8. Concept 1B: frequency table (fx and cumulative f columns)
+   ===================================================================== */
+const fq = { xs: [], fs: [], st: null, inputs: [], showLines: false };
+function drawFreq() {
+  if (!fq.st) return;
+  const { xs, fs, st } = fq;
+  drawNumericBars($('freqChart'), xs.map((x, i) => ({ x0: x - 0.35, x1: x + 0.35, h: fs[i] })), {
+    xmin: xs[0] - 0.7, xmax: xs[xs.length - 1] + 0.7, xLabel: 'x',
+    ticks: xs.map(x => ({ x, label: fmt(x) })),
+    lines: fq.showLines ? [{ x: st.mean, color: cssVar('--blue') }, { x: st.median, color: cssVar('--amber') }] : []
+  });
+}
+function newFreq() {
+  const k = randInt(4, 6), start = randInt(0, 5);
+  fq.xs = Array.from({ length: k }, (_, i) => start + i);
+  fq.fs = uniqueMaxFreqs(k, 1, 12);
+  fq.st = freqStats(fq.xs, fq.fs);
+  fq.showLines = false; toggleBtn($('freqShowLines'), false);
+  const { xs, fs, st } = fq;
+  const onChange = () => showProgress($('freqProgress'), fq.inputs);
+  const gridInputs = buildGrid($('freqGrid'), ['<i>x</i>', '<i>f</i>', '<i>fx</i>', 'Cumulative <i>f</i>'],
+    xs.map((x, i) => [fmt(x), fs[i], { t: st.fx[i] }, { t: st.cum[i] }]),
+    ['Σ', { t: st.N }, { t: st.sumFx }, '—'], onChange);
+  const N = st.N, pos = (N + 1) / 2;
+  const medHint = N % 2
+    ? `Position ${fmt(pos)}: find the first cumulative f that reaches ${fmt(pos)}. That row's x is <b>${fmt(st.median)}</b>.`
+    : `Positions ${N / 2} and ${N / 2 + 1}: look each one up in the cumulative f column, then take the value halfway between them. Median = <b>${fmt(st.median)}</b>.`;
+  const flowInputs = buildFlow($('freqFlow'), [
+    { t: st.mean, label: `Mean ${XBAR} = Σfx ÷ Σf`, hint: `${XBAR} = ${frac(st.sumFx, N)} = <b>${fmt(st.mean, 4)}</b>` },
+    { t: pos, label: 'Median position = (Σf + 1) ÷ 2', hint: `${frac(N + ' + 1', 2)} = <b>${fmt(pos)}</b>` },
+    { t: st.median, label: 'Median', hint: medHint },
+    { t: st.mode[0], label: 'Mode (the x with the highest f)', hint: `The highest frequency is ${Math.max(...fs)}, so the mode is <b>${fmt(st.mode[0])}</b>.` }
+  ], onChange);
+  fq.inputs = [...gridInputs, ...flowInputs];
+  onChange();
+  drawFreq();
+}
+$('freqNew').onclick = newFreq;
+$('freqShowLines').onclick = () => { fq.showLines = !fq.showLines; toggleBtn($('freqShowLines'), fq.showLines); drawFreq(); };
+$('freqReveal').onclick = () => revealAll(fq.inputs);
+drawers.averages.push(drawFreq);
+
+/* =====================================================================
+   9. Concept 2A: deviation squares
+   ===================================================================== */
+const dv = { data: [], inputs: [] };
+function drawSquares() {
+  if (!dv.data.length) return;
+  const c = prep($('devSquares')); if (!c) return; const { ctx, w, h } = c;
+  const data = dv.data, m = mean(data), sd = Math.sqrt(variance(data));
+  const lo = Math.min(...data, m - sd), hi = Math.max(...data, m + sd);
+  const maxDev = Math.max(...data.map(x => Math.abs(x - m)), sd);
+  const L = 18, R = 18, base = h - 40, top = 14;
+  // One scale for both directions so the squares really are squares.
+  const span = Math.max(hi - lo, EPS);
+  const s = Math.min((w - L - R) / span, maxDev > 0 ? (base - top) / maxDev : Infinity);
+  const X = v => L + (w - L - R - span * s) / 2 + (v - lo) * s;
+  // Squares, most transparent first so nested squares stay visible.
+  [...data].sort((a, b) => Math.abs(b - m) - Math.abs(a - m)).forEach(x => {
+    const d = x - m, side = Math.abs(d) * s; if (side < 0.5) return;
+    const col = d < 0 ? cssVar('--red') : cssVar('--blue');
+    ctx.globalAlpha = 0.14; ctx.fillStyle = col;
+    ctx.fillRect(Math.min(X(x), X(m)), base - side, side, side);
+    ctx.globalAlpha = 0.9; ctx.strokeStyle = col; ctx.lineWidth = 1.5;
+    ctx.strokeRect(Math.min(X(x), X(m)), base - side, side, side);
+  });
+  ctx.globalAlpha = 1;
+  if (sd > 0) {                                     // the average square has side σ
+    ctx.save(); ctx.strokeStyle = cssVar('--green'); ctx.lineWidth = 2.5; ctx.setLineDash([6, 4]);
+    ctx.strokeRect(X(m) - sd * s / 2, base - sd * s, sd * s, sd * s); ctx.restore();
+  }
+  ctx.strokeStyle = cssVar('--muted'); ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(L, base); ctx.lineTo(w - R, base); ctx.stroke();
+  const stack = new Map();
+  data.forEach(x => {
+    const k = Math.round(x * 1e6), n = stack.get(k) || 0; stack.set(k, n + 1);
+    ctx.fillStyle = cssVar('--ink'); ctx.beginPath(); ctx.arc(X(x), base + 8 + n * 9, 4, 0, Math.PI * 2); ctx.fill();
+  });
+  ctx.fillStyle = cssVar('--muted'); ctx.textAlign = 'center'; ctx.font = '12px system-ui';
+  const ax = axisRange(lo, hi, 6);
+  for (let v = ax.lo; v <= ax.hi + EPS; v += ax.step) if (X(v) >= L - 1 && X(v) <= w - R + 1) ctx.fillText(fmt(v), X(v), h - 4);
+  dashedV(ctx, X(m), top, base, cssVar('--ink'), '', 0);
+  ctx.fillStyle = cssVar('--ink'); ctx.font = 'bold 12px system-ui'; ctx.fillText('x̄', X(m) + 10, top + 8);
+}
+function renderDev() {
+  const { values, bad } = parseList($('devInput').value);
+  const err = validateData(values, bad, 12);
+  $('devError').innerHTML = err;
+  if (err) return;
+  dv.data = values;
+  const N = values.length, S = sum(values), m = S / N;
+  const devs = values.map(x => x - m), sq = devs.map(d => d * d), SS = sum(sq), v = SS / N, sd = Math.sqrt(v);
+  const mx = Math.max(...values), mn = Math.min(...values);
+  $('devMean').innerHTML = `Step 0 (from 📘 Averages): ${XBAR} = ${frac('Σ<span class="v">x</span>', '<span class="v">N</span>')} = ${frac(fmt(S, 4), N)} = <b>${fmt(m, 4)}</b>`;
+  const onChange = () => showProgress($('devProgress'), dv.inputs);
+  const gridInputs = buildGrid($('devGrid'), ['<i>x</i>', '<i>x</i> − x̄', '(<i>x</i> − x̄)²'],
+    values.map((x, i) => [fmt(x, 4), { t: devs[i] }, { t: sq[i] }]),
+    ['Σ', { t: 0, tol: 0.011 }, { t: SS }], onChange);
+  const flowInputs = buildFlow($('devFlow'), [
+    { t: mx - mn, label: 'Range = largest − smallest', hint: `${fmt(mx, 4)} − ${br(mn)} = <b>${fmt(mx - mn, 4)}</b>` },
+    { t: v, label: 'Variance σ² = Σ(x − x̄)² ÷ N', hint: `σ² = ${frac(fmt(SS, 4), N)} = <b>${fmt(v, 4)}</b>` },
+    { t: sd, label: 'Standard deviation σ = √σ²', hint: `σ = √${fmt(v, 4)} = <b>${fmt(sd, 4)}</b>` }
+  ], onChange);
+  dv.inputs = [...gridInputs, ...flowInputs];
+  onChange();
+  drawSquares();
+}
+// Friendly data: a whole-number mean so every deviation is a whole number.
+function randomDev() {
+  for (;;) {
+    const n = randInt(4, 6), vals = Array.from({ length: n }, () => randInt(1, 15));
+    if (sum(vals) % n === 0 && new Set(vals).size > 1) { $('devInput').value = vals.join(', '); break; }
+  }
+  renderDev();
+}
+$('devUse').onclick = renderDev;
+$('devInput').addEventListener('keydown', e => { if (e.key === 'Enter') renderDev(); });
+$('devRandom').onclick = randomDev;
+$('devReveal').onclick = () => revealAll(dv.inputs);
+drawers.spread.push(drawSquares);
+
+/* =====================================================================
+   10. Concept 2B: variance from a frequency table (fx, x², fx² columns)
+   ===================================================================== */
+const fv = { inputs: [] };
+function newFv() {
+  const k = randInt(4, 5), start = randInt(0, 4);
+  const xs = Array.from({ length: k }, (_, i) => start + i), fs = Array.from({ length: k }, () => randInt(1, 10));
+  const st = freqStats(xs, fs);
+  const onChange = () => showProgress($('fvProgress'), fv.inputs);
+  const gridInputs = buildGrid($('fvGrid'), ['<i>x</i>', '<i>f</i>', '<i>fx</i>', '<i>x</i>²', '<i>fx</i>²'],
+    xs.map((x, i) => [x, fs[i], { t: st.fx[i] }, { t: x * x }, { t: st.fx2[i] }]),
+    ['Σ', { t: st.N }, { t: st.sumFx }, '—', { t: st.sumFx2 }], onChange);
+  const q = st.sumFx2 / st.N;
+  const flowInputs = buildFlow($('fvFlow'), [
+    { t: st.mean, label: `Mean ${XBAR} = Σfx ÷ Σf`, hint: `${frac(st.sumFx, st.N)} = <b>${fmt(st.mean, 4)}</b>` },
+    { t: q, label: 'Σfx² ÷ Σf', hint: `${frac(st.sumFx2, st.N)} = <b>${fmt(q, 4)}</b>` },
+    { t: st.variance, label: `Variance σ² = Σfx² ÷ Σf − ${XBAR}²`, hint: `${fmt(q, 4)} − ${fmt(st.mean, 4)}² = <b>${fmt(st.variance, 4)}</b>` },
+    { t: st.sd, label: 'Standard deviation σ', hint: `√${fmt(st.variance, 4)} = <b>${fmt(st.sd, 4)}</b>` }
+  ], onChange);
+  fv.inputs = [...gridInputs, ...flowInputs];
+  onChange();
+}
+$('fvNew').onclick = newFv;
+$('fvReveal').onclick = () => revealAll(fv.inputs);
+
+/* =====================================================================
+   11. Advanced A: grouped data
+   ===================================================================== */
+const gr = { classes: [], st: null, inputs: [], showLines: false };
+function makeClasses() {
+  const c = pick([5, 10]), k = 5;
+  const start = c === 10 ? 10 * randInt(0, 4) : 5 * randInt(2, 8);
+  const fs = uniqueMaxFreqs(k, 2, 14);
+  return fs.map((f, i) => ({ lo: start + i * c, hi: start + i * c + c - 1, f }));
+}
+function drawGrouped() {
+  if (!gr.st) return;
+  const { classes, st } = gr;
+  const lines = gr.showLines ? [
+    { x: st.mean, color: cssVar('--blue') },
+    { x: st.medianEst, color: cssVar('--amber') },
+    { x: st.modeEst, color: cssVar('--violet') }] : [];
+  drawNumericBars($('grChart'), classes.map(c => ({ x0: c.lo - 0.5, x1: c.hi + 0.5, h: c.f })), {
+    xmin: classes[0].lo - 0.5 - st.width * 0.3, xmax: classes[classes.length - 1].hi + 0.5 + st.width * 0.3,
+    ticks: [...classes.map(c => ({ x: c.lo - 0.5, label: fmt(c.lo - 0.5) })), { x: classes[classes.length - 1].hi + 0.5, label: fmt(classes[classes.length - 1].hi + 0.5) }],
+    lines
+  });
+}
+function newGrouped() {
+  gr.classes = makeClasses();
+  gr.st = groupedStats(gr.classes);
+  gr.showLines = false; toggleBtn($('grShowLines'), false);
+  const { classes, st } = gr;
+  const onChange = () => showProgress($('grProgress'), gr.inputs);
+  const gridInputs = buildGrid($('grGrid'), ['Class', '<i>f</i>', 'Midpoint <i>x</i>', '<i>fx</i>', '<i>fx</i>²', 'Cumulative <i>F</i>'],
+    classes.map((c, i) => [`${c.lo} – ${c.hi}`, c.f, { t: st.mids[i] }, { t: st.fx[i] }, { t: st.fx2[i] }, { t: st.cum[i] }]),
+    ['Σ', { t: st.N }, '—', { t: st.sumFx }, { t: st.sumFx2 }, '—'], onChange);
+  const q = st.sumFx2 / st.N;
+  const mc = classes[st.mi], oc = classes[st.oi];
+  const meanIn = buildFlow($('grFlowMean'), [
+    { t: st.mean, label: `${XBAR} = Σfx ÷ Σf`, hint: `${frac(fmt(st.sumFx), st.N)} = <b>${fmt(st.mean, 4)}</b>` },
+    { t: st.variance, label: `σ² = Σfx² ÷ Σf − ${XBAR}²`, hint: `${frac(fmt(st.sumFx2), st.N)} − ${fmt(st.mean, 4)}² = ${fmt(q, 4)} − ${fmt(st.mean * st.mean, 4)} = <b>${fmt(st.variance, 4)}</b>` },
+    { t: st.sd, label: 'σ = √σ²', hint: `√${fmt(st.variance, 4)} = <b>${fmt(st.sd, 4)}</b>` }
+  ], onChange);
+  const medIn = buildFlow($('grFlowMedian'), [
+    { t: st.half, label: 'N ÷ 2', hint: `${st.N} ÷ 2 = <b>${fmt(st.half)}</b>` },
+    { t: st.L, label: 'L (lower boundary of the median class)', hint: `The first cumulative F to reach ${fmt(st.half)} is in class ${mc.lo} – ${mc.hi}. Its lower boundary is ${mc.lo} − 0.5 = <b>${fmt(st.L)}</b>.` },
+    { t: st.F, label: 'F (cumulative F before that class)', hint: st.mi ? `The row above has cumulative F = <b>${st.F}</b>.` : 'It is the first class, so nothing comes before it: <b>F = 0</b>.' },
+    { t: st.fm, label: 'f<sub>m</sub> (frequency of the median class)', hint: `<b>${st.fm}</b>` },
+    { t: st.width, label: 'c (class width)', hint: `${fmt(mc.hi + 0.5)} − ${fmt(mc.lo - 0.5)} = <b>${st.width}</b>` },
+    { t: st.medianEst, label: 'Median', hint: `${fmt(st.L)} + ${frac(fmt(st.half) + ' − ' + st.F, st.fm)} × ${st.width} = <b>${fmt(st.medianEst, 4)}</b>` }
+  ], onChange);
+  const prevF = st.oi ? classes[st.oi - 1].f : 0, nextF = st.oi < classes.length - 1 ? classes[st.oi + 1].f : 0;
+  const modeIn = buildFlow($('grFlowMode'), [
+    { t: st.modeL, label: 'L (lower boundary of the modal class)', hint: `The highest f is ${oc.f}, in class ${oc.lo} – ${oc.hi}. L = ${oc.lo} − 0.5 = <b>${fmt(st.modeL)}</b>.` },
+    { t: st.d1, label: 'd₁ = f − f(before)', hint: `${oc.f} − ${prevF} = <b>${st.d1}</b>` + (st.oi ? '' : ' (no class before, so use 0)') },
+    { t: st.d2, label: 'd₂ = f − f(after)', hint: `${oc.f} − ${nextF} = <b>${st.d2}</b>` + (st.oi < classes.length - 1 ? '' : ' (no class after, so use 0)') },
+    { t: st.modeEst, label: 'Mode', hint: `${fmt(st.modeL)} + ${frac(st.d1, st.d1 + ' + ' + st.d2)} × ${st.width} = <b>${fmt(st.modeEst, 4)}</b>` }
+  ], onChange);
+  gr.inputs = [...gridInputs, ...meanIn, ...medIn, ...modeIn];
+  onChange();
+  drawGrouped();
+}
+$('grNew').onclick = newGrouped;
+$('grShowLines').onclick = () => { gr.showLines = !gr.showLines; toggleBtn($('grShowLines'), gr.showLines); drawGrouped(); };
+$('grReveal').onclick = () => revealAll(gr.inputs);
+drawers.advanced.push(drawGrouped);
+
+/* =====================================================================
+   12. Advanced B: transformations (multiply by m, then add k)
+   ===================================================================== */
+const TF_BASE = [2, 4, 4, 5, 7, 8];                  // mean 5, σ = 2
+$('tfBase').textContent = TF_BASE.join(', ') + ` (mean ${fmt(mean(TF_BASE))}, σ = ${fmt(Math.sqrt(variance(TF_BASE)))})`;
+let tfInputs = [];
+function tfNew() { const m = Number($('tfM').value), k = Number($('tfK').value); return TF_BASE.map(x => m * x + k); }
+function drawTf() {
+  drawDotRows($('tfChart'), [
+    { values: TF_BASE, color: cssVar('--muted'), label: 'original' },
+    { values: tfNew(), color: cssVar('--blue'), label: 'new' }]);
+}
+function renderTf() {
+  const m = Number($('tfM').value), k = Number($('tfK').value);
+  $('tfKOut').textContent = fmt(k);
+  const nd = tfNew(), bm = mean(TF_BASE), bs = Math.sqrt(variance(TF_BASE));
+  $('tfNewData').innerHTML = `New data: <b>${nd.map(v => fmt(v)).join(', ')}</b>`;
+  tfInputs = buildFlow($('tfFlow'), [
+    { t: m * bm + k, label: `Predict the new mean`, hint: `${fmt(m)} × ${fmt(bm)} + ${br(k)} = <b>${fmt(m * bm + k)}</b>` },
+    { t: Math.abs(m) * bs, label: 'Predict the new σ', hint: `|${fmt(m)}| × ${fmt(bs)} = <b>${fmt(Math.abs(m) * bs)}</b>. Adding ${fmt(k)} does not change the spread.` + (m === 0 ? ' Multiplying by 0 makes every value the same, so σ = 0.' : '') }
+  ]);
+  drawTf();
+}
+$('tfM').onchange = renderTf; $('tfK').oninput = renderTf;
+drawers.advanced.push(drawTf);
+
+/* =====================================================================
+   13. Practice: random problem generators
+   Each returns { topic, title, question, data?, grid?, steps, final, solution }
+   ===================================================================== */
+const dataTable = (xs, fs, head = '<i>x</i>') =>
+  `<div class="tablewrap" style="display:inline-block;max-width:100%"><table class="data"><tr><th>${head}</th>${xs.map(x => `<td>${x}</td>`).join('')}</tr><tr><th>Frequency <i>f</i></th>${fs.map(f => `<td>${f}</td>`).join('')}</tr></table></div>`;
+const listText = a => a.map(v => fmt(v)).join(', ');
+
+const GENERATORS = {
+  easy: [
+    function meanRaw() {
+      const n = randInt(5, 7), a = Array.from({ length: n }, () => randInt(1, 20)), S = sum(a), m = S / n;
+      return { topic: 'avg', title: 'Mean', question: `Find the mean of: ${listText(a)}`,
+        steps: [{ t: S, label: 'Σx' }, { t: n, label: 'N' }], final: { t: m, label: `Mean ${XBAR}` },
+        solution: [`Add the values: Σx = ${a.join(' + ')} = ${S}`, `Count them: N = ${n}`, `${XBAR} = ${frac(S, n)} = <b>${fmt(m)}</b>`] };
+    },
+    function medianRaw() {
+      const n = randInt(5, 8), a = Array.from({ length: n }, () => randInt(1, 30)), s = [...a].sort((x, y) => x - y), md = median(s), pos = (n + 1) / 2;
+      return { topic: 'avg', title: 'Median', question: `Find the median of: ${listText(a)}`,
+        steps: [{ t: pos, label: 'Median position (N + 1) ÷ 2' }], final: { t: md, label: 'Median' },
+        solution: [`Sort first: ${listText(s)}`, `Position = ${frac(n + ' + 1', 2)} = ${fmt(pos)}`,
+          n % 2 ? `The ${fmt(pos)}th value is <b>${fmt(md)}</b>.` : `Halfway between the ${n / 2}th and ${n / 2 + 1}th values: ${frac(s[n / 2 - 1] + ' + ' + s[n / 2], 2)} = <b>${fmt(md)}</b>`] };
+    },
+    function modeRaw() {
+      // The mode appears 3 times; every other value at most twice.
+      const mv = randInt(1, 12), others = shuffle(Array.from({ length: 12 }, (_, i) => i + 1).filter(v => v !== mv)).slice(0, randInt(3, 5));
+      const a = shuffle([mv, mv, mv, ...others, ...(Math.random() < 0.6 ? [others[0]] : [])]);
+      return { topic: 'avg', title: 'Mode', question: `Shoe sizes of a group of friends: ${listText(a)}. Find the mode.`,
+        steps: [{ t: 3, label: 'How many times does the most common value appear?' }], final: { t: mv, label: 'Mode' },
+        solution: [`Sort to make counting easy: ${listText([...a].sort((x, y) => x - y))}`, `${mv} appears 3 times, more than any other size.`, `Mode = <b>${mv}</b>`] };
+    },
+    function rangeTemps() {
+      const n = 6, a = Array.from({ length: n }, () => randInt(-10, 15));
+      if (Math.min(...a) >= 0) a[randInt(0, n - 1)] = randInt(-10, -1);   // always include a negative
+      const mx = Math.max(...a), mn = Math.min(...a);
+      return { topic: 'spread', title: 'Range with negatives', question: `Midnight temperatures (°C) in a mountain town: ${listText(a)}. Find the range.`,
+        steps: [{ t: mx, label: 'Largest value' }, { t: mn, label: 'Smallest value' }], final: { t: mx - mn, label: 'Range (°C)' },
+        solution: [`Largest = ${fmt(mx)}, smallest = ${fmt(mn)}`, `Range = ${fmt(mx)} − ${br(mn)} = <b>${fmt(mx - mn)}</b> °C`, 'Subtracting a negative is the same as adding.'] };
+    }
+  ],
+  medium: [
+    function meanFreq() {
+      const k = randInt(4, 5), s0 = randInt(0, 4), xs = Array.from({ length: k }, (_, i) => s0 + i), fs = Array.from({ length: k }, () => randInt(1, 12)), st = freqStats(xs, fs);
+      return { topic: 'avg', title: 'Mean from a frequency table', question: 'Number of goals per match in a school league. Find the mean.', data: dataTable(xs, fs, 'Goals <i>x</i>'),
+        grid: { headers: ['<i>x</i>', '<i>f</i>', '<i>fx</i>'], rows: xs.map((x, i) => [x, fs[i], { t: st.fx[i] }]), foot: ['Σ', { t: st.N }, { t: st.sumFx }] },
+        steps: [], final: { t: st.mean, label: `Mean ${XBAR}` },
+        solution: [`Multiply each x by its f: ${st.fx.join(', ')}`, `Σfx = ${st.sumFx}, Σf = ${st.N}`, `${XBAR} = ${frac(st.sumFx, st.N)} = <b>${fmt(st.mean)}</b>`] };
+    },
+    function medianFreq() {
+      const k = randInt(4, 5), s0 = randInt(1, 5), xs = Array.from({ length: k }, (_, i) => s0 + i), fs = Array.from({ length: k }, () => randInt(2, 10)), st = freqStats(xs, fs), N = st.N;
+      return { topic: 'avg', title: 'Median from a frequency table', question: 'Family sizes in a housing area. Find the median.', data: dataTable(xs, fs, 'People <i>x</i>'),
+        grid: { headers: ['<i>x</i>', '<i>f</i>', 'Cumulative <i>f</i>'], rows: xs.map((x, i) => [x, fs[i], { t: st.cum[i] }]) },
+        steps: [{ t: N, label: 'N = Σf' }, { t: (N + 1) / 2, label: 'Median position (N + 1) ÷ 2' }], final: { t: st.median, label: 'Median' },
+        solution: [`Cumulative f: ${st.cum.join(', ')}. So N = ${N}.`, `Position = ${frac(N + ' + 1', 2)} = ${fmt((N + 1) / 2)}`,
+          N % 2 ? `The first cumulative f to reach ${fmt((N + 1) / 2)} belongs to x = ${fmt(st.median)}. Median = <b>${fmt(st.median)}</b>`
+            : `Look up the ${N / 2}th and ${N / 2 + 1}th values in the cumulative f column and take the value halfway between them. Median = <b>${fmt(st.median)}</b>`] };
+    },
+    function sdRaw() {
+      let a;
+      do { a = Array.from({ length: 5 }, () => randInt(1, 15)); } while (sum(a) % 5 || new Set(a).size < 2);
+      const m = sum(a) / 5, d = a.map(x => x - m), sq = d.map(x => x * x), SS = sum(sq), v = SS / 5;
+      return { topic: 'spread', title: 'Standard deviation', question: `Minutes late for 5 buses: ${listText(a)}. Find the standard deviation.`,
+        grid: { headers: ['<i>x</i>', '<i>x</i> − x̄', '(<i>x</i> − x̄)²'], rows: a.map((x, i) => [x, { t: d[i] }, { t: sq[i] }]), foot: ['Σ', { t: 0, tol: 0.011 }, { t: SS }] },
+        steps: [{ t: m, label: `Mean ${XBAR}` }, { t: v, label: 'Variance σ²' }], final: { t: Math.sqrt(v), label: 'Standard deviation σ' },
+        solution: [`${XBAR} = ${frac(sum(a), 5)} = ${fmt(m)}`, `Deviations: ${d.map(x => fmt(x)).join(', ')}. Squares: ${sq.join(', ')}`, `Σ(x − x̄)² = ${SS}, so σ² = ${frac(SS, 5)} = ${fmt(v, 4)}`, `σ = √${fmt(v, 4)} = <b>${fmt(Math.sqrt(v))}</b>`] };
+    },
+    function missingValue() {
+      for (;;) {
+        const n = randInt(4, 6), m = randInt(6, 20), known = Array.from({ length: n - 1 }, () => randInt(2, 30)), k = m * n - sum(known);
+        if (k < 0 || k > 40) continue;
+        return { topic: 'avg', title: 'Missing value', question: `The mean of ${n} numbers ${listText(known)} and <i>k</i> is ${m}. Find <i>k</i>.`,
+          steps: [{ t: m * n, label: 'Total of all numbers = mean × N' }, { t: sum(known), label: 'Total of the known numbers' }], final: { t: k, label: '<i>k</i>' },
+          solution: [`Mean × N = total, so the total is ${m} × ${n} = ${m * n}`, `Known numbers add to ${sum(known)}`, `k = ${m * n} − ${sum(known)} = <b>${k}</b>`] };
+      }
+    }
+  ],
+  hard: [
+    function groupedMean() {
+      const cl = makeClasses(), st = groupedStats(cl);
+      return { topic: 'avg', title: 'Mean of grouped data', question: 'Marks of students in a quiz. Estimate the mean mark.', data: dataTable(cl.map(c => `${c.lo} – ${c.hi}`), cl.map(c => c.f), 'Marks'),
+        grid: { headers: ['Class', '<i>f</i>', 'Midpoint <i>x</i>', '<i>fx</i>'], rows: cl.map((c, i) => [`${c.lo} – ${c.hi}`, c.f, { t: st.mids[i] }, { t: st.fx[i] }]), foot: ['Σ', { t: st.N }, '—', { t: st.sumFx }] },
+        steps: [], final: { t: st.mean, label: `Mean ${XBAR}` },
+        solution: [`Midpoints: ${st.mids.map(x => fmt(x)).join(', ')}`, `Σfx = ${fmt(st.sumFx)}, Σf = ${st.N}`, `${XBAR} = ${frac(fmt(st.sumFx), st.N)} = <b>${fmt(st.mean)}</b>`] };
+    },
+    function groupedMedian() {
+      const cl = makeClasses(), st = groupedStats(cl), mc = cl[st.mi];
+      return { topic: 'avg', title: 'Median of grouped data', question: 'Masses (kg) of parcels at a post office. Estimate the median mass.', data: dataTable(cl.map(c => `${c.lo} – ${c.hi}`), cl.map(c => c.f), 'Mass (kg)'),
+        grid: { headers: ['Class', '<i>f</i>', 'Cumulative <i>F</i>'], rows: cl.map((c, i) => [`${c.lo} – ${c.hi}`, c.f, { t: st.cum[i] }]) },
+        steps: [{ t: st.half, label: 'N ÷ 2' }, { t: st.L, label: 'L' }, { t: st.F, label: 'F' }, { t: st.fm, label: 'f<sub>m</sub>' }, { t: st.width, label: 'c' }],
+        final: { t: st.medianEst, label: 'Median' },
+        solution: [`N = ${st.N}, so N ÷ 2 = ${fmt(st.half)}. Cumulative F: ${st.cum.join(', ')}`, `Median class: ${mc.lo} – ${mc.hi}, so L = ${fmt(st.L)}, F = ${st.F}, f<sub>m</sub> = ${st.fm}, c = ${st.width}`,
+          `Median = ${fmt(st.L)} + ${frac(fmt(st.half) + ' − ' + st.F, st.fm)} × ${st.width} = <b>${fmt(st.medianEst)}</b>`] };
+    },
+    function sdFreq() {
+      const k = 4, s0 = randInt(1, 5), xs = Array.from({ length: k }, (_, i) => s0 + i), fs = Array.from({ length: k }, () => randInt(1, 9)), st = freqStats(xs, fs), q = st.sumFx2 / st.N;
+      return { topic: 'spread', title: 'Standard deviation from a frequency table', question: 'Books read last month by members of a club. Find the standard deviation.', data: dataTable(xs, fs, 'Books <i>x</i>'),
+        grid: { headers: ['<i>x</i>', '<i>f</i>', '<i>fx</i>', '<i>fx</i>²'], rows: xs.map((x, i) => [x, fs[i], { t: st.fx[i] }, { t: st.fx2[i] }]), foot: ['Σ', { t: st.N }, { t: st.sumFx }, { t: st.sumFx2 }] },
+        steps: [{ t: st.mean, label: `Mean ${XBAR}` }, { t: st.variance, label: 'Variance σ²' }], final: { t: st.sd, label: 'Standard deviation σ' },
+        solution: [`Σf = ${st.N}, Σfx = ${st.sumFx}, Σfx² = ${st.sumFx2}`, `${XBAR} = ${frac(st.sumFx, st.N)} = ${fmt(st.mean, 4)}`,
+          `σ² = ${frac(st.sumFx2, st.N)} − ${fmt(st.mean, 4)}² = ${fmt(q, 4)} − ${fmt(st.mean ** 2, 4)} = ${fmt(st.variance, 4)}`, `σ = √${fmt(st.variance, 4)} = <b>${fmt(st.sd)}</b>`] };
+    },
+    function missingFrequency() {
+      // Pick k first, then only keep tables whose mean has at most 2 decimal places.
+      for (let tries = 0; tries < 5000; tries++) {
+        const xs = [0, 1, 2, 3, 4], fs = Array.from({ length: 5 }, () => randInt(2, 10)), j = randInt(0, 4), k = randInt(2, 12);
+        fs[j] = k;
+        const m = sum(xs.map((x, i) => x * fs[i])) / sum(fs);
+        if (!isWhole(m * 100) || Math.abs(xs[j] - m) < 0.5) continue;
+        const f0 = sum(fs) - k, fx0 = sum(xs.map((x, i) => x * fs[i])) - xs[j] * k;
+        const shown = fs.map((f, i) => (i === j ? '<i>k</i>' : f));
+        return { topic: 'avg', title: 'Missing frequency', question: `Number of siblings of students in a class. The mean is ${fmt(m)}. Find <i>k</i>.`, data: dataTable(xs, shown, 'Siblings <i>x</i>'),
+          steps: [{ t: f0, label: 'Σf of the known rows' }, { t: fx0, label: 'Σfx of the known rows' }], final: { t: k, label: '<i>k</i>' },
+          solution: [`Σf = ${f0} + k and Σfx = ${fx0} + ${xs[j]}k`, `Mean = Σfx ÷ Σf, so ${fmt(m)}(${f0} + k) = ${fx0} + ${xs[j]}k`,
+            `${fmt(m * f0)} + ${fmt(m)}k = ${fx0} + ${xs[j]}k → ${fmt(m - xs[j])}k = ${fmt(fx0 - m * f0)}`, `k = ${frac(fmt(fx0 - m * f0), fmt(m - xs[j]))} = <b>${k}</b>`] };
+      }
+      return GENERATORS.hard[0]();                  // extremely unlikely fallback
+    },
+    function transform() {
+      const m0 = randInt(-5, 20), s0 = randInt(1, 6), a = pick([-3, -2, 2, 3, 4, 0.5]), b = randInt(-10, 10);
+      const nm = a * m0 + b, ns = Math.abs(a) * s0;
+      return { topic: 'spread', title: 'Changing every value', question: `A set of data has mean ${fmt(m0)} and standard deviation ${s0}. Every value is multiplied by ${fmt(a)} and then ${b < 0 ? fmt(-b) + ' is subtracted' : fmt(b) + ' is added'}. Find the new standard deviation.`,
+        steps: [{ t: nm, label: 'New mean' }, { t: a * a * s0 * s0, label: 'New variance' }], final: { t: ns, label: 'New σ' },
+        solution: [`New mean = ${fmt(a)} × ${br(m0)} + ${br(b)} = ${fmt(nm)}`, `Adding or subtracting does not change the spread. Multiplying by ${fmt(a)} scales σ by |${fmt(a)}| = ${fmt(Math.abs(a))}.`,
+          `New σ = ${fmt(Math.abs(a))} × ${s0} = <b>${fmt(ns)}</b> (new variance = ${fmt(ns)}² = ${fmt(ns * ns)})`] };
+    }
+  ]
+};
+
+/* =====================================================================
+   14. Practice: state, scoring and rendering
+   ===================================================================== */
+const P = { problem: null, level: 'easy', scored: false, attempted: 0, correct: 0, streak: 0, best: 0,
+  byLevel: { easy: [0, 0], medium: [0, 0], hard: [0, 0] }, inputs: [] };
+const LEVEL_NAME = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
+function updateScore() {
+  $('pScore').textContent = `${P.correct} / ${P.attempted}`;
+  $('pAcc').textContent = P.attempted ? Math.round(P.correct / P.attempted * 100) + '%' : '—';
+  $('pStreak').textContent = P.streak;
+  $('pLevels').textContent = Object.keys(P.byLevel).map(k => `${LEVEL_NAME[k]}: ${P.byLevel[k][0]} / ${P.byLevel[k][1]}`).join(' · ') + ` · Best streak: ${P.best}`;
+}
+function score(ok) {
+  if (P.scored) return;
+  P.scored = true; P.attempted++; P.byLevel[P.level][1]++;
+  if (ok) { P.correct++; P.streak++; P.byLevel[P.level][0]++; P.best = Math.max(P.best, P.streak); } else P.streak = 0;
+  updateScore();
+}
+function newProblem() {
+  P.level = $('pLevel').value;
+  const topic = $('pTopic').value;
+  let pool = GENERATORS[P.level].map(g => g());
+  if (topic !== 'mixed') pool = pool.filter(p => p.topic === topic);
+  if (!pool.length) pool = GENERATORS[P.level].map(g => g());
+  const p = pick(pool);
+  P.problem = p; P.scored = false;
+  $('pTag').className = 'pill ' + P.level;
+  $('pTag').textContent = `${LEVEL_NAME[P.level]} · ${p.title}`;
+  $('pQuestion').innerHTML = p.question;
+  $('pData').innerHTML = p.data || '';
+  P.inputs = p.grid ? buildGrid($('pGrid'), p.grid.headers, p.grid.rows, p.grid.foot) : [];
+  if (!p.grid) $('pGrid').innerHTML = '';
+  if (p.grid) $('pGrid').insertAdjacentHTML('afterbegin', '<p class="progressline" style="margin:10px 0 0">Box method: fill the table first (it checks itself as you type).</p>');
+  P.inputs.push(...buildFlow($('pFlow'), p.steps));
+  $('pFinalLabel').innerHTML = p.final.label;
+  $('pAnswer').value = ''; $('pAnswer').classList.remove('good', 'bad'); $('pAnswer').removeAttribute('aria-invalid');
+  $('pStatus').textContent = ''; $('pStatus').className = 'status';
+  $('pSolution').hidden = true; $('pSolution').innerHTML = '';
+  $('pShow').textContent = 'Show solution';
+}
+function checkAnswer() {
+  const raw = $('pAnswer').value;
+  if (raw.trim() === '') { $('pStatus').textContent = 'Type your final answer first.'; $('pStatus').className = 'status'; return; }
+  if (!Number.isFinite(parseNum(raw))) { $('pStatus').textContent = 'That is not a number. Try something like 4.25, −3 or 17/4.'; $('pStatus').className = 'status no'; return; }
+  const ok = matches(raw, P.problem.final);
+  $('pAnswer').classList.toggle('good', ok); $('pAnswer').classList.toggle('bad', !ok);
+  $('pAnswer').setAttribute('aria-invalid', String(!ok));
+  const first = !P.scored;
+  score(ok);
+  $('pStatus').className = 'status ' + (ok ? 'ok' : 'no');
+  $('pStatus').textContent = ok
+    ? (first ? `✓ Correct! ${P.streak > 2 ? 'Streak of ' + P.streak + ' 🔥' : 'Nice work.'}` : '✓ Correct now. Well done for sticking with it.')
+    : '✗ Not quite. Check the green and red boxes above, or open the solution.';
+}
+function showSolution() {
+  const sol = $('pSolution');
+  if (!sol.hidden) { sol.hidden = true; $('pShow').textContent = 'Show solution'; return; }
+  if (!P.scored) { score(false); $('pStatus').className = 'status'; $('pStatus').textContent = 'Solution opened, so this one counts as a guided attempt. Study it, then try a new problem!'; }
+  sol.innerHTML = `<b>Step-by-step solution</b><ol>${P.problem.solution.map(s => `<li>${s}</li>`).join('')}</ol><p style="margin:0">Answer: <b>${answerText(P.problem.final)}</b></p>`;
+  sol.hidden = false; $('pShow').textContent = 'Hide solution';
+}
+$('pCheck').onclick = checkAnswer;
+$('pAnswer').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
+$('pShow').onclick = showSolution;
+$('pNext').onclick = newProblem;
+$('pLevel').onchange = newProblem;
+$('pTopic').onchange = newProblem;
+
+/* =====================================================================
+   15. Start
+   ===================================================================== */
+newSeason(); newWeek(); renderRaw(); newFreq(); renderDev(); newFv(); newGrouped(); renderTf(); newProblem(); updateScore();
+const startTab = location.hash.slice(1);
+showTab(drawers[startTab] ? startTab : 'intro');
+</script>
+</body>
+</html>

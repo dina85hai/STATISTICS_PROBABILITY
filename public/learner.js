@@ -24,7 +24,11 @@
         { id: 'statistics-notes', title: 'Mean, Mode, Median & Variance', url: 'statistics-notes.html',
           tag: 'Notes', word: 'statistics', c1: '#e6d3f0', c2: '#f7d6de',
           blurb: 'Step-by-step worked examples for raw data, frequency tables and grouped data.',
-          how: 'Copy each step into your notebook as you go.' }
+          how: 'Copy each step into your notebook as you go.' },
+        { id: 'statistics-lab', title: 'Statistics Lab', url: 'statistics-lab.html',
+          tag: 'Lab', word: 'explore', c1: '#d6ecf0', c2: '#e6d3f0',
+          blurb: 'Interactive box-method tables for mean, median, mode, range, variance and standard deviation, with endless practice.',
+          how: 'Fill one box at a time: it turns green when right. Use Hint when stuck, then try the Practice tab.' }
       ]
     },
     {
