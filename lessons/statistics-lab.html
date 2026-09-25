@@ -147,6 +147,9 @@ ol.work>li{margin-bottom:10px}
 .xline{font-family:"Cambria Math","STIX Two Math",Georgia,"Times New Roman",serif;font-size:19px;line-height:2.4;overflow-x:auto;padding:2px 2px 4px}
 .xline .sp-frac{margin:0 .15em}
 .nw{white-space:nowrap}
+input.cell.ib.final{width:7ch;border-width:3px;border-color:var(--blue)}
+input.cell.ib.final.good{border-color:var(--green)}input.cell.ib.final.bad{border-color:var(--red)}
+#practice .xformula{max-width:620px;margin-left:auto;margin-right:auto}
 input.cell.ib{display:inline-block;width:6ch;margin:3px 2px;padding:2px 4px;text-align:center;font:16px system-ui,sans-serif;vertical-align:middle;border-radius:6px}
 .par{display:inline-flex;align-items:center;vertical-align:middle;border-left:1.5px solid currentColor;border-right:1.5px solid currentColor;border-radius:.7em/50%;padding:0 .3em;margin:0 .1em}
 .sqrt{display:inline-flex;align-items:stretch;vertical-align:middle;line-height:1.5}
@@ -167,7 +170,6 @@ input.cell.ib{display:inline-block;width:6ch;margin:3px 2px;padding:2px 4px;text
 .pill.easy{color:var(--green)}.pill.medium{color:var(--amber)}.pill.hard{color:var(--red)}
 .solution{border-left:4px solid var(--green);background:var(--green-soft);border-radius:8px;padding:14px 18px;margin-top:14px}
 .solution ol{margin:6px 0;padding-left:22px}.solution li{margin-bottom:8px}
-.final{max-width:320px}
 .status{font-weight:700;min-height:1.4em}
 .status.ok{color:var(--green)}.status.no{color:var(--red)}
 details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0;background:var(--card)}
@@ -415,13 +417,10 @@ body.sp-lesson header .top{padding-left:max(0px,calc(112px - max(0px,(100vw - 11
     <span id="pTag" class="pill"></span>
     <h2 id="pQuestion" style="margin-top:12px"></h2>
     <div id="pData"></div>
-    <div id="pGrid"></div>
-    <div id="pFlow" class="flow"></div>
-    <div class="final">
-      <label for="pAnswer"><b id="pFinalLabel">Final answer</b></label>
-      <input id="pAnswer" class="cell" type="text" autocomplete="off" spellcheck="false" placeholder="Type your answer">
-    </div>
-    <small>Round to 2 decimal places unless the answer is a whole number. Fractions like 23/4 are accepted.</small>
+    <div id="pFormula" class="xformula"></div>
+    <ol id="pWork" class="work"></ol>
+    <p class="progressline" id="pProgress"></p>
+    <small>The boxes in the working check themselves as you type. The <b>answer box</b> (with the thick border) is scored when you press <b>Check answer</b>. Round to 2 decimal places unless the answer is a whole number. Fractions like 23/4 are accepted.</small>
     <div class="actions">
       <button class="btn primary" id="pCheck">Check answer</button>
       <button class="btn" id="pShow">Show solution</button>
@@ -1337,124 +1336,166 @@ const dataTable = (xs, fs, head = '<i>x</i>') =>
   `<div class="tablewrap" style="display:inline-block;max-width:100%"><table class="data"><tr><th>${head}</th>${xs.map(x => `<td>${x}</td>`).join('')}</tr><tr><th>Frequency <i>f</i></th>${fs.map(f => `<td>${f}</td>`).join('')}</tr></table></div>`;
 const listText = a => a.map(v => fmt(v)).join(', ');
 
+// Every generator returns { topic, title, question, data?, formula, rule?, work, solution }.
+// work is a list of { html, grid?, after? }, written like the formula, with boxes made by
+// the boxer b. The box made with { final: true } is the scored answer: it is only
+// marked when the student presses Check.
+const fin = (b, t, label) => b(t, label, { final: true });
+// Median working for a sorted list or table: one box for an odd count, the middle of two for an even count.
+const medianLine = (b, N, lo, hi, md) => N % 2
+  ? line(`Median = ${fin(b, md, 'Median')}`)
+  : line(`Median = ${frac(b(lo, 'First middle value') + ' + ' + b(hi, 'Second middle value'), 2)} = ${fin(b, md, 'Median')}`);
+
 const GENERATORS = {
   easy: [
-    function meanRaw() {
+    function meanRaw(b) {
       const n = randInt(5, 7), a = Array.from({ length: n }, () => randInt(1, 20)), S = sum(a), m = S / n;
-      return { topic: 'avg', title: 'Mean', question: `Find the mean of: ${listText(a)}`,
-        steps: [{ t: S, label: 'Σx' }, { t: n, label: 'N' }], final: { t: m, label: `Mean ${XBAR}` },
-        solution: [`Add the values: Σx = ${a.join(' + ')} = ${S}`, `Count them: N = ${n}`, `${XBAR} = ${frac(S, n)} = <b>${fmt(m)}</b>`] };
+      return { topic: 'avg', title: 'Mean · raw data', question: `Find the mean of: ${listText(a)}`, formula: FORMULAS.meanA,
+        work: [
+          { html: 'Add them all up:' + line(`Σ${V('x')} = ${plusList(a)} = ${b(S, 'Sum of x')}`) },
+          { html: 'Count the numbers, then substitute into the formula:' + line(`${XBAR} = ${frac(b(S, 'Sum of x'), b(n, 'N'))} = ${fin(b, m, 'Mean')}`) }],
+        solution: [`Σx = ${a.join(' + ')} = ${S}`, `N = ${n}`, `${XBAR} = ${frac(S, n)} = <b>${fmt(m)}</b>`] };
     },
-    function medianRaw() {
+    function medianRaw(b) {
       const n = randInt(5, 8), a = Array.from({ length: n }, () => randInt(1, 30)), s = [...a].sort((x, y) => x - y), md = median(s), pos = (n + 1) / 2;
-      return { topic: 'avg', title: 'Median', question: `Find the median of: ${listText(a)}`,
-        steps: [{ t: pos, label: 'Median position (N + 1) ÷ 2' }], final: { t: md, label: 'Median' },
-        solution: [`Sort first: ${listText(s)}`, `Position = ${frac(n + ' + 1', 2)} = ${fmt(pos)}`,
-          n % 2 ? `The ${fmt(pos)}th value is <b>${fmt(md)}</b>.` : `Halfway between the ${n / 2}th and ${n / 2 + 1}th values: ${frac(s[n / 2 - 1] + ' + ' + s[n / 2], 2)} = <b>${fmt(md)}</b>`] };
+      const lo = n % 2 ? md : s[n / 2 - 1], hi = n % 2 ? md : s[n / 2];
+      return { topic: 'avg', title: 'Median · raw data', question: `Find the median of: ${listText(a)}`, formula: FORMULAS.medA,
+        work: [
+          { html: 'Sort the numbers first (on paper), then substitute into the formula:' + line(`Position = ${frac(b(n, 'N') + ' + 1', 2)} = ${b(pos, 'Position of median')}`) },
+          { html: (n % 2 ? 'Count along the sorted list to that position:' : 'The position is halfway between two values, so take the middle of the two:') + medianLine(b, n, lo, hi, md) }],
+        solution: [`Sort: ${listText(s)}`, `Position = ${frac(n + ' + 1', 2)} = ${fmt(pos)}`,
+          n % 2 ? `The ${nth(pos)} value is <b>${fmt(md)}</b>.` : `Halfway between the ${nth(n / 2)} and ${nth(n / 2 + 1)} values: ${frac(lo + ' + ' + hi, 2)} = <b>${fmt(md)}</b>`] };
     },
-    function modeRaw() {
+    function modeRaw(b) {
       // The mode appears 3 times; every other value at most twice.
       const mv = randInt(1, 12), others = shuffle(Array.from({ length: 12 }, (_, i) => i + 1).filter(v => v !== mv)).slice(0, randInt(3, 5));
       const a = shuffle([mv, mv, mv, ...others, ...(Math.random() < 0.6 ? [others[0]] : [])]);
-      return { topic: 'avg', title: 'Mode', question: `Shoe sizes of a group of friends: ${listText(a)}. Find the mode.`,
-        steps: [{ t: 3, label: 'How many times does the most common value appear?' }], final: { t: mv, label: 'Mode' },
+      return { topic: 'avg', title: 'Mode · raw data', question: `Shoe sizes of a group of friends: ${listText(a)}. Find the mode.`, formula: FORMULAS.modeA, rule: true,
+        work: [
+          { html: 'Sort the numbers and count each one:' + line(`The most common value appears ${b(3, 'How many times')} times`) },
+          { html: 'So:' + line(`Mode = ${fin(b, mv, 'Mode')}`) }],
         solution: [`Sort to make counting easy: ${listText([...a].sort((x, y) => x - y))}`, `${mv} appears 3 times, more than any other size.`, `Mode = <b>${mv}</b>`] };
     },
-    function rangeTemps() {
+    function rangeTemps(b) {
       const n = 6, a = Array.from({ length: n }, () => randInt(-10, 15));
       if (Math.min(...a) >= 0) a[randInt(0, n - 1)] = randInt(-10, -1);   // always include a negative
       const mx = Math.max(...a), mn = Math.min(...a);
-      return { topic: 'spread', title: 'Range with negatives', question: `Midnight temperatures (°C) in a mountain town: ${listText(a)}. Find the range.`,
-        steps: [{ t: mx, label: 'Largest value' }, { t: mn, label: 'Smallest value' }], final: { t: mx - mn, label: 'Range (°C)' },
+      return { topic: 'spread', title: 'Range with negatives', question: `Midnight temperatures (°C) in a mountain town: ${listText(a)}. Find the range.`, formula: FORMULAS.range,
+        work: [{ html: 'Find the largest and smallest values, then substitute into the formula:' + line(`Range = ${b(mx, 'Largest value')} − (${b(mn, 'Smallest value')}) = ${fin(b, mx - mn, 'Range')}`) }],
         solution: [`Largest = ${fmt(mx)}, smallest = ${fmt(mn)}`, `Range = ${fmt(mx)} − ${br(mn)} = <b>${fmt(mx - mn)}</b> °C`, 'Subtracting a negative is the same as adding.'] };
     }
   ],
   medium: [
-    function meanFreq() {
+    function meanFreq(b) {
       const k = randInt(4, 5), s0 = randInt(0, 4), xs = Array.from({ length: k }, (_, i) => s0 + i), fs = Array.from({ length: k }, () => randInt(1, 12)), st = freqStats(xs, fs);
-      return { topic: 'avg', title: 'Mean from a frequency table', question: 'Number of goals per match in a school league. Find the mean.', data: dataTable(xs, fs, 'Goals <i>x</i>'),
-        grid: { headers: ['<i>x</i>', '<i>f</i>', '<i>fx</i>'], rows: xs.map((x, i) => [x, fs[i], { t: st.fx[i] }]), foot: ['Σ', { t: st.N }, { t: st.sumFx }] },
-        steps: [], final: { t: st.mean, label: `Mean ${XBAR}` },
+      return { topic: 'avg', title: 'Mean · frequency table', question: 'Number of goals per match in a school league. Find the mean.', data: dataTable(xs, fs, 'Goals <i>x</i>'), formula: FORMULAS.meanB,
+        work: [
+          { html: 'Multiply each value by its frequency (<i>f</i> × <i>x</i>):', grid: { headers: ['<i>x</i>', '<i>f</i>', '<i>fx</i>'], rows: xs.map((x, i) => [x, fs[i], { t: st.fx[i] }]), foot: ['Σ', { t: st.N }, { t: st.sumFx }] } },
+          { html: 'Substitute into the formula:' + line(`${XBAR} = ${frac(b(st.sumFx, 'Sum of fx'), b(st.N, 'Sum of f'))} = ${fin(b, st.mean, 'Mean')}`) }],
         solution: [`Multiply each x by its f: ${st.fx.join(', ')}`, `Σfx = ${st.sumFx}, Σf = ${st.N}`, `${XBAR} = ${frac(st.sumFx, st.N)} = <b>${fmt(st.mean)}</b>`] };
     },
-    function medianFreq() {
-      const k = randInt(4, 5), s0 = randInt(1, 5), xs = Array.from({ length: k }, (_, i) => s0 + i), fs = Array.from({ length: k }, () => randInt(2, 10)), st = freqStats(xs, fs), N = st.N;
-      return { topic: 'avg', title: 'Median from a frequency table', question: 'Family sizes in a housing area. Find the median.', data: dataTable(xs, fs, 'People <i>x</i>'),
-        grid: { headers: ['<i>x</i>', '<i>f</i>', 'Cumulative <i>f</i>'], rows: xs.map((x, i) => [x, fs[i], { t: st.cum[i] }]) },
-        steps: [{ t: N, label: 'N = Σf' }, { t: (N + 1) / 2, label: 'Median position (N + 1) ÷ 2' }], final: { t: st.median, label: 'Median' },
-        solution: [`Cumulative f: ${st.cum.join(', ')}. So N = ${N}.`, `Position = ${frac(N + ' + 1', 2)} = ${fmt((N + 1) / 2)}`,
-          N % 2 ? `The first cumulative f to reach ${fmt((N + 1) / 2)} belongs to x = ${fmt(st.median)}. Median = <b>${fmt(st.median)}</b>`
-            : `Look up the ${N / 2}th and ${N / 2 + 1}th values in the cumulative f column and take the value halfway between them. Median = <b>${fmt(st.median)}</b>`] };
+    function medianFreq(b) {
+      const k = randInt(4, 5), s0 = randInt(1, 5), xs = Array.from({ length: k }, (_, i) => s0 + i), fs = Array.from({ length: k }, () => randInt(2, 10)), st = statsB(xs, fs), N = st.N;
+      return { topic: 'avg', title: 'Median · frequency table', question: 'Family sizes in a housing area. Find the median.', data: dataTable(xs, fs, 'People <i>x</i>'), formula: FORMULAS.medB,
+        work: [
+          { html: 'Add a cumulative frequency column (a running total of <i>f</i>):', grid: { headers: ['<i>x</i>', '<i>f</i>', 'Cumulative <i>f</i>'], rows: xs.map((x, i) => [x, fs[i], { t: st.cum[i] }]) } },
+          { html: 'Substitute into the formula:' + line(`Position = ${frac(b(N, 'N = sum of f') + ' + 1', 2)} = ${b(st.pos, 'Position of median')}`) },
+          { html: (N % 2 ? 'The median is the value in the first row whose cumulative <i>f</i> reaches the position:' : 'The position is halfway between two values. Look both up, then take the middle of the two:') + medianLine(b, N, st.lo, st.hi, st.median) }],
+        solution: [`Cumulative f: ${st.cum.join(', ')}. So N = ${N}.`, `Position = ${frac(N + ' + 1', 2)} = ${fmt(st.pos)}`,
+          N % 2 ? `The first cumulative f to reach ${fmt(st.pos)} belongs to x = ${fmt(st.median)}. Median = <b>${fmt(st.median)}</b>`
+            : `${nth(N / 2)} value = ${fmt(st.lo)}, ${nth(N / 2 + 1)} value = ${fmt(st.hi)}, so Median = ${frac(fmt(st.lo) + ' + ' + fmt(st.hi), 2)} = <b>${fmt(st.median)}</b>`] };
     },
-    function sdRaw() {
+    function sdRaw(b) {
       let a;
       do { a = Array.from({ length: 5 }, () => randInt(1, 15)); } while (sum(a) % 5 || new Set(a).size < 2);
-      const m = sum(a) / 5, d = a.map(x => x - m), sq = d.map(x => x * x), SS = sum(sq), v = SS / 5;
-      return { topic: 'spread', title: 'Standard deviation', question: `Minutes late for 5 buses: ${listText(a)}. Find the standard deviation.`,
-        grid: { headers: ['<i>x</i>', '<i>x</i> − x̄', '(<i>x</i> − x̄)²'], rows: a.map((x, i) => [x, { t: d[i] }, { t: sq[i] }]), foot: ['Σ', { t: 0, tol: 0.011 }, { t: SS }] },
-        steps: [{ t: m, label: `Mean ${XBAR}` }, { t: v, label: 'Variance σ²' }], final: { t: Math.sqrt(v), label: 'Standard deviation σ' },
-        solution: [`${XBAR} = ${frac(sum(a), 5)} = ${fmt(m)}`, `Deviations: ${d.map(x => fmt(x)).join(', ')}. Squares: ${sq.join(', ')}`, `Σ(x − x̄)² = ${SS}, so σ² = ${frac(SS, 5)} = ${fmt(v, 4)}`, `σ = √${fmt(v, 4)} = <b>${fmt(Math.sqrt(v))}</b>`] };
+      const S = sum(a), m = S / 5, sq = a.map(x => x * x), S2 = sum(sq), v = S2 / 5 - m * m, sd = Math.sqrt(v);
+      return { topic: 'spread', title: 'Standard deviation · raw data', question: `Minutes late for 5 buses: ${listText(a)}. Find the standard deviation.`, formula: FORMULAS.varA,
+        work: [
+          { html: 'Square each value and add:', grid: { headers: ['<i>x</i>', '<i>x</i>²'], rows: a.map((x, i) => [x, { t: sq[i] }]), foot: ['Σ', { t: S2 }] } },
+          { html: 'Find the mean first:' + line(`${XBAR} = ${frac(b(S, 'Sum of x'), b(5, 'N'))} = ${b(m, 'Mean')}`) },
+          { html: 'Substitute into the formula:' + line(`${SIG}² = ${frac(b(S2, 'Sum of x squared'), b(5, 'N'))} − ${b(m, 'Mean')}² = ${b(v, 'Variance')}`) },
+          { html: 'Standard deviation:' + line(`${SIG} = ${rad(b(v, 'Variance'))} = ${fin(b, sd, 'Standard deviation')}`) }],
+        solution: [`Σx² = ${sq.join(' + ')} = ${S2}`, `${XBAR} = ${frac(S, 5)} = ${fmt(m)}`, `σ² = ${frac(S2, 5)} − ${fmt(m)}² = ${fmt(S2 / 5, 4)} − ${fmt(m * m)} = ${fmt(v, 4)}`, `σ = √${fmt(v, 4)} = <b>${fmt(sd)}</b>`] };
     },
-    function groupedRange() {
+    function groupedRange(b) {
       const cl = makeClasses(), a = cl[0], z = cl[cl.length - 1], m1 = (a.lo + a.hi) / 2, m2 = (z.lo + z.hi) / 2;
-      return { topic: 'grouped', title: 'Range of grouped data', question: `${cl.ctx.text} Find the range of this grouped data.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'),
-        steps: [{ t: m2, label: 'Midpoint of the last class' }, { t: m1, label: 'Midpoint of the first class' }], final: { t: m2 - m1, label: 'Range' },
-        solution: ['Formula: Range = midpoint of last class − midpoint of first class', `Midpoint of the last class (${classLabel(z)}): ${frac(z.lo + ' + ' + z.hi, 2)} = ${fmt(m2)}`,
-          `Midpoint of the first class (${classLabel(a)}): ${frac(a.lo + ' + ' + a.hi, 2)} = ${fmt(m1)}`, `Substitute into the formula: Range = ${fmt(m2)} − ${fmt(m1)} = <b>${fmt(m2 - m1)}</b>`] };
+      return { topic: 'grouped', title: 'Range · grouped data', question: `${cl.ctx.text} Find the range of this grouped data.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'), formula: FORMULAS.rangeC,
+        work: [{ html: `Midpoint of the last class (${classLabel(z)}) and of the first class (${classLabel(a)}):` +
+          line(`Range = ${frac(b(z.lo, 'Lower limit of the last class') + ' + ' + b(z.hi, 'Upper limit of the last class'), 2)} − ${frac(b(a.lo, 'Lower limit of the first class') + ' + ' + b(a.hi, 'Upper limit of the first class'), 2)}`) +
+          line(`= ${b(m2, 'Midpoint of the last class')} − ${b(m1, 'Midpoint of the first class')} = ${fin(b, m2 - m1, 'Range')}`) }],
+        solution: [`Midpoint of the last class (${classLabel(z)}): ${frac(z.lo + ' + ' + z.hi, 2)} = ${fmt(m2)}`,
+          `Midpoint of the first class (${classLabel(a)}): ${frac(a.lo + ' + ' + a.hi, 2)} = ${fmt(m1)}`, `Range = ${fmt(m2)} − ${fmt(m1)} = <b>${fmt(m2 - m1)}</b>`] };
     },
-    function missingValue() {
+    function missingValue(b) {
       for (;;) {
         const n = randInt(4, 6), m = randInt(6, 20), known = Array.from({ length: n - 1 }, () => randInt(2, 30)), k = m * n - sum(known);
         if (k < 0 || k > 40) continue;
         return { topic: 'avg', title: 'Missing value', question: `The mean of ${n} numbers ${listText(known)} and <i>k</i> is ${m}. Find <i>k</i>.`,
-          steps: [{ t: m * n, label: 'Total of all numbers = mean × N' }, { t: sum(known), label: 'Total of the known numbers' }], final: { t: k, label: '<i>k</i>' },
-          solution: [`Mean × N = total, so the total is ${m} × ${n} = ${m * n}`, `Known numbers add to ${sum(known)}`, `k = ${m * n} − ${sum(known)} = <b>${k}</b>`] };
+          formula: `${FORMULAS.meanA} &nbsp;⇒&nbsp; Σ${V('x')} = ${XBAR} × ${V('N')}`,
+          work: [
+            { html: 'The total of all the numbers:' + line(`Σ${V('x')} = ${b(m, 'Mean')} × ${b(n, 'N')} = ${b(m * n, 'Total')}`) },
+            { html: 'Take away the numbers you know:' + line(`${V('k')} = ${b(m * n, 'Total')} − ${par(plusList(known))} = ${fin(b, k, 'k')}`) }],
+          solution: [`Σx = x̄ × N = ${m} × ${n} = ${m * n}`, `Known numbers add to ${sum(known)}`, `k = ${m * n} − ${sum(known)} = <b>${k}</b>`] };
       }
     }
   ],
   hard: [
-    function groupedMean() {
+    function groupedMean(b) {
       const cl = makeClasses(), st = groupedStats(cl);
-      return { topic: 'grouped', title: 'Mean of grouped data', question: `${cl.ctx.text} Estimate the mean.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'),
-        grid: { headers: ['Class', '<i>f</i>', 'Midpoint <i>x</i>', '<i>fx</i>'], rows: cl.map((c, i) => [`${c.lo} – ${c.hi}`, c.f, { t: st.mids[i] }, { t: st.fx[i] }]), foot: ['Σ', { t: st.N }, '—', { t: st.sumFx }] },
-        steps: [], final: { t: st.mean, label: `Mean ${XBAR}` },
-        solution: ['Formula: x̄ = Σfx ÷ Σf, where x = (lower limit + upper limit) ÷ 2', `Midpoints: ${st.mids.map(x => fmt(x)).join(', ')}`, `Σfx = ${fmt(st.sumFx)}, Σf = ${st.N}`, `${XBAR} = ${frac(fmt(st.sumFx), st.N)} = <b>${fmt(st.mean)}</b>`] };
+      return { topic: 'grouped', title: 'Mean · grouped data', question: `${cl.ctx.text} Estimate the mean.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'), formula: FORMULAS.meanC,
+        work: [
+          { html: 'Use the <b>midpoint</b> of each class as <i>x</i>:', grid: { headers: ['Class', '<i>f</i>', '<i>x</i>', '<i>fx</i>'], rows: cl.map((c, i) => [classLabel(c), c.f, { t: st.mids[i] }, { t: st.fx[i] }]), foot: ['Σ', { t: st.N }, '', { t: st.sumFx }] } },
+          { html: 'Substitute into the formula:' + line(`${XBAR} = ${frac(b(st.sumFx, 'Sum of fx'), b(st.N, 'Sum of f'))} = ${fin(b, st.mean, 'Mean')}`) }],
+        solution: [`Midpoints: ${st.mids.map(x => fmt(x)).join(', ')}`, `Σfx = ${fmt(st.sumFx)}, Σf = ${st.N}`, `${XBAR} = ${frac(fmt(st.sumFx), st.N)} = <b>${fmt(st.mean)}</b>`] };
     },
-    function groupedMedian() {
+    function groupedMedian(b) {
       const cl = makeClasses(), st = groupedStats(cl), mc = cl[st.mi];
-      return { topic: 'grouped', title: 'Median of grouped data', question: `${cl.ctx.text} Estimate the median.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'),
-        grid: { headers: ['Class', '<i>f</i>', 'Cumulative <i>F</i>'], rows: cl.map((c, i) => [`${c.lo} – ${c.hi}`, c.f, { t: st.cum[i] }]) },
-        steps: [{ t: st.half, label: 'N ÷ 2' }, { t: st.L, label: 'L' }, { t: st.F, label: 'F' }, { t: st.fm, label: 'f<sub>m</sub>' }, { t: st.width, label: 'c' }],
-        final: { t: st.medianEst, label: 'Median' },
-        solution: ['Formula: Median = L + ((N/2 − F) ÷ f<sub>m</sub>) × c', `N = ${st.N}, so N ÷ 2 = ${fmt(st.half)}. Cumulative F: ${st.cum.join(', ')}`, `Median class: ${mc.lo} – ${mc.hi}, so L = ${fmt(st.L)}, F = ${st.F}, f<sub>m</sub> = ${st.fm}, c = ${st.width}`,
-          `Median = ${fmt(st.L)} + ${frac(fmt(st.half) + ' − ' + st.F, st.fm)} × ${st.width} = <b>${fmt(st.medianEst)}</b>`] };
+      return { topic: 'grouped', title: 'Median · grouped data', question: `${cl.ctx.text} Estimate the median.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'), formula: FORMULAS.medC,
+        work: [
+          { html: 'Find the middle position:' + line(`${frac(V('N'), 2)} = ${frac(b(st.N, 'N = sum of f'), 2)} = ${b(st.half, 'N over 2')}`) },
+          { html: 'Add a cumulative frequency column. The median class is the first class whose cumulative <i>f</i> reaches N/2:',
+            grid: { headers: ['Class', '<i>f</i>', 'Class boundaries', 'Cumulative <i>f</i>'], rows: cl.map((c, i) => [classLabel(c), c.f, boundLabel(c), { t: st.cum[i] }]) } },
+          { html: `Find ${V('L')}, ${V('F')} (cumulative <i>f</i> <b>before</b> the class), ${FM} and ${V('c')}, then substitute into the formula:` +
+            line(`Median = ${b(st.L, 'L')} + ${par(frac(`${b(st.half, 'N over 2')} − ${b(st.F, 'F')}`, b(st.fm, 'f m')))} <span class="nw">× ${b(st.width, 'c')}</span>`) +
+            line(`= ${fin(b, st.medianEst, 'Median')}`) }],
+        solution: [`N = ${st.N}, so N ÷ 2 = ${fmt(st.half)}. Cumulative f: ${st.cum.join(', ')}`, `Median class: ${classLabel(mc)}, so L = ${fmt(st.L)}, F = ${st.F}, fₘ = ${st.fm}, c = ${st.width}`,
+          `Median = ${fmt(st.L)} + ${par(frac(fmt(st.half) + ' − ' + st.F, st.fm))} × ${st.width} = <b>${fmt(st.medianEst)}</b>`] };
     },
-    function groupedMode() {
+    function groupedMode(b) {
       const cl = makeClasses(), st = groupedStats(cl), oc = cl[st.oi];
-      return { topic: 'grouped', title: 'Mode of grouped data', question: `${cl.ctx.text} Estimate the mode of this grouped data using the formula.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'),
-        steps: [{ t: st.modeL, label: 'L (lower boundary of the modal class)' }, { t: st.d1, label: 'd₁' }, { t: st.d2, label: 'd₂' }, { t: st.width, label: 'c' }],
-        final: { t: st.modeEst, label: 'Mode' },
-        solution: ['Formula: Mode = L + (d₁ ÷ (d₁ + d₂)) × c', `Modal class = the class with the highest frequency = ${classLabel(oc)} (f = ${oc.f}), so L = ${fmt(st.modeL)}`,
-          `d₁ = ${oc.f} − ${st.oi ? cl[st.oi - 1].f : 0} = ${st.d1} (difference with the class before), d₂ = ${oc.f} − ${st.oi < cl.length - 1 ? cl[st.oi + 1].f : 0} = ${st.d2} (difference with the class after), c = ${st.width}`,
-          `Substitute into the formula: Mode = ${fmt(st.modeL)} + (${frac(st.d1, st.d1 + ' + ' + st.d2)}) × ${st.width} = <b>${fmt(st.modeEst)}</b>`] };
+      return { topic: 'grouped', title: 'Mode · grouped data', question: `${cl.ctx.text} Estimate the mode of this grouped data using the formula.`, formula: FORMULAS.modeC,
+        work: [
+          { html: 'Modal class = the class with the highest frequency:', grid: { headers: ['Class', '<i>f</i>', 'Class boundaries'], rows: cl.map(c => [classLabel(c), c.f, boundLabel(c)]) } },
+          { html: `Find ${V('L')}, ${d1} (with the class before), ${d2} (with the class after) and ${V('c')}, then substitute into the formula:` +
+            line(`Mode = ${b(st.modeL, 'L')} + ${par(frac(b(st.d1, 'd1'), `${b(st.d1, 'd1')} + ${b(st.d2, 'd2')}`))} <span class="nw">× ${b(st.width, 'c')}</span>`) +
+            line(`= ${fin(b, st.modeEst, 'Mode')}`) }],
+        solution: [`Modal class = ${classLabel(oc)} (f = ${oc.f}), so L = ${fmt(st.modeL)}`,
+          `d₁ = ${oc.f} − ${st.oi ? cl[st.oi - 1].f : 0} = ${st.d1}, d₂ = ${oc.f} − ${st.oi < cl.length - 1 ? cl[st.oi + 1].f : 0} = ${st.d2}, c = ${st.width}`,
+          `Mode = ${fmt(st.modeL)} + ${par(frac(st.d1, st.d1 + ' + ' + st.d2))} × ${st.width} = <b>${fmt(st.modeEst)}</b>`] };
     },
-    function groupedSD() {
+    function groupedSD(b) {
       const cl = makeClasses(), st = groupedStats(cl), q = st.sumFx2 / st.N;
-      return { topic: 'grouped', title: 'Standard deviation of grouped data', question: `${cl.ctx.text} Find the variance and standard deviation of this grouped data.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'),
-        grid: { headers: ['Class', '<i>f</i>', 'Midpoint <i>x</i>', '<i>fx</i>', '<i>x</i>²', '<i>fx</i>²'], rows: cl.map((c, i) => [classLabel(c), c.f, { t: st.mids[i] }, { t: st.fx[i] }, { t: st.mids[i] ** 2 }, { t: st.fx2[i] }]), foot: ['Σ', { t: st.N }, '—', { t: st.sumFx }, '—', { t: st.sumFx2 }] },
-        steps: [{ t: st.mean, label: `Mean ${XBAR}` }, { t: st.variance, label: 'Variance σ²' }], final: { t: st.sd, label: 'Standard deviation σ' },
-        solution: ['Formula: σ² = Σfx² ÷ Σf − x̄², σ = √σ²', `Use the midpoints as x: Σf = ${st.N}, Σfx = ${fmt(st.sumFx)}, Σfx² = ${fmt(st.sumFx2)}`, `${XBAR} = ${frac(fmt(st.sumFx), st.N)} = ${fmt(st.mean, 4)} (keep the full value)`,
-          `Substitute into the formula: σ² = ${frac(fmt(st.sumFx2), st.N)} − ${fmt(st.mean, 4)}² = ${fmt(q, 4)} − ${fmt(st.mean ** 2, 4)} = ${fmt(st.variance, 4)}`, `σ = √${fmt(st.variance, 4)} = <b>${fmt(st.sd)}</b>`] };
+      return { topic: 'grouped', title: 'Standard deviation · grouped data', question: `${cl.ctx.text} Find the variance and standard deviation of this grouped data.`, data: dataTable(cl.map(classLabel), cl.map(c => c.f), 'Class'), formula: FORMULAS.varBC,
+        work: [
+          { html: 'Use the midpoints as <i>x</i>:', grid: { headers: ['Class', '<i>f</i>', '<i>x</i>', '<i>fx</i>', '<i>x</i>²', '<i>fx</i>²'], rows: cl.map((c, i) => [classLabel(c), c.f, { t: st.mids[i] }, { t: st.fx[i] }, { t: st.mids[i] ** 2 }, { t: st.fx2[i] }]), foot: ['Σ', { t: st.N }, '', { t: st.sumFx }, '', { t: st.sumFx2 }] } },
+          { html: 'Find the mean first (keep the full value):' + line(`${XBAR} = ${frac(b(st.sumFx, 'Sum of fx'), b(st.N, 'Sum of f'))} = ${b(st.mean, 'Mean')}`) },
+          { html: 'Substitute into the formula:' + line(`${SIG}² = ${frac(b(st.sumFx2, 'Sum of fx squared'), b(st.N, 'Sum of f'))} − ${b(st.mean, 'Mean')}² = ${b(st.variance, 'Variance')}`) },
+          { html: 'Standard deviation:' + line(`${SIG} = ${rad(b(st.variance, 'Variance'))} = ${fin(b, st.sd, 'Standard deviation')}`) }],
+        solution: [`Σf = ${st.N}, Σfx = ${fmt(st.sumFx)}, Σfx² = ${fmt(st.sumFx2)}`, `${XBAR} = ${frac(fmt(st.sumFx), st.N)} = ${fmt(st.mean, 4)} (keep the full value)`,
+          `σ² = ${frac(fmt(st.sumFx2), st.N)} − ${fmt(st.mean, 4)}² = ${fmt(q, 4)} − ${fmt(st.mean ** 2, 4)} = ${fmt(st.variance, 4)}`, `σ = √${fmt(st.variance, 4)} = <b>${fmt(st.sd)}</b>`] };
     },
-    function sdFreq() {
+    function sdFreq(b) {
       const k = 4, s0 = randInt(1, 5), xs = Array.from({ length: k }, (_, i) => s0 + i), fs = Array.from({ length: k }, () => randInt(1, 9)), st = freqStats(xs, fs), q = st.sumFx2 / st.N;
-      return { topic: 'spread', title: 'Standard deviation from a frequency table', question: 'Books read last month by members of a club. Find the standard deviation.', data: dataTable(xs, fs, 'Books <i>x</i>'),
-        grid: { headers: ['<i>x</i>', '<i>f</i>', '<i>fx</i>', '<i>fx</i>²'], rows: xs.map((x, i) => [x, fs[i], { t: st.fx[i] }, { t: st.fx2[i] }]), foot: ['Σ', { t: st.N }, { t: st.sumFx }, { t: st.sumFx2 }] },
-        steps: [{ t: st.mean, label: `Mean ${XBAR}` }, { t: st.variance, label: 'Variance σ²' }], final: { t: st.sd, label: 'Standard deviation σ' },
+      return { topic: 'spread', title: 'Standard deviation · frequency table', question: 'Books read last month by members of a club. Find the standard deviation.', data: dataTable(xs, fs, 'Books <i>x</i>'), formula: FORMULAS.varBC,
+        work: [
+          { html: 'Work out <i>fx</i> and <i>fx</i>² for each row:', grid: { headers: ['<i>x</i>', '<i>f</i>', '<i>fx</i>', '<i>fx</i>²'], rows: xs.map((x, i) => [x, fs[i], { t: st.fx[i] }, { t: st.fx2[i] }]), foot: ['Σ', { t: st.N }, { t: st.sumFx }, { t: st.sumFx2 }] } },
+          { html: 'Find the mean first (keep the full value):' + line(`${XBAR} = ${frac(b(st.sumFx, 'Sum of fx'), b(st.N, 'Sum of f'))} = ${b(st.mean, 'Mean')}`) },
+          { html: 'Substitute into the formula:' + line(`${SIG}² = ${frac(b(st.sumFx2, 'Sum of fx squared'), b(st.N, 'Sum of f'))} − ${b(st.mean, 'Mean')}² = ${b(st.variance, 'Variance')}`) },
+          { html: 'Standard deviation:' + line(`${SIG} = ${rad(b(st.variance, 'Variance'))} = ${fin(b, st.sd, 'Standard deviation')}`) }],
         solution: [`Σf = ${st.N}, Σfx = ${st.sumFx}, Σfx² = ${st.sumFx2}`, `${XBAR} = ${frac(st.sumFx, st.N)} = ${fmt(st.mean, 4)}`,
           `σ² = ${frac(st.sumFx2, st.N)} − ${fmt(st.mean, 4)}² = ${fmt(q, 4)} − ${fmt(st.mean ** 2, 4)} = ${fmt(st.variance, 4)}`, `σ = √${fmt(st.variance, 4)} = <b>${fmt(st.sd)}</b>`] };
     },
-    function missingFrequency() {
+    function missingFrequency(b) {
       // Pick k first, then only keep tables whose mean has at most 2 decimal places.
       for (let tries = 0; tries < 5000; tries++) {
         const xs = [0, 1, 2, 3, 4], fs = Array.from({ length: 5 }, () => randInt(2, 10)), j = randInt(0, 4), k = randInt(2, 12);
@@ -1463,20 +1504,26 @@ const GENERATORS = {
         if (!isWhole(m * 100) || Math.abs(xs[j] - m) < 0.5) continue;
         const f0 = sum(fs) - k, fx0 = sum(xs.map((x, i) => x * fs[i])) - xs[j] * k;
         const shown = fs.map((f, i) => (i === j ? '<i>k</i>' : f));
-        return { topic: 'avg', title: 'Missing frequency', question: `Number of siblings of students in a class. The mean is ${fmt(m)}. Find <i>k</i>.`, data: dataTable(xs, shown, 'Siblings <i>x</i>'),
-          steps: [{ t: f0, label: 'Σf of the known rows' }, { t: fx0, label: 'Σfx of the known rows' }], final: { t: k, label: '<i>k</i>' },
+        const kx = xs[j] === 0 ? '0' : xs[j] === 1 ? V('k') : xs[j] + V('k');
+        return { topic: 'avg', title: 'Missing frequency', question: `Number of siblings of students in a class. The mean is ${fmt(m)}. Find <i>k</i>.`, data: dataTable(xs, shown, 'Siblings <i>x</i>'), formula: FORMULAS.meanB,
+          work: [
+            { html: 'Add up the rows you know, then write Σ<i>f</i> and Σ<i>fx</i> with <i>k</i>:' + line(`Σ${V('f')} = ${b(f0, 'Sum of the known f')} + ${V('k')}`) + line(`Σ${V('fx')} = ${b(fx0, 'Sum of the known fx')} + ${kx}`) },
+            { html: 'Substitute into the formula and solve for <i>k</i>:' + line(`${fmt(m)} = ${frac(`${fx0} + ${kx}`, `${f0} + ${V('k')}`)}`) + line(`${V('k')} = ${fin(b, k, 'k')}`) }],
           solution: [`Σf = ${f0} + k and Σfx = ${fx0} + ${xs[j]}k`, `Mean = Σfx ÷ Σf, so ${fmt(m)}(${f0} + k) = ${fx0} + ${xs[j]}k`,
             `${fmt(m * f0)} + ${fmt(m)}k = ${fx0} + ${xs[j]}k → ${fmt(m - xs[j])}k = ${fmt(fx0 - m * f0)}`, `k = ${frac(fmt(fx0 - m * f0), fmt(m - xs[j]))} = <b>${k}</b>`] };
       }
-      return GENERATORS.hard[0]();                  // extremely unlikely fallback
+      return GENERATORS.hard[0](b);                 // extremely unlikely fallback
     },
-    function transform() {
-      const m0 = randInt(-5, 20), s0 = randInt(1, 6), a = pick([-3, -2, 2, 3, 4, 0.5]), b = randInt(-10, 10);
-      const nm = a * m0 + b, ns = Math.abs(a) * s0;
-      return { topic: 'spread', title: 'Changing every value', question: `A set of data has mean ${fmt(m0)} and standard deviation ${s0}. Every value is multiplied by ${fmt(a)} and then ${b < 0 ? fmt(-b) + ' is subtracted' : fmt(b) + ' is added'}. Find the new standard deviation.`,
-        steps: [{ t: nm, label: 'New mean' }, { t: a * a * s0 * s0, label: 'New variance' }], final: { t: ns, label: 'New σ' },
-        solution: [`New mean = ${fmt(a)} × ${br(m0)} + ${br(b)} = ${fmt(nm)}`, `Adding or subtracting does not change the spread. Multiplying by ${fmt(a)} scales σ by |${fmt(a)}| = ${fmt(Math.abs(a))}.`,
-          `New σ = ${fmt(Math.abs(a))} × ${s0} = <b>${fmt(ns)}</b> (new variance = ${fmt(ns)}² = ${fmt(ns * ns)})`] };
+    function transform(b) {
+      const m0 = randInt(-5, 20), s0 = randInt(1, 6), a = pick([-3, -2, 2, 3, 4, 0.5]), add = randInt(-10, 10);
+      const nm = a * m0 + add, ns = Math.abs(a) * s0;
+      return { topic: 'spread', title: 'Changing every value', question: `A set of data has mean ${fmt(m0)} and standard deviation ${s0}. Every value is multiplied by ${fmt(a)} and then ${add < 0 ? fmt(-add) + ' is subtracted' : fmt(add) + ' is added'}. Find the new standard deviation.`,
+        formula: `new ${XBAR} = ${V('m')} × ${XBAR} + ${V('k')}<br>new ${SIG} = |${V('m')}| × ${SIG}${legend('m = multiply by · k = add (a subtraction is a negative k)')}`,
+        work: [
+          { html: 'The new mean moves and stretches:' + line(`new ${XBAR} = ${b(a, 'm')} × ${par(b(m0, 'Old mean'))} + ${par(b(add, 'k'))} = ${b(nm, 'New mean')}`) },
+          { html: 'Adding does not change the spread. Only the multiplication does:' + line(`new ${SIG} = |${b(a, 'm')}| × ${b(s0, 'Old standard deviation')} = ${fin(b, ns, 'New standard deviation')}`) }],
+        solution: [`New mean = ${fmt(a)} × ${br(m0)} + ${br(add)} = ${fmt(nm)}`, `Adding or subtracting does not change the spread. Multiplying by ${fmt(a)} scales σ by |${fmt(a)}| = ${fmt(Math.abs(a))}.`,
+          `New σ = ${fmt(Math.abs(a))} × ${s0} = <b>${fmt(ns)}</b>`] };
     }
   ]
 };
@@ -1502,30 +1549,53 @@ function score(ok) {
 function newProblem() {
   P.level = $('pLevel').value;
   const topic = $('pTopic').value;
-  let pool = GENERATORS[P.level].map(g => g());
+  const make = g => { const b = boxer(), p = g(b); p.box = b; return p; };
+  let pool = GENERATORS[P.level].map(make);
   if (topic !== 'mixed') pool = pool.filter(p => p.topic === topic);
-  if (!pool.length) pool = GENERATORS[P.level].map(g => g());
+  if (!pool.length) pool = GENERATORS[P.level].map(make);
   const p = pick(pool);
   P.problem = p; P.scored = false;
   $('pTag').className = 'pill ' + P.level;
   $('pTag').textContent = `${LEVEL_NAME[P.level]} · ${p.title}`;
   $('pQuestion').innerHTML = p.question;
   $('pData').innerHTML = p.data || '';
-  P.inputs = p.grid ? buildGrid($('pGrid'), p.grid.headers, p.grid.rows, p.grid.foot) : [];
-  if (!p.grid) $('pGrid').innerHTML = '';
-  if (p.grid) $('pGrid').insertAdjacentHTML('afterbegin', '<p class="progressline" style="margin:10px 0 0">Box method: fill the table first (it checks itself as you type).</p>');
-  P.inputs.push(...buildFlow($('pFlow'), p.steps));
-  $('pFinalLabel').innerHTML = p.final.label;
-  $('pAnswer').value = ''; $('pAnswer').classList.remove('good', 'bad'); $('pAnswer').removeAttribute('aria-invalid');
+  $('pFormula').innerHTML = `<small>${p.rule ? 'Rule' : 'Formula'}</small>${p.formula}`;
+  // The scored box is a plain input: it is only marked by Check answer.
+  const specs = p.box.specs, fi = specs.findIndex(s => s.final);
+  P.final = specs[fi];
+  const ol = $('pWork'); ol.innerHTML = '';
+  P.inputs = [];
+  const progress = () => {
+    const good = P.inputs.filter(i => i.classList.contains('good')).length;
+    $('pProgress').innerHTML = P.inputs.length ? `Working boxes correct: <b>${good}</b> of ${P.inputs.length}` : '';
+  };
+  const place = root => {
+    const slot = root.querySelector(`[data-box="${fi}"]`);
+    if (slot) {
+      const inp = el('input', 'cell ib final'); inp.id = 'pAnswer';
+      inp.type = 'text'; inp.autocomplete = 'off'; inp.spellcheck = false; inp.placeholder = '?';
+      inp.setAttribute('aria-label', P.final.label + ' (your answer)');
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
+      slot.replaceWith(inp);
+    }
+    P.inputs.push(...fillSlots(root, specs, progress));
+  };
+  p.work.forEach(s => {
+    const li = el('li', null, s.html);
+    place(li);
+    if (s.grid) { const d = el('div'); P.inputs.push(...buildGrid(d, s.grid.headers, s.grid.rows, s.grid.foot, progress)); li.append(d); }
+    ol.append(li);
+  });
+  progress();
   $('pStatus').textContent = ''; $('pStatus').className = 'status';
   $('pSolution').hidden = true; $('pSolution').innerHTML = '';
   $('pShow').textContent = 'Show solution';
 }
 function checkAnswer() {
   const raw = $('pAnswer').value;
-  if (raw.trim() === '') { $('pStatus').textContent = 'Type your final answer first.'; $('pStatus').className = 'status'; return; }
+  if (raw.trim() === '') { $('pStatus').textContent = 'Type your answer in the answer box first.'; $('pStatus').className = 'status'; return; }
   if (!Number.isFinite(parseNum(raw))) { $('pStatus').textContent = 'That is not a number. Try something like 4.25, −3 or 17/4.'; $('pStatus').className = 'status no'; return; }
-  const ok = matches(raw, P.problem.final);
+  const ok = matches(raw, P.final);
   $('pAnswer').classList.toggle('good', ok); $('pAnswer').classList.toggle('bad', !ok);
   $('pAnswer').setAttribute('aria-invalid', String(!ok));
   const first = !P.scored;
@@ -1533,17 +1603,16 @@ function checkAnswer() {
   $('pStatus').className = 'status ' + (ok ? 'ok' : 'no');
   $('pStatus').textContent = ok
     ? (first ? `✓ Correct! ${P.streak > 2 ? 'Streak of ' + P.streak + ' 🔥' : 'Nice work.'}` : '✓ Correct now. Well done for sticking with it.')
-    : '✗ Not quite. Check the green and red boxes above, or open the solution.';
+    : '✗ Not quite. Check the green and red boxes in the working, or open the solution.';
 }
 function showSolution() {
   const sol = $('pSolution');
   if (!sol.hidden) { sol.hidden = true; $('pShow').textContent = 'Show solution'; return; }
   if (!P.scored) { score(false); $('pStatus').className = 'status'; $('pStatus').textContent = 'Solution opened, so this one counts as a guided attempt. Study it, then try a new problem!'; }
-  sol.innerHTML = `<b>Step-by-step solution</b><ol>${P.problem.solution.map(s => `<li>${s}</li>`).join('')}</ol><p style="margin:0">Answer: <b>${answerText(P.problem.final)}</b></p>`;
+  sol.innerHTML = `<b>Step-by-step solution</b><ol>${P.problem.solution.map(s => `<li>${s}</li>`).join('')}</ol><p style="margin:0">Answer: <b>${answerText(P.final)}</b></p>`;
   sol.hidden = false; $('pShow').textContent = 'Hide solution';
 }
 $('pCheck').onclick = checkAnswer;
-$('pAnswer').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
 $('pShow').onclick = showSolution;
 $('pNext').onclick = newProblem;
 $('pLevel').onchange = newProblem;

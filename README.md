@@ -8,7 +8,7 @@ https://dina85hai.github.io/STATISTICS_PROBABILITY/
 1. **Statistics**: Mean, Mode, Median, Range, Variance & Standard Deviation (`statistics-notes.html`) → Statistics Lab (`lessons/statistics-lab.html`):
    an Exercise tab laid out like the notes: the same three problems (A raw data, B frequency table, C grouped data)
    side by side for each step (mean, mode, median, range, variance & σ), with the notes' formulas and answer boxes
-   placed inside the formula, plus a practice tab of random questions
+   placed inside the formula, plus a practice tab of random questions worked the same way
 2. **Probability**: Presentation (`presentation.html`) → Travel Edition (`lessons/probability-destinations.html`):
    syllabus 4.3 subtopics with interactive destination examples → Practice (`lessons/probability-practice.html`): every exercise on one page,
    grouped by skill and ordered from easy to hard
