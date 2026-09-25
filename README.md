@@ -5,7 +5,8 @@ https://dina85hai.github.io/STATISTICS_PROBABILITY/
 
 ## Learning path
 
-1. **Statistics**: Mean, Mode, Median, Range, Variance & Standard Deviation (`statistics-notes.html`)
+1. **Statistics**: Mean, Mode, Median, Range, Variance & Standard Deviation (`statistics-notes.html`) → Statistics Lab (`lessons/statistics-lab.html`):
+   box-method tables for averages, spread and grouped data, with a practice tab of random questions
 2. **Probability**: Presentation (`presentation.html`) → Travel Edition (`lessons/probability-destinations.html`):
    syllabus 4.3 subtopics with interactive destination examples → Practice (`lessons/probability-practice.html`): every exercise on one page,
    grouped by skill and ordered from easy to hard
