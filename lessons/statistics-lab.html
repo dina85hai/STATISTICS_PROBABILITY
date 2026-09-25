@@ -1595,7 +1595,13 @@ newSeason(); newWeek(); renderRaw(); newFreq(); renderDev(); newFv(); groupedNot
 const startTab = location.hash.slice(1);
 showTab(drawers[startTab] ? startTab : 'intro');
 // A #tab link would otherwise make the browser jump to the section, below the heading.
-window.addEventListener('load', () => window.scrollTo(0, 0));
+// The browser may do that jump during or just after load, so undo it on both.
+if (location.hash) {
+  try { history.scrollRestoration = 'manual'; } catch (e) { /* old browser */ }
+  const toTop = () => window.scrollTo(0, 0);
+  toTop();
+  window.addEventListener('load', () => { toTop(); setTimeout(toTop, 0); setTimeout(toTop, 150); });
+}
 </script>
 </body>
 </html>

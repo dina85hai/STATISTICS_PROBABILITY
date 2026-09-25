@@ -28,7 +28,14 @@
         { id: 'statistics-lab', title: 'Statistics Lab', url: 'statistics-lab.html',
           tag: 'Lab', word: 'explore', c1: '#d6ecf0', c2: '#e6d3f0',
           blurb: 'Interactive box-method tables for mean, median, mode, range, variance and standard deviation, a grouped data tab that follows the notes step by step, and endless practice.',
-          how: 'Fill one box at a time: it turns green when right. Use Hint when stuck, then try the Practice tab.' }
+          how: 'Fill one box at a time: it turns green when right. Use Hint when stuck, then try the Practice tab.',
+          // Quick links on the landing page card, straight to a tab of the lab.
+          sections: [
+            { label: '📘 Averages', hash: 'averages' },
+            { label: '📗 Spread', hash: 'spread' },
+            { label: '📊 Grouped data', hash: 'grouped' },
+            { label: '🎮 Practice', hash: 'practice' }
+          ] }
       ]
     },
     {
@@ -269,11 +276,21 @@
         '<h3 class="topic-title">' + escapeHtml(topic.title) + '</h3>' +
         '<p class="topic-intro">' + escapeHtml(topic.intro) + '</p><div class="grid">';
       topic.lessons.forEach(function (l, i) {
-        html += '<a class="card" href="' + escapeHtml(l.url) + '" data-lesson-card="' + escapeHtml(l.id) + '">' +
-          '<div class="thumb" style="--c1:' + escapeHtml(l.c1) + ';--c2:' + escapeHtml(l.c2) + '"><span class="step">' + (i + 1) + '</span><span>' + escapeHtml(l.word) + '</span></div>' +
+        var inner = '<div class="thumb" style="--c1:' + escapeHtml(l.c1) + ';--c2:' + escapeHtml(l.c2) + '"><span class="step">' + (i + 1) + '</span><span>' + escapeHtml(l.word) + '</span></div>' +
           '<div class="card-body"><div class="tag">Lesson ' + (i + 1) + ' · ' + escapeHtml(l.tag) + '</div>' +
           '<h3>' + escapeHtml(l.title) + '</h3><p>' + escapeHtml(l.blurb) + '</p>' +
-          '<p class="how">' + escapeHtml(l.how) + '</p></div></a>';
+          '<p class="how">' + escapeHtml(l.how) + '</p></div>';
+        if (l.sections) {
+          // Links can't nest, so the card becomes a box holding the main link and the section links.
+          html += '<div class="card" data-lesson-card="' + escapeHtml(l.id) + '">' +
+            '<a class="card-link" href="' + escapeHtml(l.url) + '">' + inner + '</a>' +
+            '<nav class="card-sections" aria-label="' + escapeHtml(l.title) + ' sections">' +
+            l.sections.map(function (sec) {
+              return '<a href="' + escapeHtml(l.url + '#' + sec.hash) + '">' + escapeHtml(sec.label) + '</a>';
+            }).join('') + '</nav></div>';
+        } else {
+          html += '<a class="card" href="' + escapeHtml(l.url) + '" data-lesson-card="' + escapeHtml(l.id) + '">' + inner + '</a>';
+        }
       });
       if (topic.comingSoon) {
         html += '<div class="card soon"><div class="card-body"><div class="tag">Coming soon</div>' +
@@ -295,6 +312,8 @@
       cards[i].classList.toggle('is-done', done);
     }
     var total = LESSONS.length;
+    var bag = document.querySelector('.bag b');
+    if (bag) bag.textContent = total;
     var bar = document.getElementById('progress-fill');
     var label = document.getElementById('progress-label');
     if (bar) bar.style.width = Math.round((doneCount / total) * 100) + '%';
