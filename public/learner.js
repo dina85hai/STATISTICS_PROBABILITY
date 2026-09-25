@@ -43,7 +43,11 @@
         { id: 'probability-practice', title: 'Probability Practice', url: 'probability-practice.html',
           tag: 'Practice', word: 'practice', c1: '#fff0e3', c2: '#f3c2cf',
           blurb: 'Every probability exercise on one page, sorted by skill from easy to hard, with an interactive tree diagram explorer.',
-          how: 'Work each question on paper, then tap the blurred answer to check it.' }
+          how: 'Work each question on paper, then tap the blurred answer to check it.' },
+        { id: 'probability-lab', title: 'Probability Lab', url: 'probability-lab.html',
+          tag: 'Lab', word: 'experiment', c1: '#e6d3f0', c2: '#d6ecf0',
+          blurb: 'Explore binomial and normal distributions with interactive graphs and guided calculations.',
+          how: 'Change the values, work through each step, and check your answers.' }
       ]
     }
   ];
