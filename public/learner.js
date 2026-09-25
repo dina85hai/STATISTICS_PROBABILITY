@@ -18,9 +18,13 @@
     {
       id: 'statistics',
       title: 'Topic 1 · Statistics',
-      intro: 'Measures of central tendency and spread: how to describe a set of data.',
+      intro: 'Syllabus 4.1 tabular and graphical form, then measures of central tendency and spread: how to describe a set of data.',
       comingSoon: 'More interactive statistics lessons are coming soon.',
       lessons: [
+        { id: 'data-presentation', title: 'Tabular & Graphical Form', url: 'data-presentation.html',
+          tag: 'Notes', word: 'present', c1: '#fff0e3', c2: '#e6d3f0',
+          blurb: 'Syllabus 4.1: statistics terminology, discrete vs continuous and grouped vs ungrouped data, frequency and cumulative frequency tables, pie chart, bar chart, histogram and ogive.',
+          how: 'Learn the terms first, play the "Discrete or continuous?" game, then read each chart and try the quick check.' },
         { id: 'statistics-notes', title: 'Mean, Mode, Median & Variance', url: 'statistics-notes.html',
           tag: 'Notes', word: 'statistics', c1: '#e6d3f0', c2: '#f7d6de',
           blurb: 'Step-by-step worked examples for raw data, frequency tables and grouped data.',
