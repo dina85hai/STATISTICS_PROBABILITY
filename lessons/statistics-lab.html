@@ -148,13 +148,21 @@ ul.tight{margin:6px 0;padding-left:20px}ul.tight li{margin-bottom:6px}
 footer{text-align:center;color:var(--muted);font-size:13px;padding:10px 16px 30px}
 [hidden]{display:none!important}
 
+/* Leave room for the shared Home button (learner.js, fixed at the top left). */
+body.sp-lesson header .top{padding-left:max(0px,calc(112px - max(0px,(100vw - 1180px) / 2) - 16px))}
 @media (max-width:760px){
+  /* On phones the header scrolls away, so it doesn't cover the boxes while typing. */
+  header{position:static}
+  .badge{display:none}
+  nav[role=tablist]{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible}
+  nav button{padding:8px 4px;font-size:14px}
   body{font-size:16px}
   .grid2,.grid3{grid-template-columns:1fr}
   .hero{padding:18px}.hero p{font-size:17px}
   .card{padding:16px}
   .formula{font-size:18px}
 }
+@media (max-width:640px){body.sp-lesson header .top{padding-left:48px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -1414,6 +1422,8 @@ $('pTopic').onchange = newProblem;
 newSeason(); newWeek(); renderRaw(); newFreq(); renderDev(); newFv(); newGrouped(); renderTf(); newProblem(); updateScore();
 const startTab = location.hash.slice(1);
 showTab(drawers[startTab] ? startTab : 'intro');
+// A #tab link would otherwise make the browser jump to the section, below the heading.
+window.addEventListener('load', () => window.scrollTo(0, 0));
 </script>
 </body>
 </html>
