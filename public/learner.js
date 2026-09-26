@@ -81,8 +81,8 @@
             { label: '1 · 4.3.1 Vocabulary', hash: 'vocabulary' },
             { label: '2 · 4.3.1 Event probability', hash: 'basic' },
             { label: '3 · 4.3.1 Tree diagrams', hash: 'trees' },
-            { label: '4 · 4.3.3 Independent', hash: 'independent' },
-            { label: '5 · 4.3.2 Dependent', hash: 'dependent' },
+            { label: '4 · 4.3.2 Dependent', hash: 'dependent' },
+            { label: '5 · 4.3.3 Independent', hash: 'independent' },
             { label: '6 · 4.3.4–4.3.5 OR rules', hash: 'exclusive' },
             { label: '7 · 4.3 Probability trees', hash: 'explorer' }
           ] },
