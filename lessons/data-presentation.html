@@ -545,6 +545,63 @@
           </div>
         </div>
       </div>
+      <div class="cpa exercise" id="read-graphs">
+        <h3>EXERCISE 6.5: Reading graphs</h3>
+        <div class="body">
+          <p>Read each graph and answer the questions. Hover or tap the graph if you need to check a value. For the ogive, read as accurately as you can: answers within ±1 are accepted.</p>
+          <div class="cards two">
+            <article class="card s1 ex">
+              <p class="type">A · Pie chart</p>
+              <h3>🏭 Energy used in a workshop: 600 kWh a month</h3>
+              <div class="chart" id="rg-pie"></div>
+              <ol class="steps">
+                <li>Which equipment uses the most energy? <input class="blank" style="width:7em" data-text data-ans="motors" data-alt="motor" aria-label="Most energy" autocomplete="off" placeholder="name" /></li>
+                <li>Energy used by computers = <input class="blank" inputmode="decimal" data-ans="150" aria-label="Energy used by computers" autocomplete="off" /> kWh</li>
+                <li>Percentage used by lighting = <input class="blank" inputmode="decimal" data-ans="20" aria-label="Percentage used by lighting" autocomplete="off" /> %</li>
+                <li>How much more energy do motors use than air-con? <input class="blank" inputmode="decimal" data-ans="150" aria-label="Motors minus air-con" autocomplete="off" /> kWh</li>
+              </ol>
+              <p class="note">Hint: energy = (angle ÷ 360°) × 600</p>
+              <div class="ex-bar"><button type="button" data-act="check">Check</button><button type="button" data-act="show">Show answers</button><button type="button" data-act="reset">Reset</button><p class="feedback" aria-live="polite"></p></div>
+            </article>
+            <article class="card s1 ex">
+              <p class="type">B · Bar chart</p>
+              <h3>🔧 Faulty components found each day</h3>
+              <div class="chart" id="rg-bar"></div>
+              <ol class="steps">
+                <li>Faulty components found on Tuesday = <input class="blank" inputmode="decimal" data-ans="8" aria-label="Faults on Tuesday" autocomplete="off" /></li>
+                <li>Which day had the fewest faults? <input class="blank" style="width:7em" data-text data-ans="wednesday" data-alt="wed" aria-label="Fewest faults" autocomplete="off" placeholder="day" /></li>
+                <li>Total faulty components in the week = <input class="blank" inputmode="decimal" data-ans="26" aria-label="Total faults" autocomplete="off" /></li>
+                <li>Mean number of faults per day = <input class="blank" inputmode="decimal" data-ans="5.2" aria-label="Mean faults per day" autocomplete="off" /></li>
+              </ol>
+              <div class="ex-bar"><button type="button" data-act="check">Check</button><button type="button" data-act="show">Show answers</button><button type="button" data-act="reset">Reset</button><p class="feedback" aria-live="polite"></p></div>
+            </article>
+            <article class="card s2 ex">
+              <p class="type">C · Histogram</p>
+              <h3>🔋 Battery life of 50 power banks (hours)</h3>
+              <div class="chart" id="rg-hist"></div>
+              <ol class="steps">
+                <li>Class width = <input class="blank" inputmode="decimal" data-ans="5" aria-label="Class width" autocomplete="off" /> hours</li>
+                <li>Modal class (as class limits) = <input class="blank" style="width:7em" data-text data-ans="20-24" data-alt="19.5-24.5" aria-label="Modal class" autocomplete="off" placeholder="e.g. 5-9" /></li>
+                <li>Frequency of the class 15 – 19 = <input class="blank" inputmode="decimal" data-ans="10" aria-label="Frequency of 15 to 19" autocomplete="off" /></li>
+                <li>How many power banks lasted more than 24.5 hours? <input class="blank" inputmode="decimal" data-ans="16" aria-label="More than 24.5 hours" autocomplete="off" /></li>
+              </ol>
+              <div class="ex-bar"><button type="button" data-act="check">Check</button><button type="button" data-act="show">Show answers</button><button type="button" data-act="reset">Reset</button><p class="feedback" aria-live="polite"></p></div>
+            </article>
+            <article class="card s2 ex">
+              <p class="type">D · Ogive</p>
+              <h3>⏱️ Time to repair 40 electrical faults (min)</h3>
+              <div class="chart" id="rg-ogive"></div>
+              <ol class="steps">
+                <li>How many repairs took less than 30 min? <input class="blank" inputmode="decimal" data-ans="26" aria-label="Less than 30 minutes" autocomplete="off" data-tol="1" /></li>
+                <li>How many repairs took more than 40 min? <input class="blank" inputmode="decimal" data-ans="5" aria-label="More than 40 minutes" autocomplete="off" data-tol="1" /></li>
+                <li>How many repairs took between 20 and 40 min? <input class="blank" inputmode="decimal" data-ans="23" aria-label="Between 20 and 40 minutes" autocomplete="off" data-tol="1" /></li>
+                <li>Median time (read across from F = 20) ≈ <input class="blank" inputmode="decimal" data-ans="25.7" aria-label="Median time" autocomplete="off" data-tol="1" /> min</li>
+              </ol>
+              <div class="ex-bar"><button type="button" data-act="check">Check</button><button type="button" data-act="show">Show answers</button><button type="button" data-act="reset">Reset</button><p class="feedback" aria-live="polite"></p></div>
+            </article>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ================= QUICK CHECK ================= -->
@@ -638,9 +695,12 @@
     // ---------- Practice: fill-in-the-blank tables ----------
     function norm(v) { return v.trim().toLowerCase().replace(/[–—\s]+/g, '').replace(/[°%]/g, ''); }
     function isRight(inp) {
-      if (inp.hasAttribute('data-text')) return norm(inp.value) === norm(inp.dataset.ans);
+      if (inp.hasAttribute('data-text')) {
+        var got = norm(inp.value).replace(/s$/, '');
+        return [inp.dataset.ans, inp.dataset.alt || ''].some(function (a) { return a && got === norm(a).replace(/s$/, ''); });
+      }
       var v = parseFloat(inp.value.replace(',', '.'));
-      return !isNaN(v) && Math.abs(v - parseFloat(inp.dataset.ans)) < 1e-9;
+      return !isNaN(v) && Math.abs(v - parseFloat(inp.dataset.ans)) <= (parseFloat(inp.dataset.tol) || 1e-9);
     }
     function mark(inp) {
       inp.classList.remove('ok', 'no');
@@ -868,6 +928,72 @@
       pts.forEach(function (p, i) {
         var c = el('circle', { cx: P[i][0], cy: P[i][1], r: 5, fill: 'var(--series-1)', stroke: 'var(--card)', 'stroke-width': 2 }, svg);
         tip(c, '(' + p[0] + ' Ω, F = ' + p[1] + ')', P[i][0], P[i][1]);
+        text(svg, P[i][0], y(0) + 16, p[0], { 'text-anchor': 'middle' });
+      });
+    })();
+    // ---------- Practice: graphs to read (Exercise 6.5) ----------
+    (function () {
+      var data = [['Motors', 144], ['Computers', 90], ['Lighting', 72], ['Air-con', 54]];
+      var colors = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)', 'var(--series-4)'];
+      var box = document.getElementById('rg-pie');
+      var svg = el('svg', { viewBox: '0 0 300 220', role: 'img', 'aria-label': 'Pie chart of workshop energy use' }, box);
+      var tip = tooltip(box), cx = 150, cy = 110, R = 95, a0 = -Math.PI / 2;
+      data.forEach(function (d, i) {
+        var a1 = a0 + d[1] * Math.PI / 180, mid = (a0 + a1) / 2;
+        var p = el('path', {
+          d: 'M' + cx + ',' + cy + 'L' + (cx + R * Math.cos(a0)) + ',' + (cy + R * Math.sin(a0)) +
+             'A' + R + ',' + R + ' 0 ' + (d[1] > 180 ? 1 : 0) + ' 1 ' + (cx + R * Math.cos(a1)) + ',' + (cy + R * Math.sin(a1)) + 'Z',
+          fill: colors[i], stroke: 'var(--card)', 'stroke-width': 2
+        }, svg);
+        tip(p, d[0] + ': ' + d[1] + '°', cx + R * 0.6 * Math.cos(mid), cy + R * 0.6 * Math.sin(mid));
+        text(svg, cx + R * 0.62 * Math.cos(mid), cy + R * 0.62 * Math.sin(mid) + 4, d[1] + '°', { 'text-anchor': 'middle', class: 'lbl', style: 'fill:#fff' });
+        a0 = a1;
+      });
+      var ul = document.createElement('ul');
+      ul.className = 'legend';
+      data.forEach(function (d, i) { ul.innerHTML += '<li><i style="background:' + colors[i] + '"></i>' + d[0] + '</li>'; });
+      box.appendChild(ul);
+    })();
+    (function () {
+      var data = [['Mon', 5], ['Tue', 8], ['Wed', 3], ['Thu', 6], ['Fri', 4]];
+      var box = document.getElementById('rg-bar'), W = 320, H = 230, m = { t: 12, r: 10, b: 44, l: 44 };
+      var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Bar chart of faulty components per day' }, box);
+      var tip = tooltip(box), y = frame(svg, W, H, m, 10, 1, 'Day', 'Faulty components');
+      var slot = (W - m.l - m.r) / data.length, bw = slot * 0.6;
+      data.forEach(function (d, i) {
+        var x = m.l + i * slot + (slot - bw) / 2;
+        tip(el('path', { d: barPath(x, y(d[1]), bw, y(0)), fill: 'var(--series-1)' }, svg), d[0] + ': ' + d[1], x + bw / 2, y(d[1]));
+        text(svg, x + bw / 2, y(0) + 16, d[0], { 'text-anchor': 'middle' });
+      });
+    })();
+    (function () {
+      var bounds = [9.5, 14.5, 19.5, 24.5, 29.5, 34.5], f = [6, 10, 18, 12, 4];
+      var box = document.getElementById('rg-hist'), W = 320, H = 230, m = { t: 12, r: 14, b: 44, l: 44 };
+      var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Histogram of power bank battery life' }, box);
+      var tip = tooltip(box), y = frame(svg, W, H, m, 20, 2, 'Battery life (hours), class boundaries', 'Frequency (f)');
+      var bw = (W - m.l - m.r) / f.length;
+      f.forEach(function (v, i) {
+        var x = m.l + i * bw;
+        tip(el('path', { d: barPath(x + 1, y(v), bw - 2, y(0)), fill: 'var(--series-1)' }, svg), bounds[i] + ' – ' + bounds[i + 1] + ' h: f = ' + v, x + bw / 2, y(v));
+      });
+      bounds.forEach(function (bd, i) { text(svg, m.l + i * bw, y(0) + 16, bd, { 'text-anchor': 'middle' }); });
+    })();
+    (function () {
+      var pts = [[0, 0], [10, 4], [20, 12], [30, 26], [40, 35], [50, 40]];
+      var box = document.getElementById('rg-ogive'), W = 320, H = 240, m = { t: 12, r: 14, b: 44, l: 44 };
+      var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Ogive of repair times' }, box);
+      var tip = tooltip(box), y = frame(svg, W, H, m, 40, 5, 'Time (min), upper class boundary', 'Cumulative frequency (F)');
+      function x(v) { return m.l + v / 50 * (W - m.l - m.r); }
+      for (var g = 5; g <= 50; g += 5) el('line', { x1: x(g), x2: x(g), y1: m.t, y2: y(0), class: 'gridline' }, svg);
+      var P = pts.map(function (p) { return [x(p[0]), y(p[1])]; }), d = 'M' + P[0];
+      for (var i = 0; i < P.length - 1; i++) {
+        var p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || p2;
+        d += 'C' + (p1[0] + (p2[0] - p0[0]) / 6) + ',' + (p1[1] + (p2[1] - p0[1]) / 6) + ' ' +
+             (p2[0] - (p3[0] - p1[0]) / 6) + ',' + (p2[1] - (p3[1] - p1[1]) / 6) + ' ' + p2[0] + ',' + p2[1];
+      }
+      el('path', { d: d, fill: 'none', stroke: 'var(--series-1)', 'stroke-width': 2 }, svg);
+      pts.forEach(function (p, i) {
+        tip(el('circle', { cx: P[i][0], cy: P[i][1], r: 5, fill: 'var(--series-1)', stroke: 'var(--card)', 'stroke-width': 2 }, svg), '(' + p[0] + ' min, F = ' + p[1] + ')', P[i][0], P[i][1]);
         text(svg, P[i][0], y(0) + 16, p[0], { 'text-anchor': 'middle' });
       });
     })();
