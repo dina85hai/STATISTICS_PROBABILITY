@@ -70,8 +70,8 @@
             { label: '4.3.1 Basic concept', hash: 'basic' },
             { label: '4.3.2 Dependent', hash: 'dependent' },
             { label: '4.3.3 Independent', hash: 'independent' },
-            { label: '4.3.4 Exclusive', hash: 'exclusive' },
-            { label: '4.3.5 Non-exclusive', hash: 'non-exclusive' }
+            { label: '4.3.4 Mutually exclusive', hash: 'exclusive' },
+            { label: '4.3.5 Non-mutually exclusive', hash: 'non-exclusive' }
           ] },
         { id: 'probability-practice', title: 'Probability Practice', url: 'probability-practice.html',
           tag: 'Practice', word: 'practice', c1: '#fff0e3', c2: '#f3c2cf',
@@ -89,13 +89,7 @@
         { id: 'probability-lab', title: 'Probability Lab', url: 'probability-lab.html',
           tag: 'Lab', word: 'experiment', c1: '#e6d3f0', c2: '#d6ecf0',
           blurb: 'Syllabus 4.4: binomial distribution, binomial probability, normal distribution, normal table use and normal probability with guided visuals.',
-          how: 'Press Next › to go one slide at a time (or use the ← → keys). The topic tabs jump to Binomial, Normal, Advanced, Practice or Tips.',
-          sections: [
-            { label: '4.4 roadmap', hash: 'intro' },
-            { label: '4.4.1–4.4.2 Binomial', hash: 'binomial' },
-            { label: '4.4.3–4.4.5 Normal', hash: 'normal' },
-            { label: 'Probability practice', hash: 'practice' }
-          ] }
+          how: 'Press Next › to go one slide at a time (or use the ← → keys). The topic tabs jump to Binomial, Normal, Advanced, Practice or Tips.' }
       ]
     }
   ];
