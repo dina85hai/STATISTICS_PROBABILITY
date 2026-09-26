@@ -60,7 +60,7 @@ const slides = [
     title: 'SYLLABUS MAP 🗺️',
     items: [
       { emoji: '4.3.1', label: 'BASIC CONCEPT', detail: 'experiment, outcome, sample space, event, P(A)' },
-      { emoji: '4.3.2–4.3.5', label: 'EVENT TYPES', detail: 'dependent, independent, mutually exclusive, overlapping' },
+      { emoji: '4.3.2–4.3.5', label: 'EVENT TYPES', detail: 'dependent, independent, mutually exclusive, non-mutually exclusive' },
       { emoji: '4.4.1–4.4.2', label: 'BINOMIAL', detail: 'continue in Probability Lab for binomial models and probabilities' },
       { emoji: '4.4.3–4.4.5', label: 'NORMAL', detail: 'continue in Probability Lab for z-tables and normal probabilities' }
     ],
@@ -84,7 +84,7 @@ const slides = [
       '📚 4.3.1 Master probability vocabulary and the basic concept',
       '🎯 4.3.1 Calculate the probability of an event',
       '🌳 Count outcomes with tree diagrams and probability tables',
-      '⚡ 4.3.2–4.3.5 Spot dependent, independent, mutually exclusive and overlapping events'
+      '⚡ 4.3.2–4.3.5 Spot dependent, independent, mutually exclusive and non-mutually exclusive events'
     ]
   },
   {
@@ -407,12 +407,12 @@ const slides = [
   },
   {
     type: 'formula',
-    title: 'OVERLAPPING EVENTS: "OR" RULE',
+    title: 'NON-MUTUALLY EXCLUSIVE: "OR" RULE',
     formula: 'P(A OR B) = P(A) + P(B) − P(A AND B)',
     subformula: 'If A and B can happen together, the outcomes in both get counted twice, so take them away once.',
-    text: 'Add, then subtract the overlap!',
+    text: 'Add, then subtract P(A AND B)!',
     example: {
-      text: '🎲 Roll a die:\nEven = {2, 4, 6}, Less than 3 = {1, 2}\nOverlap (both) = {2}\nCheck by listing: Even OR Less than 3 = {1, 2, 4, 6}',
+      text: '🎲 Roll a die:\nEven = {2, 4, 6}, Less than 3 = {1, 2}\nBoth (Even AND Less than 3) = {2}\nCheck by listing: Even OR Less than 3 = {1, 2, 4, 6}',
       question: 'What\'s P(Even OR Less than 3)?',
       answer: 'P = 3/6 + 2/6 − 1/6 = 4/6 = 2/3 ≈ 66.7% ✓'
     },
@@ -420,7 +420,7 @@ const slides = [
   },
   {
     type: 'multi-practice',
-    title: 'PRACTICE: Events That Overlap',
+    title: 'PRACTICE: Non-Mutually Exclusive Events',
     problems: [
       {
         question: 'Problem 1: Pick a card. P(Heart OR King)?',

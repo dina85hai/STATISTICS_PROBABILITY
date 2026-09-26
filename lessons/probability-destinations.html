@@ -605,7 +605,7 @@ Check by counting the circles: ${dOnly} + ${both} + ${kOnly} = ${nOr} travellers
       { place: '🗼 Tokyo', text: 'You choose one day of your trip at random. A = "it rains all day", B = "it is sunny all day".', answer: 2,
         why: 'One day cannot be rainy all day AND sunny all day, so P(A and B) = 0.' },
       { place: '🏔️ Kota Kinabalu', text: 'You choose one tourist at the airport at random. A = "is Malaysian", B = "is under 18".', answer: 3,
-        why: 'A tourist can be Malaysian AND under 18, so subtract the overlap.' },
+        why: 'A tourist can be Malaysian AND under 18 (non-mutually exclusive), so subtract P(Malaysian and under 18).' },
       { place: '🏝️ Langkawi', text: 'You draw an activity ticket, put it back, then draw again. A = "1st is cable car", B = "2nd is cable car".', answer: 1,
         why: 'The ticket goes back, so the jar is the same for both draws: 4/12 × 4/12 = 1/9.' },
       { place: '🎤 Seoul', text: 'You draw one concert seat from a box. A = "seat is in Section A", B = "seat is in Section B".', answer: 2,
