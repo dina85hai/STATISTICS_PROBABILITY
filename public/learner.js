@@ -72,8 +72,8 @@
           how: 'Work each question on paper, then tap the blurred answer to check it.' },
         { id: 'probability-lab', title: 'Probability Lab', url: 'probability-lab.html',
           tag: 'Lab', word: 'experiment', c1: '#e6d3f0', c2: '#d6ecf0',
-          blurb: 'Explore binomial and normal distributions with interactive graphs and guided calculations.',
-          how: 'Change the values, work through each step, and check your answers.' }
+          blurb: 'A slide show on binomial and normal distributions: 29 slides of small guided steps, interactive graphs and calculators, practice and tips.',
+          how: 'Press Next › to go one slide at a time (or use the ← → keys). The topic tabs jump to Binomial, Normal, Advanced, Practice or Tips.' }
       ]
     }
   ];
@@ -115,8 +115,8 @@
     '.sp-bar { position: fixed; left: 12px; bottom: 12px; z-index: 2147483000; display: flex; gap: 8px; flex-wrap: wrap; max-width: calc(100vw - 24px); }',
     /* The presentation has its own Previous/Next buttons and full-screen slides:
        show icon-only buttons in the corner so they cover as little as possible */
-    '.sp-lesson-presentation .sp-bar .sp-label { display: none; }',
-    '.sp-lesson-presentation .sp-bar .sp-pill { padding: 0 11px; }',
+    '.sp-lesson-presentation .sp-bar .sp-label, .sp-lesson-probability-lab .sp-bar .sp-label { display: none; }',
+    '.sp-lesson-presentation .sp-bar .sp-pill, .sp-lesson-probability-lab .sp-bar .sp-pill { padding: 0 11px; }',
     '.sp-toast { position: fixed; left: 50%; top: 16px; transform: translateX(-50%); z-index: 2147483001; background: #7a3a4d; color: #fff;',
     '  padding: 10px 16px; border-radius: 12px; font-size: 14px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,.2); opacity: 0; transition: opacity .25s; pointer-events: none; }',
     '.sp-toast.show { opacity: 1; }',
