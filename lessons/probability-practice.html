@@ -124,22 +124,22 @@
     <header class="hero">
       <p class="kicker">Topic 2 · Probability</p>
       <h1>Probability Practice 🎯</h1>
-      <p class="lead">Every probability exercise in one place. The skills go in the same order as the lesson, and the questions in each skill go from easy to hard.</p>
+      <p class="lead">Every probability exercise in one place. The skills follow Topic 4.3 in syllabus order, and the questions in each skill go from easy to hard.</p>
       <nav class="jump" aria-label="Jump to a skill">
-        <a href="#vocabulary">1 · Vocabulary</a>
-        <a href="#basic">2 · Basic probability</a>
-        <a href="#trees">3 · Tree diagrams</a>
-        <a href="#independent">4 · Independent (AND)</a>
-        <a href="#dependent">5 · Dependent (AND, no replacement)</a>
-        <a href="#exclusive">6 · Mutually exclusive (OR)</a>
-        <a href="#explorer">7 · Probability trees</a>
+        <a href="#vocabulary">1 · 4.3.1 Vocabulary</a>
+        <a href="#basic">2 · 4.3.1 Event probability</a>
+        <a href="#trees">3 · 4.3.1 Tree diagrams</a>
+        <a href="#dependent">4 · 4.3.2 Dependent</a>
+        <a href="#independent">5 · 4.3.3 Independent</a>
+        <a href="#exclusive">6 · 4.3.4–4.3.5 OR rules</a>
+        <a href="#explorer">7 · 4.3 Probability trees</a>
       </nav>
     </header>
     <div id="sp-selftest-anchor"></div>
 
     <!-- ================= SKILL 1: VOCABULARY ================= -->
     <section id="vocabulary" class="skill">
-      <h2><span class="num">1</span> Vocabulary</h2>
+      <h2><span class="num">1</span> 4.3.1 Vocabulary: experiment, outcome, sample space and event</h2>
       <div class="rule">
         <b>Word box</b>
         <p>Example: you <b>flip a coin</b> once.</p>
@@ -211,12 +211,12 @@
 
     <!-- ================= SKILL 2: BASIC PROBABILITY ================= -->
     <section id="basic" class="skill">
-      <h2><span class="num">2</span> Basic probability</h2>
+      <h2><span class="num">2</span> 4.3.1 Basic concept of probability</h2>
       <div class="rule">
         <b>Formula</b>
         <p class="eq">P(A) = n(A)/n(S) = <span class="sp-frac"><span>number of favorable outcomes</span><span>total number of outcomes</span></span></p>
         <p class="eq">P(not A) = 1 − P(A)</p>
-        <p>Always simplify the fraction. You can also give it as a decimal or a percentage.</p>
+        <p>Always simplify the fraction. You can also give it as a decimal or a percentage. In syllabus language: calculate the probability of an event by dividing the number of outcomes in the event by the number of outcomes in the sample space.</p>
       </div>
 
       <article class="q">
@@ -463,72 +463,9 @@ P(sleep in or chill) = 6/8 = 3/4</div>
       </article>
     </section>
 
-    <!-- ================= SKILL 4: INDEPENDENT EVENTS ================= -->
-    <section id="independent" class="skill">
-      <h2><span class="num">4</span> Independent events (AND → multiply)</h2>
-      <div class="rule">
-        <b>Formula</b>
-        <p class="eq">P(A and B) = P(A) × P(B)</p>
-        <p>Use it only when one event does not change the probability of the other.</p>
-      </div>
-
-      <article class="q">
-        <div class="q-head"><h3>Q13 · Two spinners 🎡</h3><span class="level easy">Easy</span></div>
-        <ul>
-          <li><b>Spinner 1:</b> 4 equal sections (Red, Blue, Green, Yellow)</li>
-          <li><b>Spinner 2:</b> 2 equal sections (Win, Lose)</li>
-        </ul>
-        <p><b>What is the probability of spinning Blue AND Win?</b></p>
-        <div class="answer">
-          <span class="label">Answer</span>
-          <div class="work">The spinners don't affect each other, so the events are independent.
-P(Blue) = 1/4, P(Win) = 1/2
-P(Blue and Win) = 1/4 × 1/2 = 1/8</div>
-          <p class="final">1/8 = 0.125 = 12.5%</p>
-        </div>
-      </article>
-
-      <article class="q">
-        <div class="q-head"><h3>Q14 · Social media posts 📸</h3><span class="level medium">Medium</span></div>
-        <p>When you post on Instagram, there is a 30% chance your crush likes it. When you post on TikTok, there is a 40% chance they view it. The two are independent.</p>
-        <p><b>You post on both today. What is the probability they like your Instagram post AND view your TikTok?</b></p>
-        <div class="answer">
-          <span class="label">Answer</span>
-          <div class="work">P(like) = 0.30, P(view) = 0.40
-P(like and view) = 0.30 × 0.40 = 0.12</div>
-          <p class="final">0.12 = 12%</p>
-        </div>
-      </article>
-
-      <article class="q">
-        <div class="q-head"><h3>Q15 · Online shopping 🛒</h3><span class="level medium">Medium</span></div>
-        <p>You order from two different websites. Site A delivers on time 90% of the time, and Site B 85% of the time.</p>
-        <p><b>What is the probability BOTH orders arrive on time?</b></p>
-        <div class="answer">
-          <span class="label">Answer</span>
-          <div class="work">The two deliveries are independent.
-P(both on time) = 0.90 × 0.85 = 0.765</div>
-          <p class="final">0.765 = 76.5%</p>
-        </div>
-      </article>
-
-      <article class="q">
-        <div class="q-head"><h3>Q16 · Free throws 🏀</h3><span class="level hard">Hard</span></div>
-        <p>A basketball player makes 75% of their free throws. They shoot 3 free throws, and each shot is independent.</p>
-        <p><b>What is the probability they make ALL THREE?</b></p>
-        <div class="answer">
-          <span class="label">Answer</span>
-          <div class="work">P(make all 3) = P(1st) × P(2nd) × P(3rd)
-= 0.75 × 0.75 × 0.75 = 0.421875</div>
-          <p class="final">0.421875 ≈ 0.422 ≈ 42.2%</p>
-          <p class="why">Even a 75% shooter makes all three only about 42% of the time.</p>
-        </div>
-      </article>
-    </section>
-
-    <!-- ================= SKILL 5: DEPENDENT EVENTS ================= -->
+    <!-- ================= SKILL 4: DEPENDENT EVENTS ================= -->
     <section id="dependent" class="skill">
-      <h2><span class="num">5</span> Dependent events (AND, without replacement)</h2>
+      <h2><span class="num">4</span> 4.3.2 Dependent events (AND, without replacement)</h2>
       <div class="rule">
         <b>Formula</b>
         <p class="eq">P(A and B) = P(A) × P(B | A)</p>
@@ -692,13 +629,76 @@ P(at least one rare) = 1 − 14/55 = 41/55</div>
       </article>
     </section>
 
+    <!-- ================= SKILL 5: INDEPENDENT EVENTS ================= -->
+    <section id="independent" class="skill">
+      <h2><span class="num">5</span> 4.3.3 Independent events (AND → multiply)</h2>
+      <div class="rule">
+        <b>Formula</b>
+        <p class="eq">P(A and B) = P(A) × P(B)</p>
+        <p>Use it only when one event does not change the probability of the other.</p>
+      </div>
+
+      <article class="q">
+        <div class="q-head"><h3>Q13 · Two spinners 🎡</h3><span class="level easy">Easy</span></div>
+        <ul>
+          <li><b>Spinner 1:</b> 4 equal sections (Red, Blue, Green, Yellow)</li>
+          <li><b>Spinner 2:</b> 2 equal sections (Win, Lose)</li>
+        </ul>
+        <p><b>What is the probability of spinning Blue AND Win?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">The spinners don't affect each other, so the events are independent.
+P(Blue) = 1/4, P(Win) = 1/2
+P(Blue and Win) = 1/4 × 1/2 = 1/8</div>
+          <p class="final">1/8 = 0.125 = 12.5%</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q14 · Social media posts 📸</h3><span class="level medium">Medium</span></div>
+        <p>When you post on Instagram, there is a 30% chance your crush likes it. When you post on TikTok, there is a 40% chance they view it. The two are independent.</p>
+        <p><b>You post on both today. What is the probability they like your Instagram post AND view your TikTok?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">P(like) = 0.30, P(view) = 0.40
+P(like and view) = 0.30 × 0.40 = 0.12</div>
+          <p class="final">0.12 = 12%</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q15 · Online shopping 🛒</h3><span class="level medium">Medium</span></div>
+        <p>You order from two different websites. Site A delivers on time 90% of the time, and Site B 85% of the time.</p>
+        <p><b>What is the probability BOTH orders arrive on time?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">The two deliveries are independent.
+P(both on time) = 0.90 × 0.85 = 0.765</div>
+          <p class="final">0.765 = 76.5%</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q16 · Free throws 🏀</h3><span class="level hard">Hard</span></div>
+        <p>A basketball player makes 75% of their free throws. They shoot 3 free throws, and each shot is independent.</p>
+        <p><b>What is the probability they make ALL THREE?</b></p>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">P(make all 3) = P(1st) × P(2nd) × P(3rd)
+= 0.75 × 0.75 × 0.75 = 0.421875</div>
+          <p class="final">0.421875 ≈ 0.422 ≈ 42.2%</p>
+          <p class="why">Even a 75% shooter makes all three only about 42% of the time.</p>
+        </div>
+      </article>
+    </section>
+
     <!-- ================= SKILL 6: MUTUALLY EXCLUSIVE EVENTS ================= -->
     <section id="exclusive" class="skill">
-      <h2><span class="num">6</span> Mutually exclusive events (OR → add)</h2>
+      <h2><span class="num">6</span> 4.3.4 Mutually exclusive and 4.3.5 non-mutually exclusive events</h2>
       <div class="rule">
         <b>Formula</b>
         <p class="eq">P(A or B) = P(A) + P(B)</p>
-        <p>Use it only when A and B cannot happen at the same time. If they can overlap, use P(A or B) = P(A) + P(B) − P(A and B).</p>
+        <p>Use it only when A and B cannot happen at the same time. If they can overlap, they are <b>non-mutually exclusive</b>, so use P(A or B) = P(A) + P(B) − P(A and B).</p>
       </div>
 
       <article class="q">
