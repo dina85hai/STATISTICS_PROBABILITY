@@ -78,13 +78,13 @@
           blurb: 'Topic 4.3 practice in syllabus order, from vocabulary and basic probability to dependent, independent and OR-rule questions.',
           how: 'Work each question on paper, then tap the blurred answer to check it.',
           sections: [
-            { label: '4.3.1 Vocabulary', hash: 'vocabulary' },
-            { label: '4.3.1 Event probability', hash: 'basic' },
-            { label: '4.3 support Tree diagrams', hash: 'trees' },
-            { label: '4.3.3 Independent', hash: 'independent' },
-            { label: '4.3.2 Dependent', hash: 'dependent' },
-            { label: '4.3.4–4.3.5 OR rules', hash: 'exclusive' },
-            { label: '4.3 mixed Probability trees', hash: 'explorer' }
+            { label: '1 · 4.3.1 Vocabulary', hash: 'vocabulary' },
+            { label: '2 · 4.3.1 Event probability', hash: 'basic' },
+            { label: '3 · 4.3.1 Tree diagrams', hash: 'trees' },
+            { label: '4 · 4.3.2 Dependent', hash: 'dependent' },
+            { label: '5 · 4.3.3 Independent', hash: 'independent' },
+            { label: '6 · 4.3.4–4.3.5 OR rules', hash: 'exclusive' },
+            { label: '7 · 4.3 Probability trees', hash: 'explorer' }
           ] },
         { id: 'probability-lab', title: 'Probability Lab', url: 'probability-lab.html',
           tag: 'Lab', word: 'experiment', c1: '#e6d3f0', c2: '#d6ecf0',
