@@ -56,24 +56,44 @@
     {
       id: 'probability',
       title: 'Topic 2 · Probability',
-      intro: 'Syllabus 4.3: the basic concept of probability, tree diagrams, and dependent, independent, mutually exclusive and non-mutually exclusive events.',
+      intro: 'Syllabus 4.3 and 4.4: start with the basic concept of probability and event types, then continue to binomial and normal distributions.',
       lessons: [
         { id: 'presentation', title: 'Probability Presentation', url: 'presentation.html',
           tag: 'Learn', word: 'learn', c1: '#f3c2cf', c2: '#c9a07e',
-          blurb: 'Slides with animated tree diagrams, worked examples and quick "try it" questions.',
+          blurb: 'Slides that introduce 4.3.1 to 4.3.5 with vocabulary, event probability, tree diagrams and event-type comparisons.',
           how: 'Use Next / Previous at your own speed. Answer each question before you reveal it.' },
         { id: 'probability-destinations', title: 'Probability: Travel Edition', url: 'probability-destinations.html',
           tag: 'Explore', word: 'explore', c1: '#d6ecf0', c2: '#e3eefc',
           blurb: 'Syllabus 4.3: the basic concept and dependent, independent, mutually exclusive and non-mutually exclusive events, each with an interactive trip from Langkawi to Sabah.',
-          how: 'Change the choices and press the buttons in each example, then try the quick checks and the "Which type?" game.' },
+          how: 'Change the choices and press the buttons in each example, then try the quick checks and the "Which type?" game.',
+          sections: [
+            { label: '4.3.1 Basic concept', hash: 'basic' },
+            { label: '4.3.2 Dependent', hash: 'dependent' },
+            { label: '4.3.3 Independent', hash: 'independent' },
+            { label: '4.3.4 Exclusive', hash: 'exclusive' },
+            { label: '4.3.5 Non-exclusive', hash: 'non-exclusive' }
+          ] },
         { id: 'probability-practice', title: 'Probability Practice', url: 'probability-practice.html',
           tag: 'Practice', word: 'practice', c1: '#fff0e3', c2: '#f3c2cf',
-          blurb: 'Every probability exercise on one page, sorted by skill from easy to hard, with an interactive tree diagram explorer.',
-          how: 'Work each question on paper, then tap the blurred answer to check it.' },
+          blurb: 'Topic 4.3 practice in syllabus order, from vocabulary and basic probability to dependent, independent and OR-rule questions.',
+          how: 'Work each question on paper, then tap the blurred answer to check it.',
+          sections: [
+            { label: '4.3.1 Vocabulary', hash: 'vocabulary' },
+            { label: '4.3.1 Event probability', hash: 'basic' },
+            { label: '4.3.3 Independent', hash: 'independent' },
+            { label: '4.3.2 Dependent', hash: 'dependent' },
+            { label: '4.3.4–4.3.5 OR rules', hash: 'exclusive' }
+          ] },
         { id: 'probability-lab', title: 'Probability Lab', url: 'probability-lab.html',
           tag: 'Lab', word: 'experiment', c1: '#e6d3f0', c2: '#d6ecf0',
-          blurb: 'A slide show on binomial and normal distributions: 29 slides of small guided steps, interactive graphs and calculators, practice and tips.',
-          how: 'Press Next › to go one slide at a time (or use the ← → keys). The topic tabs jump to Binomial, Normal, Advanced, Practice or Tips.' }
+          blurb: 'Syllabus 4.4: binomial distribution, binomial probability, normal distribution, normal table use and normal probability with guided visuals.',
+          how: 'Press Next › to go one slide at a time (or use the ← → keys). The topic tabs jump to Binomial, Normal, Advanced, Practice or Tips.',
+          sections: [
+            { label: '4.4 roadmap', hash: 'intro' },
+            { label: '4.4.1–4.4.2 Binomial', hash: 'binomial' },
+            { label: '4.4.3–4.4.5 Normal', hash: 'normal' },
+            { label: 'Probability practice', hash: 'practice' }
+          ] }
       ]
     }
   ];
