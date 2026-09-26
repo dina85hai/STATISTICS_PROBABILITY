@@ -80,9 +80,11 @@
           sections: [
             { label: '4.3.1 Vocabulary', hash: 'vocabulary' },
             { label: '4.3.1 Event probability', hash: 'basic' },
+            { label: '4.3 support Tree diagrams', hash: 'trees' },
             { label: '4.3.3 Independent', hash: 'independent' },
             { label: '4.3.2 Dependent', hash: 'dependent' },
-            { label: '4.3.4–4.3.5 OR rules', hash: 'exclusive' }
+            { label: '4.3.4–4.3.5 OR rules', hash: 'exclusive' },
+            { label: '4.3 mixed Probability trees', hash: 'explorer' }
           ] },
         { id: 'probability-lab', title: 'Probability Lab', url: 'probability-lab.html',
           tag: 'Lab', word: 'experiment', c1: '#e6d3f0', c2: '#d6ecf0',
