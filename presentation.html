@@ -73,7 +73,7 @@ const slides = [
       '📚 Master Probability Vocabulary',
       '🎯 Calculate Event Probability',
       '🌳 Tree Diagram Wizardry',
-      '⚡ Spot Independent vs Exclusive Events'
+      '⚡ Spot Independent, Dependent & Exclusive Events'
     ]
   },
   {
@@ -279,6 +279,69 @@ const slides = [
         question: 'Problem 3: Spin wheel (20% win) twice. P(Win BOTH)?',
         setup: 'P(Win) = 0.2, P(Win) = 0.2',
         answer: 'P(Win AND Win) = 0.2 × 0.2 = 0.04 = 4%'
+      }
+    ]
+  },
+  {
+    type: 'comparison',
+    title: 'DEPENDENT EVENTS 🔗',
+    description: 'When the FIRST event CHANGES the probability of the SECOND event',
+    yes: [
+      'Drawing a card, NOT replacing it, drawing again',
+      'Picking a class monitor, then an assistant (same student can\'t be both)',
+      'Eating a sweet from a bag, then taking another',
+      'Testing 2 fuses from a box without putting the first back'
+    ],
+    no: [
+      'Flipping a coin AND rolling a die (no effect on each other)',
+      'Drawing a card, REPLACING it, drawing again',
+      'Two different people flipping coins'
+    ]
+  },
+  {
+    type: 'formula',
+    title: 'DEPENDENT: THE "AND" RULE',
+    formula: 'P(A AND B) = P(A) × P(B | A)',
+    subformula: 'P(B | A) = probability of B AFTER A has happened. Update the numbers before the 2nd pick!',
+    text: 'Multiply, but CHANGE the second fraction!',
+    example: {
+      text: '🍬 A bag has 5 red and 3 blue sweets (8 in total).\nYou take a red sweet and EAT it. Now 4 red are left out of 7.',
+      question: 'What\'s P(Red AND Red)?',
+      answer: 'P(R and R) = 5/8 × 4/7 = 20/56 = 5/14 ≈ 35.7%'
+    },
+    warning: 'Without replacement: the total goes DOWN by 1, and so does the count of what you took!'
+  },
+  {
+    type: 'formula',
+    title: 'PUT IT BACK OR KEEP IT? 🔄',
+    text: 'Same bag: 5 red + 3 blue. Pick 2 sweets. P(Red AND Red)?',
+    formula: 'Put back: 5/8 × 5/8 = 25/64 ≈ 39.1%',
+    subformula: 'WITH replacement → the bag is the same again → INDEPENDENT',
+    example: {
+      text: 'Keep (or eat) the first sweet → only 4 red left out of 7.',
+      question: 'WITHOUT replacement → DEPENDENT',
+      answer: 'Keep: 5/8 × 4/7 = 5/14 ≈ 35.7%'
+    },
+    warning: '🔑 Key words for DEPENDENT: "without replacement", "keeps", "eats", "does not put back", "picks 2 different people".'
+  },
+  {
+    type: 'multi-practice',
+    title: 'PRACTICE: Dependent Events',
+    problems: [
+      {
+        question: 'Problem 1: A box has 10 fuses, 3 are faulty. Test 2 without replacing. P(BOTH faulty)?',
+        setup: 'P(1st faulty) = 3/10, then P(2nd faulty | 1st faulty) = 2/9',
+        answer: 'P = 3/10 × 2/9 = 6/90 = 1/15 ≈ 6.7%'
+      },
+      {
+        question: 'Problem 2: Pick 2 cards without replacement. P(BOTH Aces)?',
+        setup: 'P(1st Ace) = 4/52, then P(2nd Ace | 1st Ace) = 3/51',
+        answer: 'P = 4/52 × 3/51 = 12/2652 = 1/221 ≈ 0.45%'
+      },
+      {
+        question: 'Problem 3: A class has 12 girls and 8 boys. Pick a monitor, then an assistant. P(Girl THEN Boy)?',
+        setup: 'P(Girl) = 12/20, then P(Boy | Girl picked) = 8/19',
+        answer: 'P = 12/20 × 8/19 = 96/380 = 24/95 ≈ 25.3%'
       }
     ]
   },
