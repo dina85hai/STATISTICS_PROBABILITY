@@ -115,6 +115,39 @@
     .tooltip.show { opacity: 1; }
     .steps { margin: 8px 0 0; padding-left: 20px; font-size: 15px; }
     .steps li { margin-bottom: 4px; }
+
+    /* Practice: Concrete → Visual → Abstract → Exercise boxes */
+    .cpa { background: var(--card); border: 2px solid var(--b); border-radius: 12px; margin-top: 16px; overflow: hidden; }
+    .cpa > h3 { margin: 0; padding: 7px 14px; background: var(--b); color: #fff; font-size: 16px; letter-spacing: .02em; }
+    .cpa > .body { padding: 12px 14px 14px; }
+    .cpa p { margin: 0 0 10px; }
+    .cpa.concrete { --b: #1f5fa8; }
+    .cpa.visual { --b: #2e8b3e; }
+    .cpa.abstract { --b: #8c1c3c; }
+    .cpa.exercise { --b: #1d3557; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cpa.exercise { --b: #3a5a8c; } }
+    :root[data-theme="dark"] .cpa.exercise { --b: #3a5a8c; }
+    .tally-hidden .kiosk-tally > * , .tally-hidden .kiosk-tally { color: transparent; }
+    .tally-hidden .kiosk-tally::after { content: "?"; color: var(--muted); }
+    .orders { font-weight: 600; line-height: 1.8; }
+    .formulas { display: grid; gap: 8px; }
+    .formulas .formula { margin: 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 12px; text-align: left; }
+    .formulas .formula b { font-weight: 700; }
+    .formulas .formula span.n { color: var(--muted); font-weight: 700; }
+    .fr { display: inline-flex; flex-direction: column; text-align: center; vertical-align: middle; line-height: 1.2; margin: 0 .2em; }
+    .fr > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 .2em; }
+    input.blank { width: 5.2em; padding: 4px 6px; border: 1.5px dashed var(--axis); border-radius: 6px; background: var(--bg); color: var(--ink); font: inherit; text-align: center; }
+    input.blank:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+    input.blank.ok { border: 2px solid var(--good); background: color-mix(in srgb, var(--good) 12%, var(--bg)); }
+    input.blank.no { border: 2px solid var(--bad); background: color-mix(in srgb, var(--bad) 10%, var(--bg)); }
+    .ex-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+    .ex-bar .feedback { margin: 0; }
+    .ex-table { width: 100%; background: var(--card); }
+    .ex-table td.given { font-weight: 600; }
+    .mcq { margin: 0 0 12px; }
+    .mcq p { font-weight: 600; margin-bottom: 6px; }
+    .mcq button.ok { border-color: var(--good); color: var(--good); }
+    .mcq button.no { border-color: var(--bad); color: var(--bad); }
   </style>
 </head>
 <body>
@@ -129,6 +162,7 @@
         <a href="#grouping">4.1.3 · Grouped &amp; ungrouped</a>
         <a href="#tables">4.1.4 · Frequency tables</a>
         <a href="#charts">4.1.5 · Charts</a>
+        <a href="#practice">6 · Practice</a>
         <a href="#check">Quick check</a>
       </nav>
     </header>
@@ -369,6 +403,150 @@
       </div>
     </section>
 
+    <!-- ================= 6 PRACTICE ================= -->
+    <section id="practice" class="step">
+      <h2><span class="num">6</span> Practice: concrete → visual → abstract</h2>
+      <p class="hint">Start with real objects, see the picture, learn the formula, then complete the tables yourself. Type in each blank: it turns green when right.</p>
+
+      <div class="cpa concrete">
+        <h3>CONCRETE: Beverage data organisation</h3>
+        <div class="body">
+          <p>Imagine you work at a college drink kiosk. 40 random orders come in like this, which is confusing until they are counted with tally marks and arranged in a frequency table:</p>
+          <p><b>Your turn:</b> tally the orders on paper, then type each frequency. Press <b>Show tally</b> to compare your tally marks.</p>
+          <p class="orders">Tea, Juice, Coffee, Coffee, Coffee, Tea, Juice, Coffee, Tea, Tea, Milo, Tea, Coffee, Coffee, Milo, Coffee, Coffee, Juice, Coffee, Coffee, Coffee, Juice, Tea, Coffee, Milo, Coffee, Tea, Tea, Juice, Coffee, Coffee, Milo, Coffee, Tea, Juice, Tea, Tea, Coffee, Tea, Coffee</p>
+          <div class="ex tally-hidden" data-ex="kiosk">
+            <div class="table-scroll">
+              <table class="ex-table">
+                <thead><tr><th>Drink</th><th>Tally</th><th>Frequency (f)</th></tr></thead>
+                <tbody>
+                  <tr><td class="given">Tea</td><td class="tally kiosk-tally"><s class="five">||||</s> <s class="five">||||</s> ||</td><td><input class="blank" inputmode="decimal" data-ans="12" aria-label="Frequency of tea" autocomplete="off" /></td></tr>
+                  <tr><td class="given">Coffee</td><td class="tally kiosk-tally"><s class="five">||||</s> <s class="five">||||</s> <s class="five">||||</s> |||</td><td><input class="blank" inputmode="decimal" data-ans="18" aria-label="Frequency of coffee" autocomplete="off" /></td></tr>
+                  <tr><td class="given">Juice</td><td class="tally kiosk-tally"><s class="five">||||</s> |</td><td><input class="blank" inputmode="decimal" data-ans="6" aria-label="Frequency of juice" autocomplete="off" /></td></tr>
+                  <tr><td class="given">Milo</td><td class="tally kiosk-tally">||||</td><td><input class="blank" inputmode="decimal" data-ans="4" aria-label="Frequency of Milo" autocomplete="off" /></td></tr>
+                </tbody>
+                <tfoot><tr><td>Total</td><td></td><td><input class="blank" inputmode="decimal" data-ans="40" aria-label="Total frequency" autocomplete="off" /></td></tr></tfoot>
+              </table>
+            </div>
+            <div class="ex-bar"><button type="button" data-act="check">Check</button><button type="button" data-act="show">Show answers</button><button type="button" data-act="reset">Reset</button><button type="button" id="tally-btn">Show tally</button><p class="feedback" aria-live="polite"></p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cpa visual">
+        <h3>VISUAL: Choose your graph quickly</h3>
+        <div class="body">
+          <p>The right graph depends on the type of data and on the message you want to show.</p>
+          <div class="table-scroll">
+            <table class="ex-table">
+              <thead><tr><th>Data goal / situation</th><th>Graphical tool</th><th>Main visual advantage</th></tr></thead>
+              <tbody>
+                <tr><td>Comparing discrete categories</td><td><b>Bar chart</b></td><td>Bars are separate; height shows the count</td></tr>
+                <tr><td>Showing fractions of a whole</td><td><b>Pie chart</b></td><td>Angles show percentage shares easily</td></tr>
+                <tr><td>Grouped continuous ranges</td><td><b>Histogram</b></td><td>Boundaries remove the gaps between bars</td></tr>
+                <tr><td>Reading "less than" limits</td><td><b>Ogive</b></td><td>Shows the running cumulative frequency</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:12px"><b>Try it:</b> pick the best graph for each situation.</p>
+          <div id="mcqs"></div>
+        </div>
+      </div>
+
+      <div class="cpa abstract">
+        <h3>ABSTRACT: Formulas for table construction</h3>
+        <div class="body">
+          <p>The formulas used to build and read the tables:</p>
+          <div class="formulas">
+            <div class="formula"><span><b>Class midpoint (x)</b> = <span class="fr"><span>lower limit + upper limit</span><span>2</span></span></span><span class="n">(1)</span></div>
+            <div class="formula"><span><b>Lower boundary</b> = lower limit − 0.5 &nbsp;(for whole-number data)</span><span class="n">(2)</span></div>
+            <div class="formula"><span><b>Upper boundary</b> = upper limit + 0.5 &nbsp;(for whole-number data)</span><span class="n">(3)</span></div>
+            <div class="formula"><span><b>Class width (c)</b> = upper boundary − lower boundary</span><span class="n">(4)</span></div>
+            <div class="formula"><span><b>Cumulative frequency (F)</b> = previous F + f of this class</span><span class="n">(5)</span></div>
+            <div class="formula"><span><b>Pie chart sector angle</b> = <span class="fr"><span>category value</span><span>total value</span></span> × 360°</span><span class="n">(6)</span></div>
+            <div class="formula"><span><b>Pie chart percentage (%)</b> = <span class="fr"><span>category value</span><span>total value</span></span> × 100%</span><span class="n">(7)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cpa exercise">
+        <h3>EXERCISE 6.1: Complete the grouped data table</h3>
+        <div class="body">
+          <p>Complete the blank spaces in the cumulative frequency table for waiting times at an automotive service workshop.</p>
+          <div class="ex">
+            <div class="table-scroll">
+              <table class="ex-table">
+                <thead><tr><th>Time (min)</th><th>Frequency (f)</th><th>Cumulative freq (F)</th><th>Lower boundary</th><th>Upper boundary</th><th>Midpoint (x)</th></tr></thead>
+                <tbody>
+                  <tr><td class="given">10 – 19</td><td class="given">4</td><td class="given">4</td><td class="given">9.5</td><td class="given">19.5</td><td class="given">14.5</td></tr>
+                  <tr><td class="given">20 – 29</td><td class="given">6</td><td><input class="blank" inputmode="decimal" data-ans="10" aria-label="Cumulative frequency, 20 to 29" autocomplete="off" /></td><td class="given">19.5</td><td class="given">29.5</td><td class="given">24.5</td></tr>
+                  <tr><td class="given">30 – 39</td><td class="given">8</td><td><input class="blank" inputmode="decimal" data-ans="18" aria-label="Cumulative frequency, 30 to 39" autocomplete="off" /></td><td class="given">29.5</td><td class="given">39.5</td><td><input class="blank" inputmode="decimal" data-ans="34.5" aria-label="Midpoint, 30 to 39" autocomplete="off" /></td></tr>
+                  <tr><td class="given">40 – 49</td><td class="given">2</td><td class="given">20</td><td><input class="blank" inputmode="decimal" data-ans="39.5" aria-label="Lower boundary, 40 to 49" autocomplete="off" /></td><td class="given">49.5</td><td class="given">44.5</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="ex-bar"><button type="button" data-act="check">Check</button><button type="button" data-act="show">Show answers</button><button type="button" data-act="reset">Reset</button><p class="feedback" aria-live="polite"></p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cpa exercise">
+        <h3>EXERCISE 6.2: Pie chart angles and percentages</h3>
+        <div class="body">
+          <p>Use the kiosk frequency table from the CONCRETE box to complete the pie chart table (formulas 6 and 7).</p>
+          <div class="ex">
+            <div class="table-scroll">
+              <table class="ex-table">
+                <thead><tr><th>Drink</th><th>f</th><th>Sector angle (°)</th><th>Percentage (%)</th></tr></thead>
+                <tbody>
+                  <tr><td class="given">Tea</td><td class="given">12</td><td class="given">108</td><td><input class="blank" inputmode="decimal" data-ans="30" aria-label="Tea percentage" autocomplete="off" /></td></tr>
+                  <tr><td class="given">Coffee</td><td class="given">18</td><td><input class="blank" inputmode="decimal" data-ans="162" aria-label="Coffee angle" autocomplete="off" /></td><td><input class="blank" inputmode="decimal" data-ans="45" aria-label="Coffee percentage" autocomplete="off" /></td></tr>
+                  <tr><td class="given">Juice</td><td class="given">6</td><td><input class="blank" inputmode="decimal" data-ans="54" aria-label="Juice angle" autocomplete="off" /></td><td class="given">15</td></tr>
+                  <tr><td class="given">Milo</td><td class="given">4</td><td><input class="blank" inputmode="decimal" data-ans="36" aria-label="Milo angle" autocomplete="off" /></td><td><input class="blank" inputmode="decimal" data-ans="10" aria-label="Milo percentage" autocomplete="off" /></td></tr>
+                </tbody>
+                <tfoot><tr><td>Total</td><td>40</td><td><input class="blank" inputmode="decimal" data-ans="360" aria-label="Total angle" autocomplete="off" /></td><td><input class="blank" inputmode="decimal" data-ans="100" aria-label="Total percentage" autocomplete="off" /></td></tr></tfoot>
+              </table>
+            </div>
+            <div class="ex-bar"><button type="button" data-act="check">Check</button><button type="button" data-act="show">Show answers</button><button type="button" data-act="reset">Reset</button><p class="feedback" aria-live="polite"></p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cpa exercise">
+        <h3>EXERCISE 6.3: Electrical workshop, full table</h3>
+        <div class="body">
+          <p>The lengths of 30 cable offcuts (cm) from an electrical wiring workshop are grouped below. Complete every blank.</p>
+          <div class="ex">
+            <div class="table-scroll">
+              <table class="ex-table">
+                <thead><tr><th>Length (cm)</th><th>f</th><th>F</th><th>Lower boundary</th><th>Upper boundary</th><th>Midpoint (x)</th></tr></thead>
+                <tbody>
+                  <tr><td class="given">5 – 9</td><td class="given">3</td><td><input class="blank" inputmode="decimal" data-ans="3" aria-label="F, 5 to 9" autocomplete="off" /></td><td><input class="blank" inputmode="decimal" data-ans="4.5" aria-label="Lower boundary, 5 to 9" autocomplete="off" /></td><td class="given">9.5</td><td><input class="blank" inputmode="decimal" data-ans="7" aria-label="Midpoint, 5 to 9" autocomplete="off" /></td></tr>
+                  <tr><td class="given">10 – 14</td><td class="given">7</td><td><input class="blank" inputmode="decimal" data-ans="10" aria-label="F, 10 to 14" autocomplete="off" /></td><td class="given">9.5</td><td><input class="blank" inputmode="decimal" data-ans="14.5" aria-label="Upper boundary, 10 to 14" autocomplete="off" /></td><td><input class="blank" inputmode="decimal" data-ans="12" aria-label="Midpoint, 10 to 14" autocomplete="off" /></td></tr>
+                  <tr><td class="given">15 – 19</td><td class="given">11</td><td><input class="blank" inputmode="decimal" data-ans="21" aria-label="F, 15 to 19" autocomplete="off" /></td><td><input class="blank" inputmode="decimal" data-ans="14.5" aria-label="Lower boundary, 15 to 19" autocomplete="off" /></td><td><input class="blank" inputmode="decimal" data-ans="19.5" aria-label="Upper boundary, 15 to 19" autocomplete="off" /></td><td class="given">17</td></tr>
+                  <tr><td class="given">20 – 24</td><td class="given">6</td><td><input class="blank" inputmode="decimal" data-ans="27" aria-label="F, 20 to 24" autocomplete="off" /></td><td class="given">19.5</td><td><input class="blank" inputmode="decimal" data-ans="24.5" aria-label="Upper boundary, 20 to 24" autocomplete="off" /></td><td><input class="blank" inputmode="decimal" data-ans="22" aria-label="Midpoint, 20 to 24" autocomplete="off" /></td></tr>
+                  <tr><td class="given">25 – 29</td><td class="given">3</td><td><input class="blank" inputmode="decimal" data-ans="30" aria-label="F, 25 to 29" autocomplete="off" /></td><td><input class="blank" inputmode="decimal" data-ans="24.5" aria-label="Lower boundary, 25 to 29" autocomplete="off" /></td><td class="given">29.5</td><td><input class="blank" inputmode="decimal" data-ans="27" aria-label="Midpoint, 25 to 29" autocomplete="off" /></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin-top:10px">Class width c = <input class="blank" inputmode="decimal" data-ans="5" aria-label="Class width" autocomplete="off" /> cm &nbsp;·&nbsp; Modal class: <input class="blank" style="width:7em" data-ans="15-19" data-text aria-label="Modal class" autocomplete="off" placeholder="e.g. 5-9" /></p>
+            <div class="ex-bar"><button type="button" data-act="check">Check</button><button type="button" data-act="show">Show answers</button><button type="button" data-act="reset">Reset</button><p class="feedback" aria-live="polite"></p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cpa exercise">
+        <h3>EXERCISE 6.4: Endless practice</h3>
+        <div class="body">
+          <p>A new grouped table every time you press <b>New table</b>. Complete F, the boundaries and the midpoints.</p>
+          <div class="ex" id="gen">
+            <p id="gen-ctx"></p>
+            <div class="table-scroll" id="gen-table"></div>
+            <div class="ex-bar"><button type="button" id="gen-new">New table</button><button type="button" data-act="check">Check</button><button type="button" data-act="show">Show answers</button><button type="button" data-act="reset">Reset</button><p class="feedback" aria-live="polite"></p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= QUICK CHECK ================= -->
     <section id="check" class="step">
       <h2><span class="num">✓</span> Quick check</h2>
@@ -456,6 +634,104 @@
     });
     document.getElementById('game-next').addEventListener('click', function () { pos++; show(); });
     show();
+
+    // ---------- Practice: fill-in-the-blank tables ----------
+    function norm(v) { return v.trim().toLowerCase().replace(/[–—\s]+/g, '').replace(/[°%]/g, ''); }
+    function isRight(inp) {
+      if (inp.hasAttribute('data-text')) return norm(inp.value) === norm(inp.dataset.ans);
+      var v = parseFloat(inp.value.replace(',', '.'));
+      return !isNaN(v) && Math.abs(v - parseFloat(inp.dataset.ans)) < 1e-9;
+    }
+    function mark(inp) {
+      inp.classList.remove('ok', 'no');
+      if (inp.value.trim() === '') return;
+      inp.classList.add(isRight(inp) ? 'ok' : 'no');
+    }
+    document.addEventListener('input', function (e) {
+      if (e.target.classList && e.target.classList.contains('blank')) {
+        e.target.classList.remove('no');
+        if (isRight(e.target)) e.target.classList.add('ok'); else e.target.classList.remove('ok');
+      }
+    });
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('[data-act]');
+      if (!btn) return;
+      var ex = btn.closest('.ex'), fb = ex.querySelector('.feedback'), blanks = ex.querySelectorAll('input.blank');
+      if (btn.dataset.act === 'check') {
+        var right = 0;
+        blanks.forEach(function (i) { mark(i); if (isRight(i)) right++; });
+        fb.textContent = right === blanks.length ? '✔ All ' + right + ' correct. Well done!' : right + ' / ' + blanks.length + ' correct. Fix the red boxes.';
+        fb.className = 'feedback ' + (right === blanks.length ? 'ok' : 'no');
+      } else if (btn.dataset.act === 'show') {
+        blanks.forEach(function (i) { i.value = i.dataset.ans; mark(i); });
+        fb.textContent = 'Answers shown. Press Reset to try again.'; fb.className = 'feedback';
+      } else {
+        blanks.forEach(function (i) { i.value = ''; i.classList.remove('ok', 'no'); });
+        fb.textContent = ''; fb.className = 'feedback';
+      }
+    });
+
+    document.getElementById('tally-btn').addEventListener('click', function () {
+      var ex = this.closest('.ex'), hidden = ex.classList.toggle('tally-hidden');
+      this.textContent = hidden ? 'Show tally' : 'Hide tally';
+    });
+
+    // ---------- Practice: choose the graph ----------
+    var mcqs = [
+      ['Number of motors sold by 4 different brands', 'Bar chart'],
+      ['Share of a company budget spent on each department', 'Pie chart'],
+      ['Voltage readings of 50 batteries grouped in classes of 0.1 V', 'Histogram'],
+      ['How many resistors are less than 102 Ω?', 'Ogive'],
+      ['Percentage of students choosing each elective course', 'Pie chart'],
+      ['Estimating the median waiting time from grouped data', 'Ogive']
+    ];
+    var tools = ['Bar chart', 'Pie chart', 'Histogram', 'Ogive'];
+    var mbox = document.getElementById('mcqs');
+    mcqs.forEach(function (q, n) {
+      var d = document.createElement('div');
+      d.className = 'mcq';
+      d.innerHTML = '<p>' + (n + 1) + '. ' + q[0] + '</p><div class="btns"></div><p class="feedback" aria-live="polite"></p>';
+      var row = d.querySelector('.btns'), fb = d.querySelector('.feedback');
+      tools.forEach(function (t) {
+        var bt = document.createElement('button');
+        bt.type = 'button'; bt.textContent = t;
+        bt.addEventListener('click', function () {
+          row.querySelectorAll('button').forEach(function (x) { x.classList.remove('ok', 'no'); });
+          var ok = t === q[1];
+          bt.classList.add(ok ? 'ok' : 'no');
+          fb.textContent = ok ? '✔ Correct' : '✘ Try again';
+          fb.className = 'feedback ' + (ok ? 'ok' : 'no');
+        });
+        row.appendChild(bt);
+      });
+      mbox.appendChild(d);
+    });
+
+    // ---------- Practice: random grouped tables ----------
+    var contexts = [
+      ['Waiting time at a service counter', 'min'], ['Temperature of transformers', '°C'],
+      ['Power rating of lamps', 'W'], ['Length of cable offcuts', 'cm'],
+      ['Marks in an Electrical Technology quiz', 'marks'], ['Charging time of phones', 'min']
+    ];
+    function rnd(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+    function newTable() {
+      var ctx = contexts[rnd(0, contexts.length - 1)], w = [5, 10, 10, 20][rnd(0, 3)], start = w * rnd(1, 4), n = rnd(4, 6);
+      var html = '<table class="ex-table"><thead><tr><th>Class (' + ctx[1] + ')</th><th>f</th><th>F</th><th>Lower boundary</th><th>Upper boundary</th><th>Midpoint (x)</th></tr></thead><tbody>';
+      var F = 0;
+      for (var i = 0; i < n; i++) {
+        var lo = start + i * w, hi = lo + w - 1, f = rnd(1, 12);
+        F += f;
+        function cell(ans, label) { return '<td><input class="blank" inputmode="decimal" data-ans="' + ans + '" aria-label="' + label + ', ' + lo + ' to ' + hi + '" autocomplete="off" /></td>'; }
+        html += '<tr><td class="given">' + lo + ' – ' + hi + '</td><td class="given">' + f + '</td>' +
+          cell(F, 'F') + cell(lo - 0.5, 'Lower boundary') + cell(hi + 0.5, 'Upper boundary') + cell((lo + hi) / 2, 'Midpoint') + '</tr>';
+      }
+      html += '</tbody></table>';
+      document.getElementById('gen-ctx').innerHTML = '<b>' + ctx[0] + '</b> (' + F + ' readings, class width ' + w + ')';
+      document.getElementById('gen-table').innerHTML = html;
+      var fb = document.querySelector('#gen .feedback'); fb.textContent = ''; fb.className = 'feedback';
+    }
+    document.getElementById('gen-new').addEventListener('click', newTable);
+    newTable();
 
     // ---------- Charts (inline SVG) ----------
     var NS = 'http://www.w3.org/2000/svg';

@@ -23,8 +23,8 @@
       lessons: [
         { id: 'data-presentation', title: 'Tabular & Graphical Form', url: 'data-presentation.html',
           tag: 'Notes', word: 'present', c1: '#fff0e3', c2: '#e6d3f0',
-          blurb: 'Syllabus 4.1: statistics terminology, discrete vs continuous and grouped vs ungrouped data, frequency and cumulative frequency tables, pie chart, bar chart, histogram and ogive.',
-          how: 'Learn the terms first, play the "Discrete or continuous?" game, then read each chart and try the quick check.' },
+          blurb: 'Syllabus 4.1: statistics terminology, discrete vs continuous and grouped vs ungrouped data, frequency and cumulative frequency tables, pie chart, bar chart, histogram and ogive, plus concrete → visual → abstract practice with fill-in tables.',
+          how: 'Learn the terms first, play the "Discrete or continuous?" game, read each chart, then complete the practice tables: each blank turns green when right.' },
         { id: 'statistics-notes', title: 'Mean, Mode, Median & Variance', url: 'statistics-notes.html',
           tag: 'Notes', word: 'statistics', c1: '#e6d3f0', c2: '#f7d6de',
           blurb: 'Step-by-step worked examples for raw data, frequency tables and grouped data.',
