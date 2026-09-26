@@ -5,7 +5,9 @@ https://dina85hai.github.io/STATISTICS_PROBABILITY/
 
 ## Learning path
 
-1. **Statistics**: Mean, Mode, Median, Range, Variance & Standard Deviation (`statistics-notes.html`) → Statistics Lab (`lessons/statistics-lab.html`):
+1. **Statistics**: Tabular & Graphical Form (`lessons/data-presentation.html`): syllabus 4.1 statistics terminology,
+   discrete/continuous and grouped/ungrouped data, frequency and cumulative frequency tables, pie chart, bar chart,
+   histogram and ogive with electrical engineering examples → Mean, Mode, Median, Range, Variance & Standard Deviation (`statistics-notes.html`) → Statistics Lab (`lessons/statistics-lab.html`):
    an Exercise tab laid out like the notes: the same three problems (A raw data, B frequency table, C grouped data)
    side by side for each step (mean, mode, median, range, variance & σ), with the notes' formulas and answer boxes
    placed inside the formula, plus a practice tab of random questions worked the same way, chosen by

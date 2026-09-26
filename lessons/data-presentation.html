@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tabular &amp; Graphical Form</title>
+  <meta name="description" content="Syllabus 4.1: statistics terminology, discrete and continuous data, grouped and ungrouped data, frequency and cumulative frequency tables, pie chart, bar chart, histogram and ogive." />
+  <style>
+    :root {
+      --bg: #fdf7f9; --card: #ffffff; --ink: #1c1a1b; --muted: #5f5a5c; --line: #eadfe3; --accent: #b0506c;
+      --s1: #d2395a; --s1-soft: #fdecef; --s2: #00707a; --s2-soft: #e3f7f8; --s3: #00695c; --s3-soft: #e2f6f1;
+      --formula: #fff8d6; --formula-line: #e9c84b; --good: #16804b; --bad: #c23442;
+      --grid: #eee6e9; --axis: #8a8184;
+      --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100; --series-5: #e87ba4;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #161314; --card: #211c1e; --ink: #f6eef0; --muted: #c2b8bb; --line: #3a2f33; --accent: #f0a5ba;
+        --s1: #ff8fa6; --s1-soft: #3a2228; --s2: #6fdde6; --s2-soft: #16312f; --s3: #7fe3cc; --s3-soft: #15302a;
+        --formula: #332c14; --formula-line: #8a7424; --good: #5fd08f; --bad: #ff8a95;
+        --grid: #33292d; --axis: #8d8285;
+        --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #161314; --card: #211c1e; --ink: #f6eef0; --muted: #c2b8bb; --line: #3a2f33; --accent: #f0a5ba;
+      --s1: #ff8fa6; --s1-soft: #3a2228; --s2: #6fdde6; --s2-soft: #16312f; --s3: #7fe3cc; --s3-soft: #15302a;
+      --formula: #332c14; --formula-line: #8a7424; --good: #5fd08f; --bad: #ff8a95;
+      --grid: #33292d; --axis: #8d8285;
+      --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .page { max-width: 1100px; margin: 0 auto; padding: 64px 16px 40px; }
+
+    .hero { border-radius: 20px; padding: 28px 22px; color: #fff; background: linear-gradient(135deg, #5a4fcf, #8e44ad 55%, #b0506c); }
+    .kicker { margin: 0 0 4px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
+    .hero h1 { margin: 0 0 8px; font-size: clamp(26px, 5vw, 40px); line-height: 1.15; }
+    .lead { margin: 0; max-width: 62ch; }
+    .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .jump a { color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,.18); }
+    .jump a:hover, .jump a:focus-visible { background: rgba(255,255,255,.32); }
+
+    .step { margin-top: 36px; scroll-margin-top: 16px; }
+    .step h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; font-size: clamp(20px, 3vw, 26px); }
+    .num { display: inline-grid; place-items: center; width: 34px; height: 34px; flex: none; border-radius: 50%; background: var(--accent); color: var(--card); font-size: 16px; }
+    .hint { margin: 0 0 14px; color: var(--muted); }
+    .outcome { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; margin-top: 16px; }
+    .outcome b { color: var(--accent); }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-top: 5px solid var(--c, var(--accent)); border-radius: 16px; padding: 16px 16px 18px; display: flex; flex-direction: column; min-width: 0; }
+    .cards.two { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+    .card.s1 { --c: var(--s1); --soft: var(--s1-soft); }
+    .card.s2 { --c: var(--s2); --soft: var(--s2-soft); }
+    .card.s3 { --c: var(--s3); --soft: var(--s3-soft); }
+    .type { margin: 0 0 6px; color: var(--c, var(--accent)); font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .card h3 { margin: 0 0 6px; font-size: 18px; }
+    .card p { margin: 0 0 8px; }
+    .card ul, .card ol { margin: 0 0 8px; padding-left: 20px; }
+    .data { font-weight: 700; letter-spacing: .02em; }
+    .tip { background: var(--card); border-left: 4px solid var(--formula-line); border-radius: 8px; padding: 10px 14px; margin: 14px 0 0; }
+    .formula { background: var(--formula); border: 2px solid var(--formula-line); border-radius: 12px; margin: 0 0 10px; padding: 8px 10px; text-align: center; }
+    .formula small { display: block; color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+
+    /* Terminology glossary */
+    .terms { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+    .term { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+    .term dt { font-weight: 800; color: var(--accent); }
+    .term dt .sym { color: var(--muted); font-weight: 600; font-size: 14px; }
+    .term dd { margin: 4px 0 0; }
+    .term .eg { display: block; margin-top: 6px; font-size: 14px; color: var(--muted); }
+    .term .eg::before { content: "⚡ "; }
+    .search { width: 100%; max-width: 360px; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; margin-bottom: 12px; }
+
+    table { border-collapse: collapse; margin: 8px 0; font-size: 15px; }
+    th, td { border: 1px solid var(--line); padding: 5px 10px; text-align: center; }
+    thead th { background: var(--soft, var(--formula)); color: var(--ink); }
+    tfoot td { font-weight: 700; background: var(--soft, var(--formula)); }
+    .table-scroll { overflow-x: auto; }
+    .compare { width: 100%; background: var(--card); }
+    .compare tbody th { text-align: left; }
+    .five { text-decoration-thickness: 2px; }
+    .tally { font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing: .05em; text-align: left; }
+
+    .answer { margin-top: 8px; padding: 10px 12px; border-radius: 10px; background: var(--soft, var(--formula)); border: 2px solid var(--c, var(--formula-line)); font-weight: 600; }
+
+    /* Discrete or continuous game */
+    .game { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px; margin-top: 16px; }
+    .game .q { font-size: 18px; font-weight: 700; margin: 6px 0 12px; min-height: 2.6em; }
+    .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+    button { font: inherit; font-weight: 700; border: 1px solid var(--line); background: var(--bg); color: var(--ink); padding: 9px 16px; border-radius: 10px; cursor: pointer; }
+    button:hover { border-color: var(--accent); }
+    button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+    .feedback { margin: 10px 0 0; font-weight: 600; min-height: 1.5em; }
+    .feedback.ok { color: var(--good); }
+    .feedback.no { color: var(--bad); }
+    .score { color: var(--muted); font-size: 14px; }
+
+    /* Charts */
+    .chart { position: relative; }
+    .chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+    .chart text { fill: var(--muted); font-size: 12px; font-family: inherit; }
+    .chart .lbl { fill: var(--ink); font-weight: 700; }
+    .chart .gridline { stroke: var(--grid); stroke-width: 1; }
+    .chart .axis { stroke: var(--axis); stroke-width: 1; }
+    .chart .mark { cursor: pointer; transition: opacity .15s; }
+    .chart .mark:hover, .chart .mark:focus { opacity: .8; outline: none; }
+    .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 14px; }
+    .legend li { display: flex; align-items: center; gap: 6px; }
+    .legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+    .tooltip { position: absolute; pointer-events: none; background: var(--ink); color: var(--bg); padding: 6px 9px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap; opacity: 0; transform: translate(-50%, -110%); transition: opacity .1s; z-index: 2; }
+    .tooltip.show { opacity: 1; }
+    .steps { margin: 8px 0 0; padding-left: 20px; font-size: 15px; }
+    .steps li { margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <p class="kicker">Syllabus 4.1 · Statistics &amp; Probability</p>
+      <h1>Tabular &amp; Graphical Form 📋📈</h1>
+      <p class="lead">Learn the words of statistics, tell discrete from continuous and grouped from ungrouped data, then show the same data as tables and charts, with electrical engineering examples.</p>
+      <nav class="jump" aria-label="Jump to a subtopic">
+        <a href="#terms">4.1.1 · Terminology</a>
+        <a href="#types">4.1.2 · Discrete &amp; continuous</a>
+        <a href="#grouping">4.1.3 · Grouped &amp; ungrouped</a>
+        <a href="#tables">4.1.4 · Frequency tables</a>
+        <a href="#charts">4.1.5 · Charts</a>
+        <a href="#check">Quick check</a>
+      </nav>
+    </header>
+
+    <div class="outcome">
+      <b>Learning outcome (C2):</b> After this subtopic you should be able to <b>differentiate</b> between discrete and continuous, grouped and ungrouped data, and <b>represent and interpret</b> them in a frequency table, cumulative frequency table, pie chart, bar chart, histogram and ogive.
+    </div>
+
+    <!-- ================= 4.1.1 TERMINOLOGY ================= -->
+    <section id="terms" class="step">
+      <h2><span class="num">1</span> Terminology of statistics</h2>
+      <p class="hint">The key words used in this unit. Each one has an electrical engineering example (⚡).</p>
+      <label for="term-search" class="hint" style="display:block;margin-bottom:4px">Search a term:</label>
+      <input id="term-search" class="search" type="search" placeholder="e.g. boundary, frequency…" autocomplete="off" />
+      <dl class="terms" id="term-list">
+        <div class="term"><dt>Statistics</dt><dd>The science of collecting, organising, presenting, analysing and interpreting data to make decisions.</dd><span class="eg">Studying the daily load on a substation to plan maintenance.</span></div>
+        <div class="term"><dt>Data</dt><dd>Facts or values collected by counting or measuring. One value is called a <b>datum</b> or an <b>observation</b>.</dd><span class="eg">Voltage readings from a multimeter.</span></div>
+        <div class="term"><dt>Population</dt><dd>The whole group of items or people that we want to study.</dd><span class="eg">All 10 000 resistors made by a factory in one day.</span></div>
+        <div class="term"><dt>Sample</dt><dd>A smaller part of the population that is actually tested or measured.</dd><span class="eg">40 resistors picked from the day's production for testing.</span></div>
+        <div class="term"><dt>Variable</dt><dd>A characteristic that can take different values from one item to another.</dd><span class="eg">Resistance (Ω), current (A), number of faults.</span></div>
+        <div class="term"><dt>Qualitative data</dt><dd>Data that describes a quality or category, not a number. Also called categorical data.</dd><span class="eg">Cable colour, type of motor (AC / DC), brand of circuit breaker.</span></div>
+        <div class="term"><dt>Quantitative data</dt><dd>Data in the form of numbers that can be counted or measured. It is either discrete or continuous.</dd><span class="eg">Power in watts, number of blown fuses.</span></div>
+        <div class="term"><dt>Discrete data</dt><dd>Data that is <b>counted</b>. It can only take exact separate values, usually whole numbers.</dd><span class="eg">Number of power trips per week: 0, 1, 2, 3…</span></div>
+        <div class="term"><dt>Continuous data</dt><dd>Data that is <b>measured</b>. It can take any value in a range, including decimals.</dd><span class="eg">Voltage = 239.6 V, temperature of a transformer = 65.3 °C.</span></div>
+        <div class="term"><dt>Ungrouped data <span class="sym">(raw data)</span></dt><dd>Data listed one value at a time, as it was collected, not arranged into classes.</dd><span class="eg">Current readings: 2.1, 2.4, 1.9, 2.2 A.</span></div>
+        <div class="term"><dt>Grouped data</dt><dd>Data arranged into classes (intervals) with the frequency of each class. Used when there are many values.</dd><span class="eg">Resistance 95 – 99 Ω: 9 resistors.</span></div>
+        <div class="term"><dt>Frequency <span class="sym">(f)</span></dt><dd>How many times a value, or a value in a class, appears in the data.</dd><span class="eg">3 motors failed in week 1, so f = 3 for that value.</span></div>
+        <div class="term"><dt>Tally</dt><dd>Strokes used to count data quickly. Every 5th stroke crosses the previous four: <span class="data"><s class="five">||||</s></span> = 5.</dd><span class="eg">Counting faulty sockets while inspecting a building.</span></div>
+        <div class="term"><dt>Frequency table <span class="sym">(frequency distribution)</span></dt><dd>A table that shows each value or class with its frequency.</dd><span class="eg">Number of outages per week and how many weeks had that number.</span></div>
+        <div class="term"><dt>Class <span class="sym">(class interval)</span></dt><dd>A group of values in grouped data, such as 95 – 99.</dd><span class="eg">Currents from 1.0 A to 1.4 A.</span></div>
+        <div class="term"><dt>Class limits</dt><dd>The smallest (<b>lower limit</b>) and largest (<b>upper limit</b>) values written for a class.</dd><span class="eg">For 95 – 99 Ω: lower limit 95, upper limit 99.</span></div>
+        <div class="term"><dt>Class boundaries</dt><dd>The "true" edges of a class, halfway between one class and the next, so there are no gaps. Lower boundary = lower limit − 0.5, upper boundary = upper limit + 0.5 (for whole-number limits).</dd><span class="eg">95 – 99 Ω has boundaries 94.5 and 99.5.</span></div>
+        <div class="term"><dt>Class width <span class="sym">(class size, c)</span></dt><dd>Upper boundary − lower boundary.</dd><span class="eg">99.5 − 94.5 = 5 Ω.</span></div>
+        <div class="term"><dt>Class midpoint <span class="sym">(class mark, x)</span></dt><dd>The middle value of a class: (lower limit + upper limit) ÷ 2. It represents the class in calculations.</dd><span class="eg">(95 + 99) ÷ 2 = 97 Ω.</span></div>
+        <div class="term"><dt>Cumulative frequency <span class="sym">(F)</span></dt><dd>The running total of frequencies: all values up to and including this value or class.</dd><span class="eg">27 resistors are below 104.5 Ω.</span></div>
+        <div class="term"><dt>Relative frequency</dt><dd>Frequency ÷ total frequency. Often written as a percentage.</dd><span class="eg">15 out of 40 resistors = 0.375 = 37.5 %.</span></div>
+        <div class="term"><dt>Range</dt><dd>Largest value − smallest value. Helps decide how many classes to use.</dd><span class="eg">113 − 91 = 22 Ω.</span></div>
+        <div class="term"><dt>Pie chart</dt><dd>A circle divided into sectors. Each sector's angle = (f ÷ Σf) × 360°.</dd><span class="eg">Share of a home's monthly energy used by each appliance.</span></div>
+        <div class="term"><dt>Bar chart</dt><dd>Separate bars with <b>gaps</b>, one per category or discrete value. Bar height = frequency.</dd><span class="eg">Number of weeks with 0, 1, 2… outages.</span></div>
+        <div class="term"><dt>Histogram</dt><dd>Bars with <b>no gaps</b> for grouped continuous data. Bars are drawn from class boundary to class boundary.</dd><span class="eg">Resistance of 40 resistors in classes of 5 Ω.</span></div>
+        <div class="term"><dt>Ogive</dt><dd>A cumulative frequency curve: cumulative frequency plotted against the upper class boundary, joined smoothly.</dd><span class="eg">Reading how many resistors are below 100 Ω.</span></div>
+      </dl>
+      <p class="hint" id="term-none" hidden>No term matches your search.</p>
+    </section>
+
+    <!-- ================= 4.1.2 DISCRETE & CONTINUOUS ================= -->
+    <section id="types" class="step">
+      <h2><span class="num">2</span> Discrete vs continuous data</h2>
+      <p class="hint">Ask yourself: <b>do I count it or measure it?</b> Counted → discrete. Measured → continuous.</p>
+      <div class="cards">
+        <article class="card s1">
+          <p class="type">Discrete · counted</p>
+          <h3>🔢 Exact separate values</h3>
+          <ul>
+            <li>Number of LEDs on a circuit board</li>
+            <li>Number of power outages in a month</li>
+            <li>Number of students who passed the Electrical Technology test</li>
+            <li>Number of faulty cables in a batch</li>
+          </ul>
+          <p>You cannot have 2.5 outages, so values in between make no sense.</p>
+        </article>
+        <article class="card s2">
+          <p class="type">Continuous · measured</p>
+          <h3>📏 Any value in a range</h3>
+          <ul>
+            <li>Voltage of a battery (e.g. 1.48 V)</li>
+            <li>Current drawn by a motor (e.g. 3.27 A)</li>
+            <li>Length of copper wire (e.g. 12.35 m)</li>
+            <li>Time for a capacitor to charge (e.g. 0.042 s)</li>
+          </ul>
+          <p>The value depends only on how accurate the meter is.</p>
+        </article>
+      </div>
+
+      <div class="game" id="game" aria-live="polite">
+        <p class="type" style="color:var(--accent)">🎮 Discrete or continuous?</p>
+        <p class="q" id="game-q"></p>
+        <div class="btns">
+          <button type="button" data-pick="discrete">Discrete</button>
+          <button type="button" data-pick="continuous">Continuous</button>
+          <button type="button" id="game-next">Next ›</button>
+        </div>
+        <p class="feedback" id="game-fb"></p>
+        <p class="score" id="game-score">Score: 0 / 0</p>
+      </div>
+    </section>
+
+    <!-- ================= 4.1.3 GROUPED & UNGROUPED ================= -->
+    <section id="grouping" class="step">
+      <h2><span class="num">3</span> Ungrouped vs grouped data</h2>
+      <p class="hint">A quality-control technician measured 40 resistors marked 100 Ω. The same data can be shown two ways.</p>
+      <div class="cards">
+        <article class="card s1">
+          <p class="type">Ungrouped (raw) data</p>
+          <h3>🔌 Resistance of 40 resistors (Ω)</h3>
+          <p class="data">106, 105, 100, 110, 101, 113, 104, 102, 91, 101, 102, 106, 108, 99, 101, 92, 111, 103, 96, 107, 98, 97, 107, 104, 97, 109, 102, 107, 105, 102, 100, 94, 98, 95, 96, 108, 103, 99, 100, 103</p>
+          <p>Every single value is shown, but it is hard to see a pattern.</p>
+        </article>
+        <article class="card s2">
+          <p class="type">Grouped data</p>
+          <h3>📦 The same 40 values in classes</h3>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Resistance (Ω)</th><th>Tally</th><th>f</th></tr></thead>
+              <tbody>
+                <tr><td>90 – 94</td><td class="tally">|||</td><td>3</td></tr>
+                <tr><td>95 – 99</td><td class="tally"><s class="five">||||</s> ||||</td><td>9</td></tr>
+                <tr><td>100 – 104</td><td class="tally"><s class="five">||||</s> <s class="five">||||</s> <s class="five">||||</s></td><td>15</td></tr>
+                <tr><td>105 – 109</td><td class="tally"><s class="five">||||</s> <s class="five">||||</s></td><td>10</td></tr>
+                <tr><td>110 – 114</td><td class="tally">|||</td><td>3</td></tr>
+              </tbody>
+              <tfoot><tr><td>Total</td><td></td><td>40</td></tr></tfoot>
+            </table>
+          </div>
+          <p>Now it is clear most resistors are close to 100 Ω, but the exact values are lost.</p>
+        </article>
+      </div>
+      <div class="table-scroll" style="margin-top:16px">
+        <table class="compare">
+          <thead><tr><th></th><th>Ungrouped data</th><th>Grouped data</th></tr></thead>
+          <tbody>
+            <tr><th>Looks like</th><td>A list of values, or a table of single values</td><td>A table of classes (intervals)</td></tr>
+            <tr><th>Best for</th><td>Small data sets, or few different values</td><td>Large data sets, or many different values</td></tr>
+            <tr><th>Exact values?</th><td>Kept</td><td>Lost: each class is represented by its midpoint</td></tr>
+            <tr><th>Charts</th><td>Bar chart, pie chart</td><td>Histogram, ogive</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tip"><b>How to build classes:</b> find the range (113 − 91 = 22), choose about 5 to 10 classes, then class width ≈ range ÷ number of classes = 22 ÷ 5 ≈ 5. Start the first class at or just below the smallest value (90).</p>
+    </section>
+
+    <!-- ================= 4.1.4 FREQUENCY TABLES ================= -->
+    <section id="tables" class="step">
+      <h2><span class="num">4</span> Frequency &amp; cumulative frequency tables</h2>
+      <p class="hint">Cumulative frequency (F) = add each frequency to the running total. The last F always equals Σf.</p>
+      <div class="cards">
+        <article class="card s1">
+          <p class="type">A · Ungrouped (discrete)</p>
+          <h3>⚡ Power outages per week</h3>
+          <p>A factory recorded the number of power outages each week for 30 weeks.</p>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Outages (x)</th><th>Weeks (f)</th><th>Cumulative frequency (F)</th></tr></thead>
+              <tbody>
+                <tr><td>0</td><td>6</td><td>6</td></tr>
+                <tr><td>1</td><td>9</td><td>6 + 9 = 15</td></tr>
+                <tr><td>2</td><td>8</td><td>15 + 8 = 23</td></tr>
+                <tr><td>3</td><td>5</td><td>23 + 5 = 28</td></tr>
+                <tr><td>4</td><td>2</td><td>28 + 2 = 30</td></tr>
+              </tbody>
+              <tfoot><tr><td>Σ</td><td>30</td><td></td></tr></tfoot>
+            </table>
+          </div>
+          <p><b>Interpret:</b> F = 23 at x = 2 means 23 weeks had 2 outages or fewer.</p>
+        </article>
+        <article class="card s2">
+          <p class="type">B · Grouped (continuous)</p>
+          <h3>🔌 Resistance of 40 resistors</h3>
+          <p>Add boundaries and midpoints: you need them for the histogram and ogive.</p>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Class (Ω)</th><th>f</th><th>Class boundaries</th><th>Midpoint (x)</th><th>F</th></tr></thead>
+              <tbody>
+                <tr><td>90 – 94</td><td>3</td><td>89.5 – 94.5</td><td>92</td><td>3</td></tr>
+                <tr><td>95 – 99</td><td>9</td><td>94.5 – 99.5</td><td>97</td><td>12</td></tr>
+                <tr><td>100 – 104</td><td>15</td><td>99.5 – 104.5</td><td>102</td><td>27</td></tr>
+                <tr><td>105 – 109</td><td>10</td><td>104.5 – 109.5</td><td>107</td><td>37</td></tr>
+                <tr><td>110 – 114</td><td>3</td><td>109.5 – 114.5</td><td>112</td><td>40</td></tr>
+              </tbody>
+              <tfoot><tr><td>Σ</td><td>40</td><td></td><td></td><td></td></tr></tfoot>
+            </table>
+          </div>
+          <p><b>Interpret:</b> F = 27 means 27 resistors are less than 104.5 Ω. Class width c = 94.5 − 89.5 = 5.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ================= 4.1.5 CHARTS ================= -->
+    <section id="charts" class="step">
+      <h2><span class="num">5</span> Pie chart, bar chart, histogram &amp; ogive</h2>
+      <p class="hint">Hover or tap a slice, bar or point to read its value.</p>
+      <div class="cards two">
+        <article class="card s1">
+          <p class="type">Pie chart · parts of a whole</p>
+          <h3>🏠 Monthly energy use of a house (kWh)</h3>
+          <div class="formula"><small>Sector angle</small>angle = (f ÷ Σf) × 360°</div>
+          <div class="chart" id="pie"></div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Appliance</th><th>kWh</th><th>Angle</th></tr></thead>
+              <tbody id="pie-table"></tbody>
+              <tfoot><tr><td>Total</td><td>400</td><td>360°</td></tr></tfoot>
+            </table>
+          </div>
+          <p><b>Interpret:</b> the air conditioner uses the biggest share, 180 ÷ 400 = 45 %.</p>
+        </article>
+        <article class="card s1">
+          <p class="type">Bar chart · discrete data</p>
+          <h3>⚡ Power outages per week</h3>
+          <div class="chart" id="bar"></div>
+          <ol class="steps">
+            <li>x-axis: each value (0, 1, 2, 3, 4). y-axis: frequency.</li>
+            <li>Draw bars of equal width with <b>gaps</b> between them.</li>
+          </ol>
+          <p><b>Interpret:</b> 1 outage per week is the most common (9 weeks).</p>
+        </article>
+        <article class="card s2">
+          <p class="type">Histogram · grouped continuous data</p>
+          <h3>🔌 Resistance of 40 resistors</h3>
+          <div class="chart" id="hist"></div>
+          <ol class="steps">
+            <li>x-axis: <b>class boundaries</b> (89.5, 94.5, …, 114.5). y-axis: frequency.</li>
+            <li>Bars touch: <b>no gaps</b>, because the data is continuous.</li>
+          </ol>
+          <p><b>Interpret:</b> the tallest bar, 99.5 – 104.5 Ω, is the modal class.</p>
+        </article>
+        <article class="card s2">
+          <p class="type">Ogive · cumulative frequency curve</p>
+          <h3>🔌 Resistance of 40 resistors</h3>
+          <div class="chart" id="ogive"></div>
+          <ol class="steps">
+            <li>Plot (upper boundary, F): (89.5, 0), (94.5, 3), (99.5, 12), (104.5, 27), (109.5, 37), (114.5, 40).</li>
+            <li>Start at F = 0 on the first lower boundary, then join the points with a smooth curve.</li>
+          </ol>
+          <p><b>Interpret:</b> read across from F = 20 (half of 40) to estimate the median ≈ 102 Ω.</p>
+        </article>
+      </div>
+      <div class="table-scroll" style="margin-top:16px">
+        <table class="compare">
+          <thead><tr><th>Chart</th><th>Use it for</th><th>x-axis</th><th>Remember</th></tr></thead>
+          <tbody>
+            <tr><th>Pie chart</th><td>Parts of a whole (categories)</td><td>none</td><td>Angles add up to 360°</td></tr>
+            <tr><th>Bar chart</th><td>Categories or discrete data</td><td>Categories / values</td><td>Gaps between bars</td></tr>
+            <tr><th>Histogram</th><td>Grouped continuous data</td><td>Class boundaries</td><td>No gaps between bars</td></tr>
+            <tr><th>Ogive</th><td>Cumulative frequency; median &amp; quartiles</td><td>Upper class boundaries</td><td>Starts at 0, ends at Σf</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= QUICK CHECK ================= -->
+    <section id="check" class="step">
+      <h2><span class="num">✓</span> Quick check</h2>
+      <p class="hint">Answer on paper first, then check.</p>
+      <div class="cards">
+        <article class="card s3">
+          <p class="type">Question 1</p>
+          <p>Is "the number of turns on a transformer coil" discrete or continuous? Why?</p>
+          <p class="answer">Discrete: turns are counted (e.g. 250 turns), not measured.</p>
+        </article>
+        <article class="card s3">
+          <p class="type">Question 2</p>
+          <p>For the class 20 – 29 V, find the class boundaries, class width and midpoint.</p>
+          <p class="answer">Boundaries 19.5 – 29.5 V, width = 10 V, midpoint = (20 + 29) ÷ 2 = 24.5 V.</p>
+        </article>
+        <article class="card s3">
+          <p class="type">Question 3</p>
+          <p>In the pie chart, lighting uses 30 kWh out of 400 kWh. What is its sector angle?</p>
+          <p class="answer">(30 ÷ 400) × 360° = 27°.</p>
+        </article>
+        <article class="card s3">
+          <p class="type">Question 4</p>
+          <p>Using the resistor table, how many resistors are 105 Ω or more?</p>
+          <p class="answer">40 − 27 = 13 resistors (10 + 3).</p>
+        </article>
+        <article class="card s3">
+          <p class="type">Question 5</p>
+          <p>Why are there no gaps between the bars of a histogram?</p>
+          <p class="answer">The data is continuous: each class boundary is shared by two classes, so the bars touch.</p>
+        </article>
+        <article class="card s3">
+          <p class="type">Question 6</p>
+          <p>Which chart would you use to find the median resistance, and what do you plot?</p>
+          <p class="answer">An ogive: plot cumulative frequency against the upper class boundaries, then read across at Σf ÷ 2.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+  (function () {
+    // ---------- Terminology search ----------
+    var search = document.getElementById('term-search');
+    var terms = document.querySelectorAll('#term-list .term');
+    var none = document.getElementById('term-none');
+    search.addEventListener('input', function () {
+      var q = search.value.trim().toLowerCase();
+      var shown = 0;
+      terms.forEach(function (t) {
+        var hit = !q || t.textContent.toLowerCase().indexOf(q) !== -1;
+        t.hidden = !hit;
+        if (hit) shown++;
+      });
+      none.hidden = shown > 0;
+    });
+
+    // ---------- Discrete or continuous game ----------
+    var items = [
+      ['Number of resistors in a circuit', 'discrete'],
+      ['Voltage across a capacitor', 'continuous'],
+      ['Number of blackouts in a year', 'discrete'],
+      ['Current flowing through a lamp', 'continuous'],
+      ['Number of students in an electrical lab', 'discrete'],
+      ['Temperature of a running motor', 'continuous'],
+      ['Number of switches on a distribution board', 'discrete'],
+      ['Length of an extension cable', 'continuous'],
+      ['Monthly electricity bill in RM', 'continuous'],
+      ['Number of faulty bulbs in a box of 50', 'discrete'],
+      ['Time taken to repair a fault', 'continuous'],
+      ['Frequency of the mains supply (Hz)', 'continuous']
+    ];
+    var order = items.map(function (_, i) { return i; }).sort(function () { return Math.random() - 0.5; });
+    var pos = 0, right = 0, total = 0, answered = false;
+    var qEl = document.getElementById('game-q'), fb = document.getElementById('game-fb'), sc = document.getElementById('game-score');
+    function show() { qEl.textContent = items[order[pos % order.length]][0]; fb.textContent = ''; fb.className = 'feedback'; answered = false; }
+    document.querySelectorAll('#game [data-pick]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (answered) return;
+        answered = true; total++;
+        var ans = items[order[pos % order.length]][1];
+        if (b.dataset.pick === ans) { right++; fb.textContent = '✔ Correct! It is ' + ans + (ans === 'discrete' ? ': it is counted.' : ': it is measured.'); fb.className = 'feedback ok'; }
+        else { fb.textContent = '✘ Not quite. It is ' + ans + (ans === 'discrete' ? ': it is counted.' : ': it is measured.'); fb.className = 'feedback no'; }
+        sc.textContent = 'Score: ' + right + ' / ' + total;
+      });
+    });
+    document.getElementById('game-next').addEventListener('click', function () { pos++; show(); });
+    show();
+
+    // ---------- Charts (inline SVG) ----------
+    var NS = 'http://www.w3.org/2000/svg';
+    function el(name, attrs, parent) {
+      var e = document.createElementNS(NS, name);
+      for (var k in attrs) e.setAttribute(k, attrs[k]);
+      if (parent) parent.appendChild(e);
+      return e;
+    }
+    function text(parent, x, y, s, attrs) {
+      var t = el('text', Object.assign({ x: x, y: y }, attrs || {}), parent);
+      t.textContent = s;
+      return t;
+    }
+    // Tooltip shared by every mark in one chart.
+    function tooltip(box) {
+      var tip = document.createElement('div');
+      tip.className = 'tooltip';
+      box.appendChild(tip);
+      return function (mark, label, cx, cy) {
+        mark.setAttribute('tabindex', '0');
+        mark.setAttribute('aria-label', label);
+        mark.classList.add('mark');
+        function on() {
+          var svg = box.querySelector('svg'), r = svg.getBoundingClientRect(), vb = svg.viewBox.baseVal, s = r.width / vb.width;
+          tip.textContent = label;
+          tip.style.left = (cx * s) + 'px';
+          tip.style.top = (cy * s) + 'px';
+          tip.classList.add('show');
+        }
+        function off() { tip.classList.remove('show'); }
+        mark.addEventListener('mouseenter', on); mark.addEventListener('focus', on); mark.addEventListener('click', on);
+        mark.addEventListener('mouseleave', off); mark.addEventListener('blur', off);
+      };
+    }
+    // Axes frame for bar-type charts. Returns scales.
+    function frame(svg, W, H, m, yMax, yStep, xTitle, yTitle) {
+      var ih = H - m.t - m.b;
+      function y(v) { return m.t + ih - v / yMax * ih; }
+      for (var v = 0; v <= yMax; v += yStep) {
+        el('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), class: v === 0 ? 'axis' : 'gridline' }, svg);
+        text(svg, m.l - 6, y(v) + 4, v, { 'text-anchor': 'end' });
+      }
+      text(svg, (m.l + W - m.r) / 2, H - 4, xTitle, { 'text-anchor': 'middle' });
+      text(svg, 12, m.t + ih / 2, yTitle, { 'text-anchor': 'middle', transform: 'rotate(-90 12 ' + (m.t + ih / 2) + ')' });
+      return y;
+    }
+    // Bar path with 4px rounded top corners, square at the baseline.
+    function barPath(x, yTop, w, yBase) {
+      var r = Math.min(4, w / 2, yBase - yTop);
+      return 'M' + x + ',' + yBase + 'V' + (yTop + r) + 'Q' + x + ',' + yTop + ' ' + (x + r) + ',' + yTop +
+        'H' + (x + w - r) + 'Q' + (x + w) + ',' + yTop + ' ' + (x + w) + ',' + (yTop + r) + 'V' + yBase + 'Z';
+    }
+
+    // Pie chart
+    (function () {
+      var data = [['Air conditioner', 180], ['Refrigerator', 90], ['Water heater', 60], ['Others', 40], ['Lighting', 30]];
+      var colors = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)', 'var(--series-4)', 'var(--series-5)'];
+      var box = document.getElementById('pie'), tbody = document.getElementById('pie-table');
+      var svg = el('svg', { viewBox: '0 0 300 220', role: 'img', 'aria-label': 'Pie chart of monthly energy use by appliance' }, box);
+      var tip = tooltip(box), cx = 150, cy = 110, R = 95, a0 = -Math.PI / 2, sum = 400;
+      data.forEach(function (d, i) {
+        var deg = d[1] / sum * 360, a1 = a0 + deg * Math.PI / 180;
+        var large = deg > 180 ? 1 : 0;
+        var p = el('path', {
+          d: 'M' + cx + ',' + cy + 'L' + (cx + R * Math.cos(a0)) + ',' + (cy + R * Math.sin(a0)) +
+             'A' + R + ',' + R + ' 0 ' + large + ' 1 ' + (cx + R * Math.cos(a1)) + ',' + (cy + R * Math.sin(a1)) + 'Z',
+          fill: colors[i], stroke: 'var(--card)', 'stroke-width': 2
+        }, svg);
+        var mid = (a0 + a1) / 2;
+        tip(p, d[0] + ': ' + d[1] + ' kWh · ' + deg + '°', cx + R * 0.6 * Math.cos(mid), cy + R * 0.6 * Math.sin(mid));
+        if (deg >= 50) text(svg, cx + R * 0.62 * Math.cos(mid), cy + R * 0.62 * Math.sin(mid) + 4, deg + '°', { 'text-anchor': 'middle', class: 'lbl', style: 'fill:#fff' });
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td>' + d[0] + '</td><td>' + d[1] + '</td><td>(' + d[1] + ' ÷ 400) × 360° = ' + deg + '°</td>';
+        tbody.appendChild(tr);
+        a0 = a1;
+      });
+      var ul = document.createElement('ul');
+      ul.className = 'legend';
+      data.forEach(function (d, i) { ul.innerHTML += '<li><i style="background:' + colors[i] + '"></i>' + d[0] + '</li>'; });
+      box.appendChild(ul);
+    })();
+
+    // Bar chart
+    (function () {
+      var data = [[0, 6], [1, 9], [2, 8], [3, 5], [4, 2]];
+      var box = document.getElementById('bar'), W = 320, H = 230, m = { t: 12, r: 10, b: 44, l: 44 };
+      var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Bar chart of power outages per week' }, box);
+      var tip = tooltip(box), y = frame(svg, W, H, m, 10, 2, 'Number of outages per week', 'Weeks (f)');
+      var slot = (W - m.l - m.r) / data.length, bw = slot * 0.6;
+      data.forEach(function (d, i) {
+        var x = m.l + i * slot + (slot - bw) / 2;
+        var p = el('path', { d: barPath(x, y(d[1]), bw, y(0)), fill: 'var(--series-1)' }, svg);
+        tip(p, d[0] + ' outages: ' + d[1] + ' weeks', x + bw / 2, y(d[1]));
+        text(svg, x + bw / 2, y(0) + 16, d[0], { 'text-anchor': 'middle' });
+      });
+    })();
+
+    // Histogram
+    (function () {
+      var bounds = [89.5, 94.5, 99.5, 104.5, 109.5, 114.5], f = [3, 9, 15, 10, 3];
+      var box = document.getElementById('hist'), W = 320, H = 230, m = { t: 12, r: 14, b: 44, l: 44 };
+      var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Histogram of resistance of 40 resistors' }, box);
+      var tip = tooltip(box), y = frame(svg, W, H, m, 16, 4, 'Resistance (Ω), class boundaries', 'Frequency (f)');
+      var bw = (W - m.l - m.r) / f.length;
+      f.forEach(function (v, i) {
+        var x = m.l + i * bw;
+        // 1px surface inset each side keeps a 2px hairline between touching bars
+        var p = el('path', { d: barPath(x + 1, y(v), bw - 2, y(0)), fill: 'var(--series-1)' }, svg);
+        tip(p, bounds[i] + ' – ' + bounds[i + 1] + ' Ω: f = ' + v, x + bw / 2, y(v));
+      });
+      bounds.forEach(function (b, i) { text(svg, m.l + i * bw, y(0) + 16, b, { 'text-anchor': 'middle' }); });
+    })();
+
+    // Ogive
+    (function () {
+      var pts = [[89.5, 0], [94.5, 3], [99.5, 12], [104.5, 27], [109.5, 37], [114.5, 40]];
+      var box = document.getElementById('ogive'), W = 320, H = 230, m = { t: 12, r: 14, b: 44, l: 44 };
+      var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Ogive of resistance of 40 resistors' }, box);
+      var tip = tooltip(box), y = frame(svg, W, H, m, 40, 10, 'Resistance (Ω), upper class boundary', 'Cumulative frequency (F)');
+      function x(v) { return m.l + (v - 89.5) / 25 * (W - m.l - m.r); }
+      // Median guide: across from F = 20 to the curve, then down (the curve passes F = 20 near 102 Ω).
+      var med = 99.5 + (20 - 12) / 15 * 5;
+      el('path', { d: 'M' + m.l + ',' + y(20) + 'H' + x(med) + 'V' + y(0), fill: 'none', stroke: 'var(--muted)', 'stroke-dasharray': '4 4', 'stroke-width': 1 }, svg);
+      text(svg, x(med) + 4, y(0) - 6, 'median ≈ ' + med.toFixed(1), { class: 'lbl' });
+      // Smooth curve through the points (Catmull-Rom → cubic Bézier).
+      var P = pts.map(function (p) { return [x(p[0]), y(p[1])]; }), d = 'M' + P[0];
+      for (var i = 0; i < P.length - 1; i++) {
+        var p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || p2;
+        d += 'C' + (p1[0] + (p2[0] - p0[0]) / 6) + ',' + (p1[1] + (p2[1] - p0[1]) / 6) + ' ' +
+             (p2[0] - (p3[0] - p1[0]) / 6) + ',' + (p2[1] - (p3[1] - p1[1]) / 6) + ' ' + p2[0] + ',' + p2[1];
+      }
+      el('path', { d: d, fill: 'none', stroke: 'var(--series-1)', 'stroke-width': 2 }, svg);
+      pts.forEach(function (p, i) {
+        var c = el('circle', { cx: P[i][0], cy: P[i][1], r: 5, fill: 'var(--series-1)', stroke: 'var(--card)', 'stroke-width': 2 }, svg);
+        tip(c, '(' + p[0] + ' Ω, F = ' + p[1] + ')', P[i][0], P[i][1]);
+        text(svg, P[i][0], y(0) + 16, p[0], { 'text-anchor': 'middle' });
+      });
+    })();
+  })();
+  </script>
+</body>
+</html>
