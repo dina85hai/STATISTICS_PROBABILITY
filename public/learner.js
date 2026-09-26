@@ -25,6 +25,17 @@
           tag: 'Notes', word: 'present', c1: '#fff0e3', c2: '#e6d3f0',
           blurb: 'Syllabus 4.1: statistics terminology, discrete vs continuous and grouped vs ungrouped data, frequency and cumulative frequency tables, pie chart, bar chart, histogram and ogive, plus concrete → visual → abstract practice with fill-in tables and endless graph-reading practice.',
           how: 'Learn the terms first, play the "Discrete or continuous?" game, read each chart, then complete the practice tables: each blank turns green when right.' },
+        { id: 'data-practice-slides', title: 'Data Practice Slides', url: 'data-practice-slides.html',
+          tag: 'Practice', word: 'practice', c1: '#f3c2cf', c2: '#d6ecf0',
+          blurb: 'Syllabus 4.1 practice as slides: 5 sets (terminology, types of data, tables, charts, challenge) plus a mixed test, with multiple choice, true/false, fill in, match, sort, order and graph questions.',
+          how: 'Pick a set, answer one slide at a time and read the explanation. Only your first try counts toward your score.',
+          sections: [
+            { label: '📖 Terms', hash: 'terms' },
+            { label: '🔢 Data', hash: 'types' },
+            { label: '📋 Tables', hash: 'tables' },
+            { label: '📊 Charts', hash: 'charts' },
+            { label: '🏆 Challenge', hash: 'challenge' }
+          ] },
         { id: 'statistics-notes', title: 'Mean, Mode, Median & Variance', url: 'statistics-notes.html',
           tag: 'Notes', word: 'statistics', c1: '#e6d3f0', c2: '#f7d6de',
           blurb: 'Step-by-step worked examples for raw data, frequency tables and grouped data.',

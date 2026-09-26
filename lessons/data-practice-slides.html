@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Practice Slides</title>
+  <meta name="description" content="Syllabus 4.1 practice slides: terminology, types of data, frequency tables and charts, one question per slide with many question types." />
+  <style>
+    :root {
+      --card: #ffffff; --ink: #1c1a1b; --muted: #5f5a5c; --line: #eadfe3; --accent: #8e44ad; --accent-2: #b0506c;
+      --soft: #f6effa; --good: #16804b; --good-soft: #e5f5ec; --bad: #c23442; --bad-soft: #fdecee;
+      --formula: #fff8d6; --formula-line: #e9c84b; --grid: #eee6e9; --axis: #8a8184;
+      --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100; --series-5: #e87ba4;
+      --bg: linear-gradient(135deg, #7c3aed, #db2777 55%, #3b82f6);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --card: #211c26; --ink: #f6eef0; --muted: #c2b8bb; --line: #3a2f40; --accent: #d7a6f0; --accent-2: #f0a5ba;
+        --soft: #2c2335; --good: #5fd08f; --good-soft: #173026; --bad: #ff8a95; --bad-soft: #3a1f24;
+        --formula: #332c14; --formula-line: #8a7424; --grid: #362c3a; --axis: #8d8285;
+        --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
+        --bg: linear-gradient(135deg, #3b1d6e, #6d1440 55%, #1e3a70);
+      }
+    }
+    :root[data-theme="dark"] {
+      --card: #211c26; --ink: #f6eef0; --muted: #c2b8bb; --line: #3a2f40; --accent: #d7a6f0; --accent-2: #f0a5ba;
+      --soft: #2c2335; --good: #5fd08f; --good-soft: #173026; --bad: #ff8a95; --bad-soft: #3a1f24;
+      --formula: #332c14; --formula-line: #8a7424; --grid: #362c3a; --axis: #8d8285;
+      --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
+      --bg: linear-gradient(135deg, #3b1d6e, #6d1440 55%, #1e3a70);
+    }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body { margin: 0; background: #7c3aed; background: var(--bg); background-attachment: fixed; color: var(--ink); font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .page { max-width: 900px; margin: 0 auto; padding: 64px 16px 110px; }
+    .topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; color: #fff; margin-bottom: 12px; }
+    .topbar h1 { margin: 0; font-size: clamp(20px, 4vw, 28px); }
+    .pill { background: rgba(15, 10, 30, .55); color: #fff; padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 15px; }
+    .progress { height: 8px; border-radius: 99px; background: rgba(255, 255, 255, .3); overflow: hidden; margin-bottom: 14px; }
+    .progress i { display: block; height: 100%; width: 0; background: #fff; transition: width .3s; }
+    .slide { background: var(--card); border-radius: 22px; padding: 22px 20px; box-shadow: 0 18px 40px rgba(20, 0, 40, .3); animation: pop .25s ease; }
+    @keyframes pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .slide { animation: none; } .progress i { transition: none; } }
+    .qtype { display: inline-block; margin: 0 0 8px; padding: 3px 10px; border-radius: 999px; background: var(--soft); color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .slide h2 { margin: 0 0 12px; font-size: clamp(19px, 3.2vw, 24px); line-height: 1.35; }
+    .slide p { margin: 0 0 12px; }
+    .muted { color: var(--muted); }
+    button { font: inherit; font-weight: 700; cursor: pointer; border-radius: 12px; border: 2px solid var(--line); background: var(--card); color: var(--ink); padding: 10px 16px; }
+    button:hover { border-color: var(--accent); }
+    button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    .primary { background: var(--accent-2); border-color: var(--accent-2); color: #fff; }
+    .opts { display: grid; gap: 10px; }
+    .opts.two { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+    .opt { text-align: left; display: flex; gap: 10px; align-items: flex-start; }
+    .opt b { flex: none; display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--soft); color: var(--accent); font-size: 14px; }
+    .opt.ok, .row.ok { border-color: var(--good); background: var(--good-soft); }
+    .opt.no, .row.no { border-color: var(--bad); background: var(--bad-soft); }
+    input.blank, select { font: inherit; padding: 6px 8px; border-radius: 8px; border: 2px dashed var(--axis); background: var(--card); color: var(--ink); }
+    input.blank { width: 6em; text-align: center; }
+    input.blank.ok, select.ok { border: 2px solid var(--good); background: var(--good-soft); }
+    input.blank.no, select.no { border: 2px solid var(--bad); background: var(--bad-soft); }
+    .rows { display: grid; gap: 8px; }
+    .row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; border: 2px solid var(--line); border-radius: 12px; padding: 8px 12px; }
+    .row .seg { display: flex; gap: 6px; flex-wrap: wrap; }
+    .row .seg button { padding: 6px 12px; font-size: 15px; }
+    .row .seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--card); }
+    table { border-collapse: collapse; margin: 6px 0 12px; font-size: 16px; }
+    th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: center; }
+    thead th { background: var(--soft); }
+    .scroll { overflow-x: auto; }
+    .chart { max-width: 460px; margin: 0 auto 12px; }
+    .chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+    .chart text { fill: var(--muted); font-size: 12px; font-family: inherit; }
+    .chart .lbl { fill: #fff; font-weight: 700; }
+    .chart .gridline { stroke: var(--grid); }
+    .chart .axis { stroke: var(--axis); }
+    .legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; list-style: none; padding: 0; margin: 6px 0 0; font-size: 14px; }
+    .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .explain { margin-top: 14px; padding: 12px 14px; border-radius: 12px; border-left: 5px solid var(--formula-line); background: var(--formula); }
+    .explain.ok { border-left-color: var(--good); }
+    .explain.no { border-left-color: var(--bad); }
+    .explain b.head { display: block; margin-bottom: 2px; }
+    .explain.ok b.head { color: var(--good); }
+    .explain.no b.head { color: var(--bad); }
+    .nav { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; gap: 10px; z-index: 5; }
+    .nav button { background: rgba(15, 10, 30, .75); color: #fff; border-color: transparent; border-radius: 999px; padding: 11px 20px; }
+    .nav button:hover { background: rgba(15, 10, 30, .9); }
+    .sets { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+    .set { text-align: left; display: block; padding: 14px 16px; }
+    .set .t { display: block; font-size: 18px; margin-bottom: 2px; }
+    .set .d { display: block; font-weight: 500; color: var(--muted); font-size: 15px; }
+    .set .best { display: block; margin-top: 6px; font-size: 13px; color: var(--accent); }
+    .big { font-size: clamp(40px, 9vw, 64px); font-weight: 800; margin: 4px 0; color: var(--accent-2); }
+    .review li { margin-bottom: 6px; }
+    @media (max-width: 640px) { .nav { bottom: 12px; } .nav button { padding: 10px 14px; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topbar">
+      <h1>📋📈 Data Practice Slides</h1>
+      <span class="pill" id="counter">Choose a set</span>
+    </div>
+    <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+    <div id="stage" aria-live="polite"></div>
+  </main>
+  <div class="nav">
+    <button type="button" id="prev">‹ Previous</button>
+    <button type="button" id="menu">☰ Sets</button>
+    <button type="button" id="next">Next ›</button>
+  </div>
+
+  <script>
+  (function () {
+    // ---------- Small SVG chart helpers ----------
+    var NS = 'http://www.w3.org/2000/svg';
+    function el(n, a, p) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+    function tx(p, x, y, s, a) { var t = el('text', Object.assign({ x: x, y: y }, a || {}), p); t.textContent = s; return t; }
+    function barPath(x, yt, w, yb) { var r = Math.min(4, w / 2, yb - yt); return 'M' + x + ',' + yb + 'V' + (yt + r) + 'Q' + x + ',' + yt + ' ' + (x + r) + ',' + yt + 'H' + (x + w - r) + 'Q' + (x + w) + ',' + yt + ' ' + (x + w) + ',' + (yt + r) + 'V' + yb + 'Z'; }
+    function frame(svg, W, H, m, yMax, step, xt, yt) {
+      var ih = H - m.t - m.b; function y(v) { return m.t + ih - v / yMax * ih; }
+      for (var v = 0; v <= yMax; v += step) { el('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), class: v === 0 ? 'axis' : 'gridline' }, svg); tx(svg, m.l - 6, y(v) + 4, v, { 'text-anchor': 'end' }); }
+      tx(svg, (m.l + W - m.r) / 2, H - 4, xt, { 'text-anchor': 'middle' });
+      tx(svg, 12, m.t + ih / 2, yt, { 'text-anchor': 'middle', transform: 'rotate(-90 12 ' + (m.t + ih / 2) + ')' });
+      return y;
+    }
+    var COLORS = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)', 'var(--series-4)', 'var(--series-5)'];
+    function drawBar(box, cats, vals, xt, yt, yMax) {
+      var W = 340, H = 230, m = { t: 12, r: 10, b: 44, l: 44 }, svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Bar chart' }, box);
+      var y = frame(svg, W, H, m, yMax, yMax > 12 ? 2 : 1, xt, yt), slot = (W - m.l - m.r) / cats.length, bw = slot * 0.6;
+      vals.forEach(function (v, i) { var x = m.l + i * slot + (slot - bw) / 2; el('path', { d: barPath(x, y(v), bw, y(0)), fill: 'var(--series-1)' }, svg); tx(svg, x + bw / 2, y(0) + 16, cats[i], { 'text-anchor': 'middle' }); });
+    }
+    function drawHist(box, bounds, f, xt, yMax) {
+      var W = 340, H = 230, m = { t: 12, r: 14, b: 44, l: 44 }, svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Histogram' }, box);
+      var y = frame(svg, W, H, m, yMax, 2, xt, 'Frequency (f)'), bw = (W - m.l - m.r) / f.length;
+      f.forEach(function (v, i) { el('path', { d: barPath(m.l + i * bw + 1, y(v), bw - 2, y(0)), fill: 'var(--series-1)' }, svg); });
+      bounds.forEach(function (b, i) { tx(svg, m.l + i * bw, y(0) + 16, b, { 'text-anchor': 'middle' }); });
+    }
+    function drawPie(box, names, angles) {
+      var svg = el('svg', { viewBox: '0 0 300 210', role: 'img', 'aria-label': 'Pie chart' }, box), cx = 150, cy = 105, R = 95, a0 = -Math.PI / 2;
+      angles.forEach(function (d, i) {
+        var a1 = a0 + d * Math.PI / 180, mid = (a0 + a1) / 2;
+        el('path', { d: 'M' + cx + ',' + cy + 'L' + (cx + R * Math.cos(a0)) + ',' + (cy + R * Math.sin(a0)) + 'A' + R + ',' + R + ' 0 ' + (d > 180 ? 1 : 0) + ' 1 ' + (cx + R * Math.cos(a1)) + ',' + (cy + R * Math.sin(a1)) + 'Z', fill: COLORS[i], stroke: 'var(--card)', 'stroke-width': 2 }, svg);
+        if (d >= 36) tx(svg, cx + R * .62 * Math.cos(mid), cy + R * .62 * Math.sin(mid) + 4, d + '°', { 'text-anchor': 'middle', class: 'lbl' });
+        a0 = a1;
+      });
+      var ul = document.createElement('ul'); ul.className = 'legend';
+      names.forEach(function (n, i) { ul.innerHTML += '<li><i style="background:' + COLORS[i] + '"></i>' + n + '</li>'; });
+      box.appendChild(ul);
+    }
+    function drawOgive(box, xs, F, xt, yMax) {
+      var W = 340, H = 240, m = { t: 12, r: 14, b: 44, l: 44 }, svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Ogive' }, box);
+      var y = frame(svg, W, H, m, yMax, 5, xt, 'Cumulative frequency (F)');
+      function X(v) { return m.l + (v - xs[0]) / (xs[xs.length - 1] - xs[0]) * (W - m.l - m.r); }
+      xs.forEach(function (v, i) { if (i) el('line', { x1: X(v), x2: X(v), y1: m.t, y2: y(0), class: 'gridline' }, svg); });
+      var P = xs.map(function (v, i) { return [X(v), y(F[i])]; }), d = 'M' + P[0];
+      for (var i = 0; i < P.length - 1; i++) { var p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || p2; d += 'C' + (p1[0] + (p2[0] - p0[0]) / 6) + ',' + (p1[1] + (p2[1] - p0[1]) / 6) + ' ' + (p2[0] - (p3[0] - p1[0]) / 6) + ',' + (p2[1] - (p3[1] - p1[1]) / 6) + ' ' + p2[0] + ',' + p2[1]; }
+      el('path', { d: d, fill: 'none', stroke: 'var(--series-1)', 'stroke-width': 2 }, svg);
+      P.forEach(function (p, i) { el('circle', { cx: p[0], cy: p[1], r: 5, fill: 'var(--series-1)', stroke: 'var(--card)', 'stroke-width': 2 }, svg); tx(svg, p[0], y(0) + 16, xs[i], { 'text-anchor': 'middle' }); });
+    }
+
+    // ---------- Question bank ----------
+    // Types: mcq, tf, fill (text with [[answer]] or [[answer|tolerance]] blanks), match, sort, order.
+    var SETS = [
+      { id: 'terms', title: '📖 Set A · Terminology', desc: 'The key words: population, sample, frequency, boundaries…', qs: [
+        { t: 'mcq', q: 'A factory makes <b>5 000</b> fuses a day. The QC team tests <b>50</b> of them. The 50 fuses are the…', o: ['Sample', 'Population', 'Variable', 'Frequency'], a: 0, e: 'Sample = a small part. Population = ALL 5 000 fuses.' },
+        { t: 'tf', q: 'A <b>population</b> is only a small part of the group we study.', a: false, e: 'Population = ALL. The small part is the sample.' },
+        { t: 'match', q: 'Match each word to its simple meaning.', pairs: [['Frequency', 'How many times'], ['Range', 'Biggest − smallest'], ['Cumulative frequency', 'Running total'], ['Midpoint', '(lower + upper) ÷ 2'], ['Class width', 'Upper boundary − lower boundary']], e: 'Remember: f = how often, F = snowball total, range = Big − Small.' },
+        { t: 'mcq', q: 'Which one is <b>qualitative</b> data?', o: ['Colour of a cable', 'Current of 2.5 A', 'Number of LEDs', 'Voltage of 12 V'], a: 0, e: 'Qualitative = words (quality). Colour is a word, not a number.' },
+        { t: 'fill', q: 'The data are 12, 8, 5, 5, 9, 18, 12. Range = [[13]]', e: 'Range = Big − Small = 18 − 5 = 13.' },
+        { t: 'mcq', q: 'The <b>running total</b> of the frequencies is called…', o: ['Cumulative frequency', 'Relative frequency', 'Class width', 'Midpoint'], a: 0, e: 'Cumulative = keep adding, like a snowball.' },
+        { t: 'fill', q: 'For the class <b>20 – 29</b>: lower boundary = [[19.5]], upper boundary = [[29.5]], midpoint = [[24.5]]', e: 'Lower − 0.5 = 19.5, upper + 0.5 = 29.5, midpoint = (20 + 29) ÷ 2 = 24.5.' },
+        { t: 'tf', q: '<b>Variable</b> is the thing we count or measure, and its value can change.', a: true, e: 'Variable → it varies (changes), like current or number of faults.' }
+      ] },
+      { id: 'types', title: '🔢 Set B · Types of data', desc: 'Discrete or continuous? Grouped or ungrouped? Tally marks.', qs: [
+        { t: 'sort', q: 'Is each one <b>discrete</b> (counted) or <b>continuous</b> (measured)?', groups: ['Discrete', 'Continuous'], items: [['Number of resistors in a circuit', 0], ['Voltage of a battery', 1], ['Number of blackouts this year', 0], ['Current through a lamp', 1], ['Length of a cable', 1], ['Number of students in the lab', 0]], e: 'Discrete = count (whole numbers). Continuous = measure with a meter (decimals OK).' },
+        { t: 'mcq', q: 'The temperature of a transformer is 65.3 °C. This is…', o: ['Continuous data', 'Discrete data', 'Qualitative data', 'A class'], a: 0, e: 'Temperature is measured with a thermometer, and can have decimals.' },
+        { t: 'tf', q: 'Discrete data can be 2.5 (for example, 2.5 faulty cables).', a: false, e: 'Discrete = counted, whole numbers only. You cannot have half a cable.' },
+        { t: 'fill', q: 'Count the tally: <span style="font-family:monospace;font-size:20px"><s>||||</s> <s>||||</s> |||</span> = [[13]]', e: 'Each crossed group = 5. 5 + 5 + 3 = 13.' },
+        { t: 'mcq', q: 'Which of these is <b>grouped</b> data?', o: ['Resistance 95 – 99 Ω : 9 resistors', 'Currents: 2.1, 2.4, 1.9 A', 'Voltage = 240 V', '12, 8, 5, 5, 9'], a: 0, e: 'Grouped data = values put into classes (boxes), like 95 – 99.' },
+        { t: 'mcq', q: 'When is it best to use <b>grouped</b> data?', o: ['When there are many different values', 'When there are only 3 values', 'When data are words', 'Never'], a: 0, e: 'Grouping makes a big set of data easy to read.' },
+        { t: 'sort', q: 'Is each one <b>qualitative</b> (words) or <b>quantitative</b> (numbers)?', groups: ['Qualitative', 'Quantitative'], items: [['Brand of circuit breaker', 0], ['Power of a heater (W)', 1], ['Type of motor (AC / DC)', 0], ['Number of fuses', 1]], e: 'Qualitative = words/types. Quantitative = numbers.' }
+      ] },
+      { id: 'tables', title: '📋 Set C · Frequency tables', desc: 'Tally, frequency, cumulative frequency, boundaries, midpoints.', qs: [
+        { t: 'fill', q: 'Complete the <b>cumulative frequency</b> (F) column.', html: '<div class="scroll"><table><thead><tr><th>Faults (x)</th><th>f</th><th>F</th></tr></thead><tbody><tr><td>0</td><td>5</td><td>5</td></tr><tr><td>1</td><td>8</td><td>[[13]]</td></tr><tr><td>2</td><td>6</td><td>[[19]]</td></tr><tr><td>3</td><td>1</td><td>[[20]]</td></tr></tbody></table></div>', e: 'Keep adding: 5, 5 + 8 = 13, 13 + 6 = 19, 19 + 1 = 20.' },
+        { t: 'fill', q: 'Complete the table for the class <b>40 – 49</b> (minutes).', html: '<div class="scroll"><table><thead><tr><th>Class</th><th>Lower boundary</th><th>Upper boundary</th><th>Midpoint</th><th>Class width</th></tr></thead><tbody><tr><td>40 – 49</td><td>[[39.5]]</td><td>[[49.5]]</td><td>[[44.5]]</td><td>[[10]]</td></tr></tbody></table></div>', e: '40 − 0.5 = 39.5, 49 + 0.5 = 49.5, (40 + 49) ÷ 2 = 44.5, width = 49.5 − 39.5 = 10.' },
+        { t: 'mcq', q: 'In a table, the last cumulative frequency (F) is always equal to…', o: ['The total frequency Σf', 'The biggest frequency', 'The class width', 'Zero'], a: 0, e: 'After adding every frequency, the running total = the total.' },
+        { t: 'fill', q: 'The total frequency is 40 and the class 100 – 104 has f = 10. Relative frequency = [[0.25]] = [[25]] %', e: '10 ÷ 40 = 0.25, and 0.25 × 100 = 25 %.' },
+        { t: 'order', q: 'Put the steps for building a <b>grouped frequency table</b> in order.', items: ['Find the range (biggest − smallest)', 'Choose the number of classes and the class width', 'Write the classes', 'Tally each value into its class', 'Count the tallies to get f'], e: 'Range → classes → write them → tally → count.' },
+        { t: 'fill', q: 'The cumulative frequencies are 4, 10, 18, 20. Find the frequencies.', html: '<div class="scroll"><table><thead><tr><th>Class</th><th>F</th><th>f</th></tr></thead><tbody><tr><td>10 – 19</td><td>4</td><td>[[4]]</td></tr><tr><td>20 – 29</td><td>10</td><td>[[6]]</td></tr><tr><td>30 – 39</td><td>18</td><td>[[8]]</td></tr><tr><td>40 – 49</td><td>20</td><td>[[2]]</td></tr></tbody></table></div>', e: 'Go backwards: f = this F − previous F. 10 − 4 = 6, 18 − 10 = 8, 20 − 18 = 2.' },
+        { t: 'tf', q: 'The class boundaries of 5 – 9 are 5 and 9.', a: false, e: '5 and 9 are the class limits (the numbers you see). The boundaries are 4.5 and 9.5.' }
+      ] },
+      { id: 'charts', title: '📊 Set D · Charts', desc: 'Pie chart, bar chart, histogram and ogive: choose, calculate, read.', qs: [
+        { t: 'match', q: 'Match each situation to the best graph.', pairs: [['Share of a whole (percentages)', 'Pie chart'], ['Comparing separate categories', 'Bar chart'], ['Grouped measured data', 'Histogram'], ['Running total / "less than"', 'Ogive']], e: 'Pie = parts of a whole. Bar = Breaks. Histogram bars Hold Hands. Ogive = S-curve of F.' },
+        { t: 'fill', q: 'Lighting uses <b>60 kWh</b> out of a total of <b>400 kWh</b>. Pie chart angle = [[54]] °', e: '(60 ÷ 400) × 360° = 54°.' },
+        { t: 'fill', q: 'Read the pie chart. Total = 600 kWh.', chart: function (b) { drawPie(b, ['Motors', 'Computers', 'Lighting', 'Air-con'], [144, 90, 72, 54]); }, html: 'Computers use [[150]] kWh. Lighting is [[20]] % of the total.', e: 'Computers: (90 ÷ 360) × 600 = 150 kWh. Lighting: (72 ÷ 360) × 100 = 20 %.' },
+        { t: 'fill', q: 'Read the bar chart: faulty components found each day.', chart: function (b) { drawBar(b, ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], [5, 8, 3, 6, 4], 'Day', 'Faults', 10); }, html: 'Tuesday = [[8]]. Total for the week = [[26]]. Tuesday − Wednesday = [[5]]', e: 'Read each bar top across: 5, 8, 3, 6, 4. Total = 26. 8 − 3 = 5.' },
+        { t: 'mcq', q: 'Look at the histogram. Which is the <b>modal class</b>?', chart: function (b) { drawHist(b, [9.5, 14.5, 19.5, 24.5, 29.5, 34.5], [6, 10, 18, 12, 4], 'Battery life (hours)', 20); }, o: ['20 – 24', '15 – 19', '25 – 29', '10 – 14'], a: 0, e: 'Modal class = the tallest bar: 19.5 – 24.5, so the class limits are 20 – 24.' },
+        { t: 'tf', q: 'The bars of a histogram have gaps between them.', a: false, e: 'Histogram bars touch (Hold Hands) because the data are continuous. Bar charts have gaps.' },
+        { t: 'fill', q: 'Read the ogive: time to repair 40 faults (min).', chart: function (b) { drawOgive(b, [0, 10, 20, 30, 40, 50], [0, 4, 12, 26, 35, 40], 'Time (min)', 40); }, html: 'Less than 30 min = [[26]]. More than 40 min = [[5]]', e: 'Less than 30: read F at 30 = 26. More than 40: 40 − 35 = 5.' },
+        { t: 'order', q: 'Put the steps for drawing an <b>ogive</b> in order.', items: ['Find the cumulative frequency (F) of each class', 'Find the upper class boundaries', 'Plot (upper boundary, F), starting at F = 0', 'Join the points with a smooth curve'], e: 'F → upper boundaries → plot → join smoothly.' }
+      ] },
+      { id: 'challenge', title: '🏆 Set E · Challenge', desc: 'Harder, mixed questions: work backwards and think.', qs: [
+        { t: 'fill', q: 'The total frequency is 50. The frequencies are 7, 12, <b>x</b>, 9 and 6. Find x = [[16]]', e: '7 + 12 + 9 + 6 = 34, so x = 50 − 34 = 16.' },
+        { t: 'fill', q: 'In a pie chart, <b>Coffee</b> has an angle of 90° and represents 50 cups. Total cups = [[200]]', e: '90° is a quarter of 360°, so the total = 50 × 4 = 200.' },
+        { t: 'fill', q: 'Classes are 10 – 14, 15 – 19, 20 – 24. Class width = [[5]], and the next class is [[25]] – [[29]]', e: 'Width = 14.5 − 9.5 = 5. Next class starts 25 and ends 29.' },
+        { t: 'fill', q: 'Read the ogive: resistance of 40 resistors (Ω).', chart: function (b) { drawOgive(b, [89.5, 94.5, 99.5, 104.5, 109.5, 114.5], [0, 3, 12, 27, 37, 40], 'Resistance (Ω)', 40); }, html: 'Median (read across at F = 20) ≈ [[102.2|1]] Ω. Resistors from 99.5 to 109.5 Ω = [[25]]', e: 'Half of 40 = 20; across to the curve and down ≈ 102 Ω. Between: 37 − 12 = 25.' },
+        { t: 'mcq', q: 'A histogram has class boundaries 4.5, 9.5, 14.5… What are the limits of the first class?', o: ['5 – 9', '4.5 – 9.5', '4 – 9', '5 – 10'], a: 0, e: 'Limits = boundaries moved back by 0.5: 4.5 + 0.5 = 5, 9.5 − 0.5 = 9.' },
+        { t: 'fill', q: 'Read the histogram: battery life of 50 power banks (hours).', chart: function (b) { drawHist(b, [9.5, 14.5, 19.5, 24.5, 29.5, 34.5], [6, 10, 18, 12, 4], 'Battery life (hours)', 20); }, html: 'More than 24.5 hours = [[16]]. Percentage less than 14.5 hours = [[12]] %', e: 'More than 24.5: 12 + 4 = 16. Less than 14.5: 6 of 50 = 12 %.' },
+        { t: 'tf', q: 'An ogive can go <b>down</b> if a class has a small frequency.', a: false, e: 'Cumulative frequency only adds, so the ogive always goes up (or stays level).' }
+      ] }
+    ];
+
+    // ---------- State ----------
+    var stage = document.getElementById('stage'), counter = document.getElementById('counter'), bar = document.getElementById('bar');
+    var prevB = document.getElementById('prev'), nextB = document.getElementById('next');
+    var set = null, idx = 0, results = [], order = [];
+    function load(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+    function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } }
+    function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    var LABEL = { mcq: 'Multiple choice', tf: 'True or false', fill: 'Fill in the blank', match: 'Match', sort: 'Sort', order: 'Put in order' };
+
+    function showMenu() {
+      set = null;
+      counter.textContent = 'Choose a set';
+      bar.style.width = '0';
+      prevB.disabled = true; nextB.disabled = true;
+      var best = load('dp-slides-best', {});
+      stage.innerHTML = '<section class="slide"><span class="qtype">Practice slides · Syllabus 4.1</span><h2>Choose a set of questions</h2>' +
+        '<p class="muted">One question per slide, with many types: multiple choice, true or false, fill in the blank, match, sort, put in order, tables and graphs. You get an explanation after every answer.</p><div class="sets">' +
+        SETS.map(function (s, i) {
+          var b = best[s.id];
+          return '<button type="button" class="set" data-set="' + i + '"><span class="t">' + s.title + '</span><span class="d">' + s.desc + '</span><span class="best">' + s.qs.length + ' questions' + (b != null ? ' · best score ' + b + ' / ' + s.qs.length : '') + '</span></button>';
+        }).join('') + '<button type="button" class="set" data-set="all"><span class="t">🎲 Mixed test</span><span class="d">10 random questions from every set.</span><span class="best">10 questions</span></button></div></section>';
+    }
+    function start(which) {
+      if (which === 'all') {
+        var pool = []; SETS.forEach(function (s) { s.qs.forEach(function (q) { pool.push(q); }); });
+        set = { id: 'mixed', title: '🎲 Mixed test', qs: shuffle(pool).slice(0, 10) };
+      } else set = SETS[+which];
+      idx = 0; results = set.qs.map(function () { return null; });
+      render();
+    }
+
+    // ---------- Rendering one question ----------
+    function render() {
+      if (idx >= set.qs.length) return summary();
+      var q = set.qs[idx];
+      counter.textContent = set.title.replace(/^\S+\s/, '') + ' · ' + (idx + 1) + ' / ' + set.qs.length;
+      bar.style.width = (idx / set.qs.length * 100) + '%';
+      prevB.disabled = idx === 0; nextB.disabled = false;
+      nextB.textContent = idx === set.qs.length - 1 ? 'Finish ›' : 'Next ›';
+      var s = document.createElement('section'); s.className = 'slide';
+      s.innerHTML = '<span class="qtype">Q' + (idx + 1) + ' · ' + LABEL[q.t] + '</span><h2>' + (q.t === 'fill' && !q.html && !q.chart ? blanks(q.q) : q.q) + '</h2>';
+      if (q.chart) { var c = document.createElement('div'); c.className = 'chart'; q.chart(c); s.appendChild(c); }
+      var body = document.createElement('div'); s.appendChild(body);
+      var ex = document.createElement('div'); ex.hidden = true;
+      var done = results[idx] !== null;
+      function finish(ok) {
+        if (results[idx] === null) results[idx] = ok;
+        ex.hidden = false; ex.className = 'explain ' + (ok ? 'ok' : 'no');
+        ex.innerHTML = '<b class="head">' + (ok ? '✔ Correct!' : '✘ Not quite.') + '</b>' + q.e;
+      }
+      if (q.t === 'mcq' || q.t === 'tf') {
+        var opts = q.t === 'tf' ? [['True', q.a === true], ['False', q.a === false]] : shuffle(q.o.map(function (o, i) { return [o, i === q.a]; }));
+        body.innerHTML = '<div class="opts' + (q.t === 'tf' ? ' two' : '') + '"></div>';
+        var wrap = body.firstChild;
+        opts.forEach(function (o, i) {
+          var b = document.createElement('button'); b.type = 'button'; b.className = 'opt';
+          b.innerHTML = '<b>' + (q.t === 'tf' ? (i ? '✘' : '✔') : 'ABCD'[i]) + '</b><span>' + o[0] + '</span>';
+          b.addEventListener('click', function () {
+            wrap.querySelectorAll('.opt').forEach(function (x) { x.classList.remove('ok', 'no'); });
+            b.classList.add(o[1] ? 'ok' : 'no');
+            finish(o[1]);
+          });
+          wrap.appendChild(b);
+        });
+      } else if (q.t === 'fill') {
+        if (q.html) body.innerHTML = '<div>' + blanks(q.html) + '</div>';
+        addCheck(body, function () {
+          var all = s.querySelectorAll('input.blank'), ok = 0;
+          all.forEach(function (i) { var r = right(i); i.classList.remove('ok', 'no'); i.classList.add(r ? 'ok' : 'no'); if (r) ok++; });
+          return ok === all.length;
+        }, function () { s.querySelectorAll('input.blank').forEach(function (i) { i.value = i.dataset.ans; i.classList.remove('no'); i.classList.add('ok'); }); });
+      } else if (q.t === 'match') {
+        var rights = shuffle(q.pairs.map(function (p) { return p[1]; }));
+        body.innerHTML = '<div class="rows">' + q.pairs.map(function (p, i) {
+          return '<label class="row"><span><b>' + p[0] + '</b></span><select data-ans="' + p[1] + '" aria-label="Meaning of ' + p[0] + '"><option value="">Choose…</option>' + rights.map(function (r) { return '<option>' + r + '</option>'; }).join('') + '</select></label>';
+        }).join('') + '</div>';
+        addCheck(body, function () {
+          var ok = 0, all = body.querySelectorAll('select');
+          all.forEach(function (x) { var r = x.value === x.dataset.ans; x.classList.remove('ok', 'no'); x.classList.add(r ? 'ok' : 'no'); if (r) ok++; });
+          return ok === all.length;
+        }, function () { body.querySelectorAll('select').forEach(function (x) { x.value = x.dataset.ans; x.classList.remove('no'); x.classList.add('ok'); }); });
+      } else if (q.t === 'sort') {
+        body.innerHTML = '<div class="rows">' + shuffle(q.items).map(function (it) {
+          return '<div class="row" data-ans="' + it[1] + '"><span>' + it[0] + '</span><span class="seg">' + q.groups.map(function (g, gi) { return '<button type="button" data-g="' + gi + '" aria-pressed="false">' + g + '</button>'; }).join('') + '</span></div>';
+        }).join('') + '</div>';
+        body.addEventListener('click', function (e) {
+          var b = e.target.closest('[data-g]'); if (!b) return;
+          b.parentNode.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+          b.closest('.row').classList.remove('ok', 'no');
+        });
+        addCheck(body, function () {
+          var ok = 0, rows = body.querySelectorAll('.row');
+          rows.forEach(function (r) { var p = r.querySelector('[aria-pressed="true"]'), good = p && p.dataset.g === r.dataset.ans; r.classList.remove('ok', 'no'); r.classList.add(good ? 'ok' : 'no'); if (good) ok++; });
+          return ok === rows.length;
+        }, function () { body.querySelectorAll('.row').forEach(function (r) { r.querySelectorAll('[data-g]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.g === r.dataset.ans)); }); r.classList.remove('no'); r.classList.add('ok'); }); });
+      } else if (q.t === 'order') {
+        var n = q.items.length, nums = '<option value="">Step…</option>' + q.items.map(function (_, i) { return '<option>' + (i + 1) + '</option>'; }).join('');
+        body.innerHTML = '<p class="muted">Choose a step number (1 = first) for each line.</p><div class="rows">' + shuffle(q.items.map(function (t, i) { return [t, i + 1]; })).map(function (it) {
+          return '<label class="row"><span>' + it[0] + '</span><select data-ans="' + it[1] + '" aria-label="Step number for: ' + it[0] + '">' + nums + '</select></label>';
+        }).join('') + '</div>';
+        addCheck(body, function () {
+          var ok = 0, all = body.querySelectorAll('select');
+          all.forEach(function (x) { var r = x.value === x.dataset.ans; x.classList.remove('ok', 'no'); x.classList.add(r ? 'ok' : 'no'); if (r) ok++; });
+          return ok === n;
+        }, function () { body.querySelectorAll('select').forEach(function (x) { x.value = x.dataset.ans; x.classList.remove('no'); x.classList.add('ok'); }); });
+      }
+      function addCheck(parent, check, show) {
+        var a = document.createElement('div'); a.className = 'actions';
+        a.innerHTML = '<button type="button" class="primary">Check</button><button type="button">Show answer</button>';
+        a.children[0].addEventListener('click', function () { finish(check()); });
+        a.children[1].addEventListener('click', function () { show(); if (results[idx] === null) results[idx] = false; ex.hidden = false; ex.className = 'explain'; ex.innerHTML = '<b class="head">Answer shown</b>' + q.e; });
+        parent.appendChild(a);
+      }
+      s.appendChild(ex);
+      if (done) { ex.hidden = false; ex.className = 'explain ' + (results[idx] ? 'ok' : 'no'); ex.innerHTML = '<b class="head">' + (results[idx] ? '✔ You got this right.' : 'You tried this one: try again!') + '</b>' + q.e; }
+      stage.innerHTML = ''; stage.appendChild(s);
+      var first = s.querySelector('input, select'); if (first && !done) first.focus({ preventScroll: true });
+      window.scrollTo(0, 0);
+    }
+    // [[answer]] or [[answer|tolerance]] → input box
+    function blanks(h) {
+      return h.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, function (_, a, tol) {
+        return '<input class="blank" inputmode="decimal" autocomplete="off" data-ans="' + a + '"' + (tol ? ' data-tol="' + tol + '"' : '') + ' aria-label="Answer" />';
+      });
+    }
+    function right(i) {
+      var v = parseFloat(i.value.replace(',', '.'));
+      return !isNaN(v) && Math.abs(v - parseFloat(i.dataset.ans)) <= (parseFloat(i.dataset.tol) || 1e-9);
+    }
+    function summary() {
+      var score = results.filter(function (r) { return r === true; }).length, n = set.qs.length;
+      bar.style.width = '100%'; counter.textContent = set.title.replace(/^\S+\s/, '') + ' · done';
+      prevB.disabled = false; nextB.disabled = true; nextB.textContent = 'Next ›';
+      if (set.id !== 'mixed') { var best = load('dp-slides-best', {}); if (best[set.id] == null || score > best[set.id]) { best[set.id] = score; save('dp-slides-best', best); } }
+      var pct = score / n, msg = pct === 1 ? '🌟 Perfect! You are a data master.' : pct >= .7 ? '👍 Great work! Review the ones you missed.' : pct >= .4 ? '💪 Good try. Go back to the notes, then try again.' : '📖 Read the terminology again, then try this set once more.';
+      var missed = set.qs.map(function (q, i) { return results[i] ? '' : '<li>Q' + (i + 1) + ': ' + q.e + '</li>'; }).join('');
+      stage.innerHTML = '<section class="slide" style="text-align:center"><span class="qtype">Result</span><h2>' + set.title + '</h2><p class="big">' + score + ' / ' + n + '</p><p>' + msg + '</p>' +
+        '<p class="muted">Only your first try on each question counts.</p>' +
+        (missed ? '<div style="text-align:left"><h3>Remember</h3><ul class="review">' + missed + '</ul></div>' : '') +
+        '<div class="actions" style="justify-content:center"><button type="button" class="primary" id="again">↻ Try again</button><button type="button" id="other">☰ Choose another set</button></div></section>';
+      document.getElementById('again').addEventListener('click', function () { start(set.id === 'mixed' ? 'all' : SETS.indexOf(set)); });
+      document.getElementById('other').addEventListener('click', showMenu);
+    }
+
+    stage.addEventListener('click', function (e) { var b = e.target.closest('[data-set]'); if (b) start(b.dataset.set); });
+    prevB.addEventListener('click', function () { if (set && idx > 0) { idx--; render(); } });
+    nextB.addEventListener('click', function () { if (set && idx < set.qs.length) { idx++; render(); } });
+    document.getElementById('menu').addEventListener('click', showMenu);
+    document.addEventListener('keydown', function (e) {
+      if (!set || /INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
+      if (e.key === 'ArrowRight') nextB.click();
+      if (e.key === 'ArrowLeft') prevB.click();
+    });
+    // Open a set straight from a link, e.g. data-practice-slides.html#charts
+    function fromHash() {
+      var h = location.hash.slice(1), si = SETS.map(function (s) { return s.id; }).indexOf(h);
+      if (si >= 0) start(si); else if (h === 'mixed') start('all'); else showMenu();
+    }
+    window.addEventListener('hashchange', fromHash);
+    fromHash();
+  })();
+  </script>
+</body>
+</html>
