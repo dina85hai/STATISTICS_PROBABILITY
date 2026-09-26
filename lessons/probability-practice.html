@@ -536,7 +536,27 @@ P(both on time) = 0.90 × 0.85 = 0.765</div>
       </div>
 
       <article class="q">
-        <div class="q-head"><h3>Q17 · Duit raya packets 🧧</h3><span class="level easy">Easy</span></div>
+        <div class="q-head"><h3>Q17 · Dependent or independent? 🤔</h3><span class="level easy">Easy</span></div>
+        <p>Ask: <b>does the first event change the numbers for the second?</b> Decide for each one.</p>
+        <ol type="a">
+          <li>Roll a die twice.</li>
+          <li>Pick 2 prefects from 25 students.</li>
+          <li>Take a pen from a box, put it back, then take another pen.</li>
+          <li>Eat a chocolate from a box, then take another chocolate.</li>
+        </ol>
+        <div class="answer">
+          <span class="label">Answer</span>
+          <div class="work">a) Independent: the die is the same every roll.
+b) Dependent: the same student can't be picked twice, so 24 are left.
+c) Independent: the pen goes back, so the box is the same again.
+d) Dependent: the chocolate is eaten, so one fewer is left.</div>
+          <p class="final">a) Independent · b) Dependent · c) Independent · d) Dependent</p>
+          <p class="why">Tip: "put back" → independent. "keep", "eat" or "pick different people" → dependent.</p>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q18 · Duit raya packets 🧧</h3><span class="level easy">Easy</span></div>
         <p>A bag has 10 duit raya packets: 3 contain RM10 and 7 contain RM5. You take one and keep it, then your cousin takes one.</p>
         <p><b>What is the probability that you BOTH get RM10?</b></p>
         <div class="answer">
@@ -550,7 +570,34 @@ P(both RM10) = 3/10 × 2/9 = 6/90 = 1/15</div>
       </article>
 
       <article class="q">
-        <div class="q-head"><h3>Q18 · Class committee 🗳️</h3><span class="level medium">Medium</span></div>
+        <div class="q-head"><h3>Q19 · Faulty fuses 🔌</h3><span class="level easy">Easy</span></div>
+        <p>A box has 10 fuses and 3 of them are faulty. A technician tests 2 fuses, one after the other, and does not put the first one back.</p>
+        <div class="part">
+          <p><b>Part A:</b> What is the probability that BOTH fuses are faulty?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">P(1st faulty) = 3/10
+Now 2 faulty are left out of 9.
+P(2nd faulty | 1st faulty) = 2/9
+P(both faulty) = 3/10 × 2/9 = 6/90 = 1/15</div>
+            <p class="final">1/15 ≈ 0.067 ≈ 6.7%</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part B:</b> What is the probability that the first is good and the second is faulty?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">P(1st good) = 7/10
+All 3 faulty fuses are still there, out of 9.
+P(2nd faulty | 1st good) = 3/9
+P(good then faulty) = 7/10 × 3/9 = 21/90 = 7/30</div>
+            <p class="final">7/30 ≈ 0.233 ≈ 23.3%</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q20 · Class committee 🗳️</h3><span class="level medium">Medium</span></div>
         <p>A class has 30 students: 12 girls and 18 boys. The teacher picks a chairperson at random, then a secretary at random from the students who are left.</p>
         <p><b>What is the probability that both are girls?</b></p>
         <div class="answer">
@@ -564,7 +611,7 @@ P(both girls) = 12/30 × 11/29 = 132/870 = 22/145</div>
       </article>
 
       <article class="q">
-        <div class="q-head"><h3>Q19 · Drink sachets ☕</h3><span class="level medium">Medium</span></div>
+        <div class="q-head"><h3>Q21 · Drink sachets ☕</h3><span class="level medium">Medium</span></div>
         <p>A box has 5 Milo sachets and 3 teh tarik sachets. You take 2 sachets at random.</p>
         <div class="part">
           <p><b>Part A:</b> You put the first sachet back before taking the second. What is P(both Milo)?</p>
@@ -598,7 +645,31 @@ The two orders can't both happen, so add them: 15/56 + 15/56 = 30/56 = 15/28</di
       </article>
 
       <article class="q">
-        <div class="q-head"><h3>Q20 · Blind-box figures 🎁</h3><span class="level hard">Hard</span></div>
+        <div class="q-head"><h3>Q22 · Two hearts 🃏</h3><span class="level medium">Medium</span></div>
+        <p>You draw 2 cards from a normal deck of 52 cards (13 hearts).</p>
+        <div class="part">
+          <p><b>Part A:</b> You keep the first card. What is P(both hearts)?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">Without replacement: 12 hearts left out of 51.
+P(both hearts) = 13/52 × 12/51 = 156/2652 = 1/17</div>
+            <p class="final">1/17 ≈ 0.059 ≈ 5.9%</p>
+          </div>
+        </div>
+        <div class="part">
+          <p><b>Part B:</b> You put the first card back and shuffle. What is P(both hearts)?</p>
+          <div class="answer">
+            <span class="label">Answer</span>
+            <div class="work">With replacement the deck is the same, so the events are independent.
+P(both hearts) = 13/52 × 13/52 = 1/4 × 1/4 = 1/16</div>
+            <p class="final">1/16 = 0.0625 = 6.25%</p>
+            <p class="why">Keeping the first heart leaves fewer hearts, so the dependent answer (5.9%) is a little smaller.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="q">
+        <div class="q-head"><h3>Q23 · Blind-box figures 🎁</h3><span class="level hard">Hard</span></div>
         <p>A shelf has 12 blind boxes and 4 of them hold a rare figure. You buy 3 different boxes at random.</p>
         <div class="part">
           <p><b>Part A:</b> What is the probability that NONE of your 3 boxes is rare?</p>
@@ -631,7 +702,7 @@ P(at least one rare) = 1 − 14/55 = 41/55</div>
       </div>
 
       <article class="q">
-        <div class="q-head"><h3>Q21 · Gaming loot box 🎮</h3><span class="level easy">Easy</span></div>
+        <div class="q-head"><h3>Q24 · Gaming loot box 🎮</h3><span class="level easy">Easy</span></div>
         <p>A loot box contains 50 common, 30 rare, 15 epic and 5 legendary items. You open one box and get one item.</p>
         <p><b>Are these events mutually exclusive or independent? Explain.</b></p>
         <ul>
@@ -646,7 +717,7 @@ P(at least one rare) = 1 − 14/55 = 41/55</div>
       </article>
 
       <article class="q">
-        <div class="q-head"><h3>Q22 · Grade distribution 📝</h3><span class="level medium">Medium</span></div>
+        <div class="q-head"><h3>Q25 · Grade distribution 📝</h3><span class="level medium">Medium</span></div>
         <p>In your class: A 15%, B 30%, C 35%, D 15%, F 5%.</p>
         <p><b>What is the probability a randomly selected student has a passing grade (A, B or C)?</b></p>
         <div class="answer">
@@ -658,7 +729,7 @@ P(A or B or C) = 0.15 + 0.30 + 0.35 = 0.80</div>
       </article>
 
       <article class="q">
-        <div class="q-head"><h3>Q23 · Concert raffle 🎫</h3><span class="level medium">Medium</span></div>
+        <div class="q-head"><h3>Q26 · Concert raffle 🎫</h3><span class="level medium">Medium</span></div>
         <p>A radio station gives away: 1st prize to 5 winners, 2nd prize to 15 winners and 3rd prize to 10 winners. Each entry can win only one prize. There are 1,000 entries and you entered once.</p>
         <p><b>What is the probability you win ANY prize?</b></p>
         <div class="answer">
@@ -670,7 +741,7 @@ P(any prize) = 5/1000 + 15/1000 + 10/1000 = 30/1000 = 3/100</div>
       </article>
 
       <article class="q">
-        <div class="q-head"><h3>Q24 · Video game drops 🗡️</h3><span class="level hard">Hard</span></div>
+        <div class="q-head"><h3>Q27 · Video game drops 🗡️</h3><span class="level hard">Hard</span></div>
         <p>When you defeat a boss you get exactly ONE reward: legendary weapon 10%, epic armour 25%, rare accessory 30%, common item 35%.</p>
         <div class="part">
           <p><b>Part A:</b> What is the probability of a legendary weapon OR epic armour?</p>
