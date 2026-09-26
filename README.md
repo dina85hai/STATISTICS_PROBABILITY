@@ -20,7 +20,9 @@ https://dina85hai.github.io/STATISTICS_PROBABILITY/
    syllabus 4.3 subtopics with interactive destination examples → Practice (`lessons/probability-practice.html`): every exercise on one page,
    grouped by skill and ordered from easy to hard
 
-3. **Probability Lab**: Guided binomial and normal distributions (`lessons/probability-lab.html`), with interactive graphs and step-by-step calculations.
+3. **Probability Lab**: Guided binomial and normal distributions (`lessons/probability-lab.html`) as a slide show like the
+   presentation: every guided step and explorer is one slide (Previous / Next, ← → keys, `#7` opens slide 7 and
+   `#normal` opens a topic), with interactive graphs and step-by-step calculations.
 
 ## Files
 

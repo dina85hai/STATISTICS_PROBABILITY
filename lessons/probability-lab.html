@@ -16,7 +16,23 @@ input,select{background:#111c30;color:#fff;border-color:#8290aa}canvas{backgroun
 th{background:#302b4f}td{background:#182235}.selected{background:#205f4a;color:#d6ffeb}footer{color:#f0e9ff}small{font-size:14px}button:disabled{opacity:.45;cursor:default}.guide{border:2px solid #d2b2ff;background:#192237f5}.guidehead{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.guidehead .eyebrow{color:#e9c6ff}.guidebody{min-height:260px;padding-top:22px}.guidebody p{max-width:850px}.guidebody h2{color:#fff}.guidebody .example{background:#422740;border-left:4px solid #ec4899;border-radius:10px;padding:18px;margin:16px 0}.plain{background:#26394a;border-left:4px solid #38bdf8;padding:13px 18px;margin:16px 0;border-radius:8px}.guidefoot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid #526079;padding-top:18px;margin-top:22px}.guideprogress{height:6px;background:#344159;border-radius:10px;margin-top:15px;overflow:hidden}.guideprogress span{display:block;height:100%;background:linear-gradient(90deg,#a78bfa,#ec4899,#60a5fa);transition:width .2s}.choices{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.quizfeedback{min-height:30px;color:#f5e6ff}.path{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.path span{padding:10px 16px;background:#3c2d56;border-radius:12px}.outcomes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.outcome{background:#182235;border:2px solid #68708d;padding:12px;text-align:center;border-radius:12px}.outcome.match{border-color:#6ee7b7;background:#164332}.outcome strong{font-size:23px;letter-spacing:4px;display:block}.minihelp{font-size:13px;padding:5px 9px;margin-top:9px}.reveal{font-size:14px;color:#a7f3d0}.chapterbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:28px}.guideboxgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.symbol{font-size:32px;color:#6ee7b7;font-weight:800}.bigemoji{font-size:44px}.statusbadge{font-size:13px;color:#c4fce2}details{border:1px solid #69738c;border-radius:10px;padding:12px 16px;margin:14px 0}summary{cursor:pointer;font-weight:700}.tablewrap{border-radius:10px}.practicecoach{background:#302a47;border-left:4px solid #c4b5fd;padding:14px 18px;border-radius:10px;margin:12px 0}
 @media(max-width:720px){body{font-size:17px}.hero{padding:24px}.hero p{font-size:18px}.outcomes{grid-template-columns:repeat(2,1fr)}.guideboxgrid{grid-template-columns:1fr}.guidebody{min-height:0}h2{font-size:25px}.wrap{padding:16px}.brand{font-size:21px}.badge{font-size:10px}.formula{font-size:20px}.guidefoot button{font-size:14px;padding:10px}.path span{font-size:14px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
-math{font-family:"Cambria Math","STIX Two Math",math;font-size:1.12em;color:inherit} .formula{overflow-x:auto} .formula math{font-size:1.2em;margin:4px 3px} .step math{font-size:1.1em} .result math{font-size:1em} math mfrac{padding:2px} .grid>*,.flow>*,.guideboxgrid>*{min-width:0}.formula{max-width:100%} math{max-width:100%;overflow-x:auto} </style></head><body>
+math{font-family:"Cambria Math","STIX Two Math",math;font-size:1.12em;color:inherit} .formula{overflow-x:auto} .formula math{font-size:1.2em;margin:4px 3px} .step math{font-size:1.1em} .result math{font-size:1em} math mfrac{padding:2px} .grid>*,.flow>*,.guideboxgrid>*{min-width:0}.formula{max-width:100%} math{max-width:100%;overflow-x:auto} 
+/* ---------- Slide-show mode (like the Probability Presentation) ---------- */
+.deck .off{display:none!important}
+.deck .guidefoot,.deck .chapterbar,.deck footer{display:none!important}
+.deck .guidebody{min-height:0}
+.deck .grid.one{grid-template-columns:1fr}
+.deck main{min-height:0;padding-bottom:120px}
+.deck .panel.active{animation:slidein .25s ease}
+@keyframes slidein{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.deck .panel.active{animation:none}}
+.deckbar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:10px;background:#171527ed;border:1px solid #8062a9;border-radius:999px;padding:6px;box-shadow:0 10px 30px #0006}
+.deckbar button{border-radius:999px;padding:10px 18px;white-space:nowrap}
+.deckbar .count{color:#eee4ff;font-weight:700;font-size:14px;padding:0 6px;white-space:nowrap;text-align:center;min-width:8.5em}
+.deckprogress{position:fixed;left:0;top:0;height:5px;z-index:60;background:linear-gradient(90deg,#c084fc,#f472b6,#60a5fa);transition:width .3s}
+.deckhint{color:#e9dcff;font-size:14px;text-align:center;margin:-8px 0 14px}
+@media(max-width:720px){.deckbar{bottom:10px;gap:4px}.deckbar button{padding:9px 12px;font-size:14px}.deckbar .count{min-width:0;font-size:12px}.deckbar .lbl{display:none}}
+</style></head><body>
 <header><div class="wrap"><div class="top"><div class="brand">◈ Probability<span>Lab</span></div><span class="badge">4.4 · Probability distributions</span></div><nav role="tablist" aria-label="Learning sections"><button role="tab" id="tab-intro" aria-controls="intro" aria-selected="true" data-tab="intro">🏠 Intro</button><button role="tab" id="tab-binomial" aria-controls="binomial" aria-selected="false" data-tab="binomial">📘 Binomial</button><button role="tab" id="tab-normal" aria-controls="normal" aria-selected="false" data-tab="normal">📗 Normal</button><button role="tab" id="tab-advanced" aria-controls="advanced" aria-selected="false" data-tab="advanced">➗ Advanced</button><button role="tab" id="tab-practice" aria-controls="practice" aria-selected="false" data-tab="practice">🎮 Practice</button><button role="tab" id="tab-tips" aria-controls="tips" aria-selected="false" data-tab="tips">💡 Tips</button></nav></div></header>
 <main class="wrap">
 <section id="intro" class="panel active" role="tabpanel" aria-labelledby="tab-intro"><div class="hero"><div class="eyebrow">Your next chapter · Binomial + Normal</div><h1>PROBABILITY<br>LEVEL UP! 🎲</h1><p>You already know probability means “how likely”.<br>Now learn two useful patterns, one small step at a time.<div class="path"><span>👀 Watch an example</span><span>🤝 Try together</span><span>🎮 Try on your own</span></div></p><button class="primary" data-go="binomial">Let’s start →</button></div><div class="grid"><article class="card"><h3><span class="number">01</span> The free-throw challenge</h3><p>A player makes each shot with probability 0.7. How many baskets might they score in 10 independent shots? Each shot has two outcomes: basket or miss.</p><canvas id="shots" role="img" aria-label="Ten simulated shots, green for basket and red for miss"></canvas><div class="actions"><button id="simulate">Shoot 10 shots ↻</button></div><p id="shotText" aria-live="polite"></p><small>A simulation varies. A probability model describes all possible results.</small></article><article class="card"><h3><span class="number">02</span> The delivery promise</h3><p>A shop models delivery time with a normal distribution: mean 30 minutes and standard deviation 5 minutes. What fraction arrive within 35 minutes?</p><canvas id="delivery" role="img" aria-label="Normal delivery-time curve with the area below 35 minutes shaded"></canvas><p class="result">About 84.13%</p><small>Shaded area represents probability. This is a model assumption, not a guarantee about real deliveries.</small></article></div><div class="card"><h3>Your learning route</h3><p>Identify the model → build the calculation in boxes → read the shaded probability → practise at your level.</p></div></section>
@@ -137,6 +153,93 @@ function displayMath(el){if(el.querySelector('math'))return;let source=formulaSo
 // Match mathematical runs in prose without turning ordinary teaching language into variables.
 const mathRun=/(?:(?:choose|sqrt|Bin|Var|Φ|[PXZNEnpkxzabμσ]|\d+C\d+|\d+(?:\.\d+)?|[⁰¹²³⁴⁵⁶⁷⁸⁹ⁿᵏ₀₁₂₃₄₅₆₇₈₉ₖ]+|[=≈≤≥<>∼+−×÷/√^_()%!.,→]|\((?=[\dPXZNEnpkxzabμσ−]))(?:\s*(?:choose|sqrt|Bin|Var|Φ|[PXZNEnpkxzabμσ]|\d+C\d+|\d+(?:\.\d+)?|[⁰¹²³⁴⁵⁶⁷⁸⁹ⁿᵏ₀₁₂₃₄₅₆₇₈₉ₖ]+|[=≈≤≥<>∼+−×÷/√^_()%!.,→]))*)/gu;
 function formatInline(node){const text=node.nodeValue;if(!/\d+C\d+|[=≈≤≥∼Φσμ√^²³ᵏⁿₖ÷×]|\d\s*\/\s*\d/.test(text))return;const frag=document.createDocumentFragment();let end=0,changed=false;for(const match of text.matchAll(mathRun)){let value=match[0].trim().replace(/[.,]+$/,'');let start=match.index;if(!/\d+C\d+|[=≈≤≥∼Φ√^²³ᵏⁿₖ÷×]|\d\s*\/\s*\d/.test(value)||value.length<2)continue;if(start>0&&/[A-Za-z]/.test(text[start-1]))continue;if(/[A-Za-z]/.test(text[start+value.length]||''))continue;frag.append(text.slice(end,start),equation(value));end=start+value.length;changed=true;}if(changed){frag.append(text.slice(end));node.replaceWith(frag);}}
-function formatAllMath(){document.querySelectorAll('.formula:not([data-math-done])').forEach(displayMath);const walk=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.closest('script,style,math,canvas,input,select,button,.formula,.brand,footer,.stats,.pill,.eyebrow')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});const texts=[];while(walk.nextNode())texts.push(walk.currentNode);texts.forEach(formatInline);}
+function formatAllMath(){document.querySelectorAll('.formula:not([data-math-done])').forEach(displayMath);const walk=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.closest('script,style,math,canvas,input,select,button,.formula,.brand,footer,.stats,.pill,.eyebrow,.deckbar,.deckhint')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});const texts=[];while(walk.nextNode())texts.push(walk.currentNode);texts.forEach(formatInline);}
 let mathPending=false;const mathObserver=new MutationObserver(()=>{if(mathPending)return;mathPending=true;queueMicrotask(()=>{mathObserver.disconnect();formatAllMath();mathObserver.observe(document.body,{childList:true,subtree:true,characterData:true});mathPending=false;});});formatAllMath();mathObserver.observe(document.body,{childList:true,subtree:true,characterData:true});
+</script>
+<script>
+// Slide-show mode: every guided step and every explorer card becomes one slide,
+// with Previous / Next like the Probability Presentation. The topic tabs jump to
+// the first slide of each topic.
+(function(){
+  const chapterNames={intro:'Intro',binomial:'Binomial',normal:'Normal',advanced:'Advanced',practice:'Practice',tips:'Tips'};
+  const kids=id=>[...$(id).children];
+  const header=id=>kids(id).filter(c=>c.matches('.eyebrow,h1,p'));
+  const gridOf=id=>$(id).querySelector(':scope > .grid');
+  const cardsOf=id=>[...gridOf(id).children];
+  const extra=id=>$(id).querySelector(':scope > .card:not(.guide)');
+  const deck=[];
+  const add=(id,show,opts)=>deck.push(Object.assign({id,show},opts||{}));
+  // Intro
+  add('intro',[$('intro').querySelector('.hero')]);
+  lessons.intro.forEach((_,i)=>add('intro',[$('guide-intro')],{guide:i}));
+  cardsOf('intro').forEach(c=>add('intro',[c]));
+  // Binomial
+  lessons.binomial.forEach((_,i)=>add('binomial',(i?[]:header('binomial')).concat($('guide-binomial')),{guide:i}));
+  add('binomial',[gridOf('binomial')],{explore:true});
+  // Normal
+  lessons.normal.forEach((_,i)=>add('normal',(i?[]:header('normal')).concat($('guide-normal')),{guide:i}));
+  add('normal',[gridOf('normal')],{explore:true});
+  add('normal',[extra('normal')]);
+  // Advanced
+  lessons.advanced.forEach((_,i)=>add('advanced',(i?[]:header('advanced')).concat($('guide-advanced')),{guide:i}));
+  cardsOf('advanced').forEach(c=>add('advanced',[c]));
+  add('advanced',[extra('advanced')]);
+  // Practice and tips: one slide each
+  add('practice',kids('practice').filter(c=>!c.matches('.chapterbar')));
+  add('tips',kids('tips').filter(c=>!c.matches('.chapterbar')));
+
+  document.body.classList.add('deck');
+  const bar=document.createElement('div');bar.className='deckbar';
+  bar.innerHTML='<button type="button" id="deckPrev">‹ <span class="lbl">Previous</span></button><span class="count" id="deckCount" aria-live="polite"></span><button type="button" id="deckNext" class="primary"><span class="lbl">Next</span> ›</button>';
+  document.body.append(bar);
+  const prog=document.createElement('div');prog.className='deckprogress';document.body.append(prog);
+  const hint=document.createElement('p');hint.className='deckhint';hint.textContent='Use Next › and ‹ Previous (or the ← → keys). The tabs jump to a topic.';
+  document.querySelector('main').prepend(hint);
+
+  const innerGo=go;let cur=0,inDeck=false;
+  function show(n){
+    cur=Math.max(0,Math.min(deck.length-1,n));const sl=deck[cur];
+    inDeck=true;innerGo(sl.id);inDeck=false;
+    const panel=$(sl.id);
+    panel.querySelectorAll('.off').forEach(e=>e.classList.remove('off'));
+    panel.querySelectorAll('.grid.one').forEach(e=>e.classList.remove('one'));
+    const shown=new Set(sl.show);
+    kids(sl.id).forEach(c=>{
+      if(shown.has(c))return;
+      const inner=[...c.children].filter(x=>shown.has(x));
+      if(inner.length){[...c.children].forEach(x=>{if(!shown.has(x))x.classList.add('off');});if(inner.length===1)c.classList.add('one');}
+      else c.classList.add('off');
+    });
+    if(sl.guide!==undefined){lessonIndex[sl.id]=sl.guide;lessonRender(sl.id);presets();}
+    // Canvases in a newly shown card need drawing at their real width.
+    if(sl.id==='intro'){shots();normalPlot('delivery',30,5,-Infinity,35);}
+    if(sl.id==='binomial')renderBin();
+    if(sl.id==='normal'){renderNormal();renderTable();}
+    if(sl.id==='advanced')advanced();
+    const sameChapter=deck.filter(d=>d.id===sl.id),k=sameChapter.indexOf(sl)+1;
+    $('deckCount').textContent=`${cur+1} / ${deck.length} · ${chapterNames[sl.id]} ${k}/${sameChapter.length}`;
+    $('deckPrev').disabled=cur===0;$('deckNext').disabled=cur===deck.length-1;
+    prog.style.width=((cur+1)/deck.length*100)+'%';
+    try{history.replaceState(null,'','#'+(cur+1));}catch(e){}
+    window.scrollTo(0,0);
+  }
+  function first(id){return deck.findIndex(d=>d.id===id);}
+  // The "Load the example ↓" buttons at the end of a guided lesson open the explorer slide.
+  function presets(){
+    if($('coinPreset'))$('coinPreset').onclick=()=>{$('bn').value=3;$('bp').value=.5;$('bk').value=2;show(deck.findIndex(d=>d.id==='binomial'&&d.explore));$('bn').focus({preventScroll:true});};
+    if($('normalPreset'))$('normalPreset').onclick=()=>{$('nm').value=30;$('ns').value=5;$('nx').value=25;show(deck.findIndex(d=>d.id==='normal'&&d.explore));$('nm').focus({preventScroll:true});};
+  }
+  // Tabs, "Let's start" and other topic buttons jump to the first slide of that topic.
+  go=function(id){if(inDeck)return innerGo(id);show(first(id));};
+  $('deckPrev').onclick=()=>show(cur-1);$('deckNext').onclick=()=>show(cur+1);
+  document.addEventListener('keydown',e=>{
+    if(e.target.closest('input,select,textarea,[role=tab]'))return;
+    if(e.key==='ArrowRight'&&cur<deck.length-1){e.preventDefault();show(cur+1);}
+    if(e.key==='ArrowLeft'&&cur>0){e.preventDefault();show(cur-1);}
+  });
+  // Links: #7 opens slide 7, #normal opens the Normal topic.
+  function fromHash(){const h=decodeURIComponent(location.hash.slice(1));show(/^\d+$/.test(h)?+h-1:(chapterNames[h]?first(h):0));}
+  window.addEventListener('hashchange',fromHash);
+  fromHash();
+})();
 </script></body></html>
