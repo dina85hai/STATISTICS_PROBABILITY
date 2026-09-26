@@ -71,6 +71,7 @@
     .term dt { font-weight: 800; color: var(--accent); }
     .term dt .sym { color: var(--muted); font-weight: 600; font-size: 14px; }
     .term dd { margin: 4px 0 0; }
+    .term .mem { display: block; margin-top: 6px; padding: 5px 8px; border-radius: 8px; background: var(--formula); border: 1px solid var(--formula-line); font-size: 14px; }
     .term .eg { display: block; margin-top: 6px; font-size: 14px; color: var(--muted); }
     .term .eg::before { content: "⚡ "; }
     .search { width: 100%; max-width: 360px; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; margin-bottom: 12px; }
@@ -178,36 +179,36 @@
     <!-- ================= 4.1.1 TERMINOLOGY ================= -->
     <section id="terms" class="step">
       <h2><span class="num">1</span> Terminology of statistics</h2>
-      <p class="hint">The key words used in this unit. Each one has an electrical engineering example (⚡).</p>
+      <p class="hint">The key words used in this unit, in simple words. Each one has a 💡 memory trick and an electrical engineering example (⚡).</p>
       <label for="term-search" class="hint" style="display:block;margin-bottom:4px">Search a term:</label>
       <input id="term-search" class="search" type="search" placeholder="e.g. boundary, frequency…" autocomplete="off" />
       <dl class="terms" id="term-list">
-        <div class="term"><dt>Statistics</dt><dd>The science of collecting, organising, presenting, analysing and interpreting data to make decisions.</dd><span class="eg">Studying the daily load on a substation to plan maintenance.</span></div>
-        <div class="term"><dt>Data</dt><dd>Facts or values collected by counting or measuring. One value is called a <b>datum</b> or an <b>observation</b>.</dd><span class="eg">Voltage readings from a multimeter.</span></div>
-        <div class="term"><dt>Population</dt><dd>The whole group of items or people that we want to study.</dd><span class="eg">All 10 000 resistors made by a factory in one day.</span></div>
-        <div class="term"><dt>Sample</dt><dd>A smaller part of the population that is actually tested or measured.</dd><span class="eg">40 resistors picked from the day's production for testing.</span></div>
-        <div class="term"><dt>Variable</dt><dd>A characteristic that can take different values from one item to another.</dd><span class="eg">Resistance (Ω), current (A), number of faults.</span></div>
-        <div class="term"><dt>Qualitative data</dt><dd>Data that describes a quality or category, not a number. Also called categorical data.</dd><span class="eg">Cable colour, type of motor (AC / DC), brand of circuit breaker.</span></div>
-        <div class="term"><dt>Quantitative data</dt><dd>Data in the form of numbers that can be counted or measured. It is either discrete or continuous.</dd><span class="eg">Power in watts, number of blown fuses.</span></div>
-        <div class="term"><dt>Discrete data</dt><dd>Data that is <b>counted</b>. It can only take exact separate values, usually whole numbers.</dd><span class="eg">Number of power trips per week: 0, 1, 2, 3…</span></div>
-        <div class="term"><dt>Continuous data</dt><dd>Data that is <b>measured</b>. It can take any value in a range, including decimals.</dd><span class="eg">Voltage = 239.6 V, temperature of a transformer = 65.3 °C.</span></div>
-        <div class="term"><dt>Ungrouped data <span class="sym">(raw data)</span></dt><dd>Data listed one value at a time, as it was collected, not arranged into classes.</dd><span class="eg">Current readings: 2.1, 2.4, 1.9, 2.2 A.</span></div>
-        <div class="term"><dt>Grouped data</dt><dd>Data arranged into classes (intervals) with the frequency of each class. Used when there are many values.</dd><span class="eg">Resistance 95 – 99 Ω: 9 resistors.</span></div>
-        <div class="term"><dt>Frequency <span class="sym">(f)</span></dt><dd>How many times a value, or a value in a class, appears in the data.</dd><span class="eg">3 motors failed in week 1, so f = 3 for that value.</span></div>
-        <div class="term"><dt>Tally</dt><dd>Strokes used to count data quickly. Every 5th stroke crosses the previous four: <span class="data"><s class="five">||||</s></span> = 5.</dd><span class="eg">Counting faulty sockets while inspecting a building.</span></div>
-        <div class="term"><dt>Frequency table <span class="sym">(frequency distribution)</span></dt><dd>A table that shows each value or class with its frequency.</dd><span class="eg">Number of outages per week and how many weeks had that number.</span></div>
-        <div class="term"><dt>Class <span class="sym">(class interval)</span></dt><dd>A group of values in grouped data, such as 95 – 99.</dd><span class="eg">Currents from 1.0 A to 1.4 A.</span></div>
-        <div class="term"><dt>Class limits</dt><dd>The smallest (<b>lower limit</b>) and largest (<b>upper limit</b>) values written for a class.</dd><span class="eg">For 95 – 99 Ω: lower limit 95, upper limit 99.</span></div>
-        <div class="term"><dt>Class boundaries</dt><dd>The "true" edges of a class, halfway between one class and the next, so there are no gaps. Lower boundary = lower limit − 0.5, upper boundary = upper limit + 0.5 (for whole-number limits).</dd><span class="eg">95 – 99 Ω has boundaries 94.5 and 99.5.</span></div>
-        <div class="term"><dt>Class width <span class="sym">(class size, c)</span></dt><dd>Upper boundary − lower boundary.</dd><span class="eg">99.5 − 94.5 = 5 Ω.</span></div>
-        <div class="term"><dt>Class midpoint <span class="sym">(class mark, x)</span></dt><dd>The middle value of a class: (lower limit + upper limit) ÷ 2. It represents the class in calculations.</dd><span class="eg">(95 + 99) ÷ 2 = 97 Ω.</span></div>
-        <div class="term"><dt>Cumulative frequency <span class="sym">(F)</span></dt><dd>The running total of frequencies: all values up to and including this value or class.</dd><span class="eg">27 resistors are below 104.5 Ω.</span></div>
-        <div class="term"><dt>Relative frequency</dt><dd>Frequency ÷ total frequency. Often written as a percentage.</dd><span class="eg">15 out of 40 resistors = 0.375 = 37.5 %.</span></div>
-        <div class="term"><dt>Range</dt><dd>Largest value − smallest value. Helps decide how many classes to use.</dd><span class="eg">113 − 91 = 22 Ω.</span></div>
-        <div class="term"><dt>Pie chart</dt><dd>A circle divided into sectors. Each sector's angle = (f ÷ Σf) × 360°.</dd><span class="eg">Share of a home's monthly energy used by each appliance.</span></div>
-        <div class="term"><dt>Bar chart</dt><dd>Separate bars with <b>gaps</b>, one per category or discrete value. Bar height = frequency.</dd><span class="eg">Number of weeks with 0, 1, 2… outages.</span></div>
-        <div class="term"><dt>Histogram</dt><dd>Bars with <b>no gaps</b> for grouped continuous data. Bars are drawn from class boundary to class boundary.</dd><span class="eg">Resistance of 40 resistors in classes of 5 Ω.</span></div>
-        <div class="term"><dt>Ogive</dt><dd>A cumulative frequency curve: cumulative frequency plotted against the upper class boundary, joined smoothly.</dd><span class="eg">Reading how many resistors are below 100 Ω.</span></div>
+        <div class="term"><dt>Statistics</dt><dd>Collect data, sort it, show it, then explain it.</dd><span class="mem">💡 Think <b>C-S-S-E</b>: Collect, Sort, Show, Explain.</span><span class="eg">Checking the daily load on a substation.</span></div>
+        <div class="term"><dt>Data</dt><dd>The information we collect: numbers or words.</dd><span class="mem">💡 Data = information.</span><span class="eg">Voltage readings from a multimeter.</span></div>
+        <div class="term"><dt>Population</dt><dd><b>All</b> the items or people we want to study.</dd><span class="mem">💡 Population = ALL.</span><span class="eg">All 10 000 resistors made in one day.</span></div>
+        <div class="term"><dt>Sample</dt><dd>A <b>small part</b> taken from the population.</dd><span class="mem">💡 Like tasting a <b>sample</b> of food before buying: a small bit tells you about the whole.</span><span class="eg">40 of those resistors picked for testing.</span></div>
+        <div class="term"><dt>Variable</dt><dd>The thing we count or measure. Its value can change.</dd><span class="mem">💡 Variable → it <b>varies</b> (changes).</span><span class="eg">Resistance, current, number of faults.</span></div>
+        <div class="term"><dt>Qualitative data</dt><dd>Data in <b>words</b> (types or names).</dd><span class="mem">💡 Quali<b>tative</b> = quality = words.</span><span class="eg">Cable colour, motor type (AC / DC).</span></div>
+        <div class="term"><dt>Quantitative data</dt><dd>Data in <b>numbers</b>.</dd><span class="mem">💡 Quan<b>titative</b> = quantity = numbers.</span><span class="eg">Power in watts, number of blown fuses.</span></div>
+        <div class="term"><dt>Discrete data</dt><dd>Data we <b>count</b>. Whole numbers only.</dd><span class="mem">💡 <b>D</b>iscrete = <b>D</b>on't split: no 2.5 cables.</span><span class="eg">Number of power trips: 0, 1, 2, 3.</span></div>
+        <div class="term"><dt>Continuous data</dt><dd>Data we <b>measure</b> with a tool. Decimals are OK.</dd><span class="mem">💡 <b>C</b>ontinuous = measured with a meter, can <b>continue</b> after the point: 239.6 V.</span><span class="eg">Voltage, current, temperature, length, time.</span></div>
+        <div class="term"><dt>Ungrouped data <span class="sym">(raw data)</span></dt><dd>Values written <b>one by one</b>.</dd><span class="mem">💡 Ungrouped = one by one.</span><span class="eg">Currents: 2.1, 2.4, 1.9, 2.2 A.</span></div>
+        <div class="term"><dt>Grouped data</dt><dd>Values put into <b>groups</b> (classes).</dd><span class="mem">💡 Grouped = put into boxes.</span><span class="eg">95 – 99 Ω: 9 resistors.</span></div>
+        <div class="term"><dt>Frequency <span class="sym">(f)</span></dt><dd><b>How many times</b> a value appears.</dd><span class="mem">💡 f = how often.</span><span class="eg">3 motors failed, so f = 3.</span></div>
+        <div class="term"><dt>Tally</dt><dd>Sticks used to count. The 5th stick crosses the four: <s class="five">||||</s> = 5.</dd><span class="mem">💡 4 sticks + 1 gate = 5.</span><span class="eg">Counting faulty sockets during an inspection.</span></div>
+        <div class="term"><dt>Frequency table</dt><dd>A table of each value (or class) and how many times it appears.</dd><span class="mem">💡 Value + how many.</span><span class="eg">Outages per week, and how many weeks had each.</span></div>
+        <div class="term"><dt>Class <span class="sym">(class interval)</span></dt><dd>One group in grouped data, e.g. 95 – 99.</dd><span class="mem">💡 Class = one box.</span><span class="eg">Currents from 1.0 A to 1.4 A.</span></div>
+        <div class="term"><dt>Class limits</dt><dd>The two numbers you <b>see</b> in a class: lower and upper.</dd><span class="mem">💡 Limits = the numbers you SEE.</span><span class="eg">95 – 99: limits are 95 and 99.</span></div>
+        <div class="term"><dt>Class boundaries</dt><dd>Limits moved by 0.5 so the classes touch with no gaps.</dd><span class="mem">💡 Lower <b>− 0.5</b>, upper <b>+ 0.5</b>: close the gap.</span><span class="eg">95 – 99 → 94.5 – 99.5.</span></div>
+        <div class="term"><dt>Class width <span class="sym">(c)</span></dt><dd>How wide a class is: upper boundary − lower boundary.</dd><span class="mem">💡 Width = big boundary − small boundary.</span><span class="eg">99.5 − 94.5 = 5.</span></div>
+        <div class="term"><dt>Class midpoint <span class="sym">(x)</span></dt><dd>The middle of a class: (lower + upper) ÷ 2.</dd><span class="mem">💡 Midpoint = add, then halve.</span><span class="eg">(95 + 99) ÷ 2 = 97.</span></div>
+        <div class="term"><dt>Cumulative frequency <span class="sym">(F)</span></dt><dd>The <b>running total</b> of the frequencies.</dd><span class="mem">💡 Keep adding, like a snowball ⛄ getting bigger.</span><span class="eg">f: 3, 9, 15 → F: 3, 12, 27.</span></div>
+        <div class="term"><dt>Relative frequency</dt><dd>Frequency ÷ total. Part of the whole.</dd><span class="mem">💡 Part ÷ whole (× 100 for %).</span><span class="eg">15 out of 40 = 0.375 = 37.5 %.</span></div>
+        <div class="term"><dt>Range</dt><dd>Biggest value − smallest value.</dd><span class="mem">💡 Range = Big − Small.</span><span class="eg">113 − 91 = 22 Ω.</span></div>
+        <div class="term"><dt>Pie chart</dt><dd>A circle cut into slices. Angle = (f ÷ total) × 360°.</dd><span class="mem">💡 The whole pie = 360°.</span><span class="eg">Energy used by each appliance at home.</span></div>
+        <div class="term"><dt>Bar chart</dt><dd>Bars with <b>gaps</b>, one bar for each type or value.</dd><span class="mem">💡 <b>B</b>ar chart = <b>B</b>reaks between bars.</span><span class="eg">Weeks with 0, 1, 2… outages.</span></div>
+        <div class="term"><dt>Histogram</dt><dd>Bars that <b>touch</b>, for grouped measured data.</dd><span class="mem">💡 <b>H</b>istogram bars <b>H</b>old <b>H</b>ands (no gaps).</span><span class="eg">Resistance of 40 resistors in classes.</span></div>
+        <div class="term"><dt>Ogive</dt><dd>The running-total (cumulative frequency) curve. Plot F at the <b>upper boundary</b>.</dd><span class="mem">💡 Ogive = an S-shaped curve that only goes <b>up</b>.</span><span class="eg">How many resistors are below 100 Ω?</span></div>
       </dl>
       <p class="hint" id="term-none" hidden>No term matches your search.</p>
     </section>
@@ -411,6 +412,7 @@
     <section id="practice" class="step">
       <h2><span class="num">6</span> Practice: concrete → visual → abstract</h2>
       <p class="hint">Start with real objects, see the picture, learn the formula, then complete the tables yourself. Type in each blank: it turns green when right.</p>
+      <p class="tip">🎞️ <b>Want more?</b> Try the <a href="data-practice-slides.html">Data Practice Slides</a>: 5 sets of questions, one per slide, with multiple choice, true/false, fill in, match, sort, order and graph questions.</p>
 
       <div class="cpa concrete">
         <h3>CONCRETE: Beverage data organisation</h3>
